@@ -1,10 +1,24 @@
+<!--
+Sync Impact Report
+- Version change: 1.0.0 → 2.0.0
+- Modified principles:
+  - I. Universal-First React Architecture → I. Web-First React Architecture
+- Added sections: none
+- Removed sections: none
+- Templates requiring updates:
+  - .specify/templates/plan-template.md ✅ aligned
+  - .specify/templates/spec-template.md ✅ aligned
+  - .specify/templates/tasks-template.md ✅ aligned
+- Follow-up TODOs: none
+-->
+
 # Tatakai Constitution
 
 ## Core Principles
 
-### I. Universal-First React Architecture
-L’application est pensée d’abord comme un projet React Native universel (mobile + web), en utilisant systématiquement des composants cross‑platform (React Native Web + Expo Universal Components).  
-Chaque élément d’UI doit fonctionner sans divergence majeure entre mobile et web, avec une préférence forte pour des abstractions communes.
+### I. Web-First React Architecture
+L’application est pensée comme une application React web mobile-first (SPA), construite avec un outil moderne de bundling (par exemple Vite).  
+L’UI doit rester responsive (mobile d’abord) et cohérente sur desktop. Les composants doivent rester découplés de toute plateforme native spécifique, et la logique métier reste agnostique du framework UI autant que possible.
 
 ### II. Simplicité avant tout
 Tatakai doit rester une application simple, lisible et maintenable.  
@@ -25,16 +39,16 @@ Chaque domaine doit être clairement séparé :
 - **Matchmaking**
 - **Players / Teams**
 - **Tournament lifecycle**
-- **Persistence (AsyncStorage / file abstraction)**  
+- **Persistence (localStorage / storage abstraction)**  
 Chaque module doit être réutilisable et indépendant autant que possible.
 
 ## Développement & Workflow
 
 ### Structure du Code
-- React Native + Expo
-- Expo Router pour la navigation
-- UI universelle compatible RN Web
-- Storage Local : `AsyncStorage` (ou équivalent web via expo)
+- React (web) + Vite (SPA)
+- React Router (ou équivalent) pour la navigation
+- UI mobile-first responsive (par exemple Tailwind CSS + librairie de composants)
+- Storage local : `localStorage` (ou équivalent persistance web) derrière une abstraction de stockage
 
 ### Workflows de Dev
 - Toute nouvelle logic métier nécessite :
@@ -61,4 +75,4 @@ Toute modification doit inclure :
 - les impacts,
 - un plan de migration s'il y en a un.
 
-**Version**: 1.0.0 | **Ratified**: 2025‑11‑13 | **Last Amended**: 2025‑11‑13
+**Version**: 2.0.0 | **Ratified**: 2025-11-13 | **Last Amended**: 2025-11-14
