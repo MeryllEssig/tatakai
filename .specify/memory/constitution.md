@@ -1,50 +1,64 @@
-# [PROJECT_NAME] Constitution
-<!-- Example: Spec Constitution, TaskFlow Constitution, etc. -->
+# Tatakai Constitution
 
 ## Core Principles
 
-### [PRINCIPLE_1_NAME]
-<!-- Example: I. Library-First -->
-[PRINCIPLE_1_DESCRIPTION]
-<!-- Example: Every feature starts as a standalone library; Libraries must be self-contained, independently testable, documented; Clear purpose required - no organizational-only libraries -->
+### I. Universal-First React Architecture
+L’application est pensée d’abord comme un projet React Native universel (mobile + web), en utilisant systématiquement des composants cross‑platform (React Native Web + Expo Universal Components).  
+Chaque élément d’UI doit fonctionner sans divergence majeure entre mobile et web, avec une préférence forte pour des abstractions communes.
 
-### [PRINCIPLE_2_NAME]
-<!-- Example: II. CLI Interface -->
-[PRINCIPLE_2_DESCRIPTION]
-<!-- Example: Every library exposes functionality via CLI; Text in/out protocol: stdin/args → stdout, errors → stderr; Support JSON + human-readable formats -->
+### II. Simplicité avant tout
+Tatakai doit rester une application simple, lisible et maintenable.  
+Pas de sur‑ingénierie, pas de features grasses, pas d’architecture inutilement complexe.  
+Les modules doivent rester petits, isolés, faciles à lire et faciles à tester.
 
-### [PRINCIPLE_3_NAME]
-<!-- Example: III. Test-First (NON-NEGOTIABLE) -->
-[PRINCIPLE_3_DESCRIPTION]
-<!-- Example: TDD mandatory: Tests written → User approved → Tests fail → Then implement; Red-Green-Refactor cycle strictly enforced -->
+### III. Business Utilities Testables
+Les seules parties du code nécessitant des tests systématiques sont :
+- les algorithmes métier (MMR, matchmaking, calculs séquentiels…)
+- les utilitaires purs  
+→ tests unitaires obligatoires et rapides.
 
-### [PRINCIPLE_4_NAME]
-<!-- Example: IV. Integration Testing -->
-[PRINCIPLE_4_DESCRIPTION]
-<!-- Example: Focus areas requiring integration tests: New library contract tests, Contract changes, Inter-service communication, Shared schemas -->
+Le reste (UI, navigation, état local, stockage) n'exige pas de couverture systématique mais doit rester simple à valider manuellement.
 
-### [PRINCIPLE_5_NAME]
-<!-- Example: V. Observability, VI. Versioning & Breaking Changes, VII. Simplicity -->
-[PRINCIPLE_5_DESCRIPTION]
-<!-- Example: Text I/O ensures debuggability; Structured logging required; Or: MAJOR.MINOR.BUILD format; Or: Start simple, YAGNI principles -->
+### IV. Architecture Modulaire
+Chaque domaine doit être clairement séparé :
+- **MMR / OpenSkill utilities**
+- **Matchmaking**
+- **Players / Teams**
+- **Tournament lifecycle**
+- **Persistence (AsyncStorage / file abstraction)**  
+Chaque module doit être réutilisable et indépendant autant que possible.
 
-## [SECTION_2_NAME]
-<!-- Example: Additional Constraints, Security Requirements, Performance Standards, etc. -->
+## Développement & Workflow
 
-[SECTION_2_CONTENT]
-<!-- Example: Technology stack requirements, compliance standards, deployment policies, etc. -->
+### Structure du Code
+- React Native + Expo
+- Expo Router pour la navigation
+- UI universelle compatible RN Web
+- Storage Local : `AsyncStorage` (ou équivalent web via expo)
 
-## [SECTION_3_NAME]
-<!-- Example: Development Workflow, Review Process, Quality Gates, etc. -->
+### Workflows de Dev
+- Toute nouvelle logic métier nécessite :
+  1. Une function pure centralisée dans un utilitaire.
+  2. Un test unitaire associé.
+- Les écrans et composants peuvent être livrés sans tests si le comportement reste trivial ou purement visuel.
 
-[SECTION_3_CONTENT]
-<!-- Example: Code review requirements, testing gates, deployment approval process, etc. -->
+### Qualité
+- Préférence strictement donnée aux fonctions pures pour tout ce qui touche aux calculs.
+- Toute opération de recalcul global des MMR doit être entièrement déterministe et idempotente.
+- Pas d'états cachés : si quelque chose peut être dérivé, il doit l’être.
+
+### Revue & Approche
+- Chaque PR doit vérifier :
+  - que le code reste compréhensible,
+  - que la logique métier est testée,
+  - que les composants UI restent simples et universels.
+- Objectif : une app lisible, maintenable, contrôlée.
 
 ## Governance
-<!-- Example: Constitution supersedes all other practices; Amendments require documentation, approval, migration plan -->
+Cette constitution fait autorité sur les pratiques du projet.  
+Toute modification doit inclure :
+- une justification claire,
+- les impacts,
+- un plan de migration s'il y en a un.
 
-[GOVERNANCE_RULES]
-<!-- Example: All PRs/reviews must verify compliance; Complexity must be justified; Use [GUIDANCE_FILE] for runtime development guidance -->
-
-**Version**: [CONSTITUTION_VERSION] | **Ratified**: [RATIFICATION_DATE] | **Last Amended**: [LAST_AMENDED_DATE]
-<!-- Example: Version: 2.1.1 | Ratified: 2025-06-13 | Last Amended: 2025-07-16 -->
+**Version**: 1.0.0 | **Ratified**: 2025‑11‑13 | **Last Amended**: 2025‑11‑13
