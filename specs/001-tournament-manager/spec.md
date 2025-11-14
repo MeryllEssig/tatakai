@@ -107,7 +107,7 @@ As a tournament organizer, I want to view complete chronological game history an
 - **FR-009**: System MUST track bench streak and prioritize players who haven't played recently while maintaining team balance
 - **FR-010**: System MUST maintain complete chronological game history with detailed team compositions and rankings
 - **FR-011**: System MUST allow deletion of games with automatic sequential rating recalculation from remaining history
-- **FR-012**: System MUST store all tournament data locally in AsyncStorage under single key "mon-tournoi" with automatic periodic backups and corruption detection
+- **FR-012**: System MUST store tournament data locally in browser storage (via a storage abstraction backed by `localStorage`) using a per-tournament key pattern (e.g. `"mon-tournoi-1"`), with automatic periodic backups and corruption detection
 - **FR-013**: System MUST provide comprehensive player statistics including rating history, bench streak, and performance metrics
 - **FR-014**: System MUST support any team size from 1-10 players per team with flexible team composition
 - **FR-015**: System MUST handle tournaments with up to 50 players per tournament
@@ -117,7 +117,7 @@ As a tournament organizer, I want to view complete chronological game history an
 
 ### Key Entities *(include if feature involves data)*
 
-- **StoredData**: Root storage object containing tournaments array and lastOpenedTournamentId for AsyncStorage persistence
+- **StoredData**: Logical root view that combines tournaments metadata array and `lastOpenedTournamentId` for local storage persistence and navigation (tournaments are persisted individually under per-tournament keys)
 - **Tournament**: Represents a competitive event with id, name, defaultMaxPlayersPerGame, players array, games array, and configuration settings
 - **Player**: Represents a participant with id, name, OpenSkill.js rating {mu, sigma}, benchStreak, gamesPlayed, and isActive status
 - **Team**: Represents a team composition with id, optional name, and array of playerIds for flexible team management
@@ -137,5 +137,5 @@ As a tournament organizer, I want to view complete chronological game history an
 - **SC-006**: 95% of matchmaking suggestions respect bench fairness rules (no player sits out more than 2 consecutive games when possible)
 - **SC-007**: System maintains data integrity with 100% accuracy in OpenSkill.js rating calculations across complete tournament history
 - **SC-008**: Users can successfully find and view any specific game from a 100-game history within 10 seconds
-- **SC-009**: App launches and opens last used tournament within 2 seconds using AsyncStorage persistence
+- **SC-009**: App launches and opens last used tournament within 2 seconds using local storage persistence
 - **SC-010**: Tournament data export to clipboard completes within 1 second for tournaments with up to 50 players and 100 games

@@ -1,17 +1,3 @@
-<!--
-Sync Impact Report
-- Version change: 1.0.0 → 2.0.0
-- Modified principles:
-  - I. Universal-First React Architecture → I. Web-First React Architecture
-- Added sections: none
-- Removed sections: none
-- Templates requiring updates:
-  - .specify/templates/plan-template.md ✅ aligned
-  - .specify/templates/spec-template.md ✅ aligned
-  - .specify/templates/tasks-template.md ✅ aligned
-- Follow-up TODOs: none
--->
-
 # Tatakai Constitution
 
 ## Core Principles

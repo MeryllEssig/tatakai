@@ -9,14 +9,14 @@
 
 Local-first multi-tournament rating manager for multi-game events with players and teams.
 
-The application is a mobile-first React single-page app built with Vite and TypeScript. It lets users:
+The application is a mobile-first React single-page app built with Vite and TypeScript (React 19). It lets users:
 - **Create and manage multiple tournaments** with flexible solo/team configurations.
 - **Record games** and automatically update player ratings using **OpenSkill.js** (configurable modes per tournament).
 - **View leaderboards and player statistics** (µ, σ, conservative µ-3σ, bench streaks, histories).
 - **Run advanced matchmaking** that prioritizes bench fairness, then rating uncertainty, then rating balance.
 - **Maintain full game history** and support deletion with **sequential rating recomputation**.
 
-All tournament data (including settings) lives in one or more **Jotai stores** that mirror the `StoredData` model from the spec and are persisted to browser `localStorage` under a single root key (spec: `"mon-tournoi"`) with backup and corruption detection.
+All data for the **active tournament** lives in a **Jotai store** that mirrors a `GameData` model and is persisted to browser `localStorage` under a **tournament-specific key** (e.g. `"mon-tournoi-1"`). Multiple tournaments can be stored concurrently under distinct keys, but only one is loaded into the Jotai store at a time; switching tournaments unloads the current data and loads the selected tournament from `localStorage`.
 
 ## Technical Context
 
@@ -40,9 +40,9 @@ All tournament data (including settings) lives in one or more **Jotai stores** t
 
 *GATE: Must pass before Phase 0 research. Re-check after Phase 1 design.*
 
-- **Gate 1 – Universal-First React Architecture**  
-  - **Status**: VIOLATION (documented in Complexity Tracking).  
-  - **Details**: The constitution targets a React Native + Expo + React Native Web stack with AsyncStorage. This feature is implemented as a web-only React + Vite SPA. To stay compatible with future RN/Expo work, the plan keeps UI components and business logic framework-agnostic where possible, and uses an AsyncStorage-like adapter over `localStorage`.
+- **Gate 1 – Web-First React Architecture**  
+  - **Status**: PASS.  
+  - **Details**: The constitution targets a mobile-first React web SPA with local storage behind a storage abstraction. This feature uses React 19 + Vite, Tailwind mobile-first, shadcn/ui, Jotai for state, and a localStorage-backed storage adapter. Business logic is kept framework-agnostic where possible.
 
 - **Gate 2 – Simplicité avant tout**  
   - **Status**: PASS.  
@@ -129,5 +129,5 @@ web/
 
 | Violation | Why Needed | Simpler Alternative Rejected Because |
 |-----------|------------|-------------------------------------|
-| Use of web-only React + Vite SPA instead of React Native + Expo universal app | Faster to ship a focused browser-based prototype for the tournament manager while keeping domains and business logic framework-agnostic | React Native + Expo setup adds initial friction and complexity; current feature only needs a local-first UI and can later be wrapped or ported once flows and algorithms are stable |
-| AsyncStorage semantics emulated over `localStorage` via a storage adapter | Aligns with spec requirement (single `"mon-tournoi"` key, backups, corruption detection) while staying in a pure web environment | Direct scattered `localStorage` usage would couple storage details to features, make backups/recovery harder, and violate the modular persistence principle |
+| None currently. | All constitution gates for this feature pass under the web-first React architecture. | N/A |
+
