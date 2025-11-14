@@ -24,11 +24,11 @@ description: "Task list for feature 001-tournament-manager"
 
 **Purpose**: Project initialization and basic structure for the `web/` React SPA.
 
-- [ ] T001 Create Vite React + TypeScript app in `web/` aligned with plan.md structure
-- [ ] T002 Configure TypeScript and base linting/formatting in `web/tsconfig.json`, `web/.eslintrc.*`, `web/.prettierrc.*`
-- [ ] T003 [P] Install core dependencies (React 19, React DOM, React Router, Jotai, openskill, Tailwind CSS, shadcn/ui) by updating `web/package.json`
-- [ ] T004 [P] Configure Tailwind CSS in `web/tailwind.config.*`, `web/postcss.config.*`, and global styles in `web/src/styles/index.css`
-- [ ] T005 [P] Initialize shadcn/ui config and generate base UI primitives (Button, Card, Dialog, Input, Select) in `web/src/ui/components/`
+- [X] T001 Create Vite React + TypeScript app in `web/` aligned with plan.md structure
+- [X] T002 Configure TypeScript and base linting/formatting in `web/tsconfig.json`, `web/eslint.config.js`, `web/.prettierrc*`
+- [X] T003 [P] Install core dependencies (React 19, React DOM, React Router, Jotai, openskill, Tailwind CSS, Tailwind tooling) by updating `web/package.json`
+- [X] T004 [P] Configure Tailwind CSS using the `@tailwindcss/vite` plugin and global styles in `web/src/index.css`
+- [X] T005 [P] Initialize shadcn/ui-style UI primitives (Button, Card, Dialog, Input, Select) in `web/src/ui/components/`
 
 ---
 
@@ -38,9 +38,9 @@ description: "Task list for feature 001-tournament-manager"
 
 **⚠️ CRITICAL**: No user story work can begin until this phase is complete.
 
-- [ ] T006 Implement React entrypoint and app shell in `web/src/main.tsx` and `web/src/app/layout/app-shell.tsx`
-- [ ] T007 [P] Implement Jotai provider component in `web/src/app/providers/jotai-provider.tsx`
-- [ ] T008 [P] Implement theme provider and base theming in `web/src/app/providers/theme-provider.tsx`
+- [X] T006 Implement React entrypoint and app shell in `web/src/main.tsx` and `web/src/app/layout/app-shell.tsx`
+- [X] T007 [P] Implement Jotai provider component in `web/src/app/providers/jotai-provider.tsx`
+- [X] T008 [P] Implement theme provider and base theming in `web/src/app/providers/theme-provider.tsx`
 - [ ] T009 Set up routing configuration for main screens in `web/src/app/router/routes.tsx`
 - [ ] T010 Define shared domain TypeScript types from `data-model.md` in `web/src/lib/domain/types.ts`
 - [ ] T011 [P] Implement localStorage tournament storage adapter (key-per-tournament `mon-tournoi-<id>`) in `web/src/features/persistence/local-storage-adapter.ts`
