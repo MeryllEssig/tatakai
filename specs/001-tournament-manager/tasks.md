@@ -87,7 +87,7 @@ description: "Task list for feature 001-tournament-manager"
 - [X] T026 [P] [US2] Add unit tests for rating updates and bench streak tracking in `web/tests/unit/games/game-service.test.ts`
 - [X] T027 [US2] Implement per-player rank-based game result entry screen with bench toggle and rank selector (1..rankMax) in `web/src/features/games/game-result-screen.tsx`, including per-tournament `rankMax` configuration in tournament settings and creation wizard
 - [X] T028 [US2] Implement player statistics view (µ, σ, µ-3σ, bench streak, games played, rating history) in `web/src/features/ratings/player-stats-panel.tsx`
-- [ ] T029 [US2] Implement tournament leaderboard view sorted by rating with uncertainty and game count in `web/src/features/ratings/leaderboard-screen.tsx`
+- [X] T029 [US2] Implement tournament leaderboard view sorted by rating with uncertainty and game count in `web/src/features/ratings/leaderboard-screen.tsx`
 - [X] T030 [US2] Wire game save flow to persist updated `GameData` via `state/persistence` in `web/src/features/games/game-result-screen.tsx`
 
 **Checkpoint**: At this point, User Stories 1 AND 2 should both work independently and provide core tournament + rating functionality.

@@ -45,6 +45,14 @@ export function TournamentListScreen(): ReactElement {
             type="button"
             variant="outline"
             disabled={!hasSelection}
+            onClick={() => navigate('/leaderboard')}
+          >
+            Classement
+          </Button>
+          <Button
+            type="button"
+            variant="outline"
+            disabled={!hasSelection}
             onClick={() => navigate('/games/new')}
           >
             Nouvelle partie
