@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router-dom'
 import type { TournamentSummary } from '../../lib/domain/types'
 import { listStoredTournamentSummaries } from '../persistence/local-storage-adapter'
 import { useTournamentSelection } from './use-tournament-selection'
+import { PlayerListPanel } from '../players/player-list-panel'
 import {
   Card,
   CardContent,
@@ -43,38 +44,44 @@ export function TournamentListScreen(): ReactElement {
         </Button>
       </div>
 
-      {!hasTournaments ? (
-        <Card>
-          <CardHeader>
-            <CardTitle>Aucun tournoi pour le moment</CardTitle>
-            <CardDescription>
-              Créez votre premier tournoi pour commencer à enregistrer des parties.
-            </CardDescription>
-          </CardHeader>
-        </Card>
-      ) : (
-        <div className="grid gap-3 md:grid-cols-2">
-          {tournaments.map((tournament) => (
-            <Card
-              key={tournament.id}
-              className="cursor-pointer"
-              onClick={() => selectTournament(tournament.id)}
-            >
+      <div className="grid gap-4 lg:grid-cols-[minmax(0,1.4fr)_minmax(0,1fr)]">
+        <div>
+          {!hasTournaments ? (
+            <Card>
               <CardHeader>
-                <CardTitle>{tournament.name}</CardTitle>
+                <CardTitle>Aucun tournoi pour le moment</CardTitle>
                 <CardDescription>
-                  {tournament.playerCount} joueur
-                  {tournament.playerCount > 1 ? 's' : ''} · {tournament.gameCount} partie
-                  {tournament.gameCount > 1 ? 's' : ''}
+                  Créez votre premier tournoi pour commencer à enregistrer des parties.
                 </CardDescription>
               </CardHeader>
-              <CardContent className="flex items-center justify-between text-xs text-slate-400">
-                <span>Dernière partie : {formatLastGameDate(tournament.lastGameDate)}</span>
-              </CardContent>
             </Card>
-          ))}
+          ) : (
+            <div className="grid gap-3 md:grid-cols-2">
+              {tournaments.map((tournament) => (
+                <Card
+                  key={tournament.id}
+                  className="cursor-pointer"
+                  onClick={() => selectTournament(tournament.id)}
+                >
+                  <CardHeader>
+                    <CardTitle>{tournament.name}</CardTitle>
+                    <CardDescription>
+                      {tournament.playerCount} joueur
+                      {tournament.playerCount > 1 ? 's' : ''} · {tournament.gameCount} partie
+                      {tournament.gameCount > 1 ? 's' : ''}
+                    </CardDescription>
+                  </CardHeader>
+                  <CardContent className="flex items-center justify-between text-xs text-slate-400">
+                    <span>Dernière partie : {formatLastGameDate(tournament.lastGameDate)}</span>
+                  </CardContent>
+                </Card>
+              ))}
+            </div>
+          )}
         </div>
-      )}
+
+        <PlayerListPanel />
+      </div>
     </div>
   )
 }
