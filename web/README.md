@@ -1,4 +1,19 @@
-# React + TypeScript + Vite
+# Multi-Game Rating Manager (web)
+
+Local-first React SPA to manage multi-game tournaments with OpenSkill.js ratings, matchmaking,
+and complete game history.
+
+## Quickstart
+
+For end-to-end validation flows (create tournament, record games, matchmaking, history,
+recomputation), see the feature quickstart:
+
+- `../specs/001-tournament-manager/quickstart.md`
+
+## Tech notes (Vite template)
+
+This project was bootstrapped from the standard **React + TypeScript + Vite** template. The
+original template documentation follows.
 
 This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
 

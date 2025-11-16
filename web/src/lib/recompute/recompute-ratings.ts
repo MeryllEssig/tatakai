@@ -89,3 +89,25 @@ export function recomputeAllRatings(gameData: GameData): GameData {
     players: recomputedPlayers,
   }
 }
+
+export function deleteGameAndRecompute(gameData: GameData, gameId: string): GameData {
+  const hasGame = gameData.games.some((game) => game.id === gameId)
+
+  if (!hasGame) {
+    throw new Error('Game not found')
+  }
+
+  const remainingGames = gameData.games.filter((game) => game.id !== gameId)
+
+  const base: GameData = {
+    ...gameData,
+    games: remainingGames,
+  }
+
+  const recomputed = recomputeAllRatings(base)
+
+  return {
+    ...recomputed,
+    updatedAt: new Date().toISOString(),
+  }
+}

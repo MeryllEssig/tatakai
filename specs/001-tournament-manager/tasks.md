@@ -120,11 +120,11 @@ description: "Task list for feature 001-tournament-manager"
 
 ### Implementation for User Story 4
 
-- [ ] T036 [US4] Implement `DeleteGameAndRecompute` logic in `web/src/lib/recompute/recompute-ratings.ts` (reset ratings and replay history)
-- [ ] T037 [P] [US4] Add unit tests validating sequential recomputation in `web/tests/unit/recompute/recompute-ratings.test.ts`
-- [ ] T038 [US4] Implement game history screen showing chronological games with teams and rankings in `web/src/features/games/game-history-screen.tsx`
-- [ ] T039 [US4] Implement delete game UI with confirmation and recomputation trigger in `web/src/features/games/game-history-screen.tsx`
-- [ ] T040 [US4] Ensure player stats and leaderboard views react to updated ratings after recomputation in `web/src/features/ratings/use-rating-snapshots.ts`
+- [X] T036 [US4] Implement `DeleteGameAndRecompute` logic in `web/src/lib/recompute/recompute-ratings.ts` (reset ratings and replay history)
+- [X] T037 [P] [US4] Add unit tests validating sequential recomputation in `web/tests/unit/recompute/recompute-ratings.test.ts`
+- [X] T038 [US4] Implement game history screen showing chronological games with teams and rankings in `web/src/features/games/game-history-screen.tsx`
+- [X] T039 [US4] Implement delete game UI with confirmation and recomputation trigger in `web/src/features/games/game-history-screen.tsx`
+- [X] T040 [US4] Ensure player stats and leaderboard views react to updated ratings after recomputation in `web/src/features/ratings/use-rating-snapshots.ts`
 
 **Checkpoint**: All four user stories (US1–US4) should now be independently functional and testable.
 
@@ -134,7 +134,7 @@ description: "Task list for feature 001-tournament-manager"
 
 **Purpose**: Improvements that affect multiple user stories and overall quality.
 
-- [ ] T041 Documentation updates to reference `quickstart.md` in `web/README.md` or `web/docs/quickstart.md`
+- [X] T041 Documentation updates to reference `quickstart.md` in `web/README.md` or `web/docs/quickstart.md`
 - [ ] T042 [P] Code cleanup and type tightening across `web/src/**/*`
 - [ ] T043 [P] Performance checks and optimizations for rating updates and recomputation in `web/src/lib/` and `web/src/features/`
 - [ ] T044 [P] Add any missing unit tests for core business utilities (OpenSkill integration, matchmaking, recomputation) in `web/tests/unit/`

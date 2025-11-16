@@ -1,9 +1,8 @@
 import type { ReactElement } from 'react'
 import { useAtomValue } from 'jotai/react'
 import { useNavigate } from 'react-router-dom'
-import type { Player } from '../../lib/domain/types'
 import { gameDataAtom } from '../../state/atoms'
-import { conservativeRating } from '../../lib/openskill/ratings'
+import { useRatingSnapshots } from './use-rating-snapshots'
 import {
   Card,
   CardContent,
@@ -13,22 +12,10 @@ import {
 } from '../../ui/components/card'
 import { Button } from '../../ui/components/button'
 
-function sortPlayersForLeaderboard(players: Player[]): Player[] {
-  return [...players].sort((a, b) => {
-    const aCons = conservativeRating(a.rating)
-    const bCons = conservativeRating(b.rating)
-
-    if (aCons !== bCons) {
-      return bCons - aCons
-    }
-
-    return a.name.localeCompare(b.name)
-  })
-}
-
 export function LeaderboardScreen(): ReactElement {
   const gameData = useAtomValue(gameDataAtom)
   const navigate = useNavigate()
+  const snapshots = useRatingSnapshots()
 
   if (!gameData) {
     return (
@@ -50,9 +37,7 @@ export function LeaderboardScreen(): ReactElement {
     )
   }
 
-  const players = sortPlayersForLeaderboard(gameData.players)
-
-  if (players.length === 0) {
+  if (snapshots.length === 0) {
     return (
       <div className="flex flex-col gap-4">
         <Card>
@@ -103,10 +88,7 @@ export function LeaderboardScreen(): ReactElement {
               </tr>
             </thead>
             <tbody>
-              {players.map((player, index) => {
-                const conservative = conservativeRating(player.rating)
-
-                return (
+              {snapshots.map(({ player, conservative }, index) => (
                   <tr
                     key={player.id}
                     className="border-b border-slate-900/60 last:border-b-0 hover:bg-slate-900/40"
@@ -130,8 +112,7 @@ export function LeaderboardScreen(): ReactElement {
                     <td className="py-1 px-2 text-right tabular-nums">{player.gamesPlayed}</td>
                     <td className="py-1 pl-2 text-right tabular-nums">{player.benchStreak}</td>
                   </tr>
-                )
-              })}
+              ))}
             </tbody>
           </table>
         </CardContent>

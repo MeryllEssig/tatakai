@@ -45,6 +45,14 @@ export function TournamentListScreen(): ReactElement {
             type="button"
             variant="outline"
             disabled={!hasSelection}
+            onClick={() => navigate('/history')}
+          >
+            Historique
+          </Button>
+          <Button
+            type="button"
+            variant="outline"
+            disabled={!hasSelection}
             onClick={() => navigate('/matchmaking')}
           >
             Matchmaking
