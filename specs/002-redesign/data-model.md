@@ -7,7 +7,7 @@ This feature mostly extends the existing tournament data model with routing/i18n
 Represents the active tournament context as encoded in the URL.
 
 - `tournamentId: string` – ID taken from the URL.
-- `currentView: 'overview' | 'history' | 'leaderboard' | 'matchmaking' | 'settings' | 'help'` – logical sub-view.
+- `currentView: 'overview' | 'history' | 'new-game' | 'leaderboard' | 'matchmaking' | 'settings' | 'help'` – logical sub-view.
 - `isValid: boolean` – derived flag indicating whether the ID points to an existing tournament.
 
 ## LanguagePreference

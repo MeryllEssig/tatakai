@@ -32,7 +32,7 @@
 
 - **Decision**: Implement i18n with a lightweight custom solution:
   - Typed translation dictionaries per locale (FR/EN/JA) stored as TS modules.
-  - A `LanguagePreference` model backed by localStorage + browser language detection per FR-205.
+  - A `LanguagePreference` model persisted via the existing storage abstraction (backed by localStorage) plus browser language detection per FR-205.
   - A React context/provider exposing the effective language and a `t()` function.
   - Fallback for missing keys stays consistent with the effective language (per clarification).
 - **Rationale**: Keeps dependencies minimal, matches the constitution’s simplicity principle, and is sufficient for a small SPA.
