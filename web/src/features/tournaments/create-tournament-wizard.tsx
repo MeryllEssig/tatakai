@@ -15,6 +15,7 @@ interface SettingsState {
   maxPlayersPerGame: number
   ratingPreset: RatingPreset
   openSkillEnabled: boolean
+  rankMax: number
 }
 
 interface PlayerRow {
@@ -29,6 +30,7 @@ function createEmptySettings(): SettingsState {
     maxPlayersPerGame: 4,
     ratingPreset: 'default',
     openSkillEnabled: true,
+    rankMax: 20,
   }
 }
 
@@ -61,6 +63,11 @@ export function CreateTournamentWizard(): ReactElement {
 
     if (!Number.isFinite(settings.maxPlayersPerGame) || settings.maxPlayersPerGame <= 0) {
       setError('Le nombre maximum de joueurs par partie doit être un entier positif.')
+      return
+    }
+
+    if (!Number.isFinite(settings.rankMax) || settings.rankMax <= 0) {
+      setError('Le rang maximum doit être un entier positif.')
       return
     }
 
@@ -97,6 +104,7 @@ export function CreateTournamentWizard(): ReactElement {
         maxPlayersPerGame: settings.maxPlayersPerGame,
         ratingPreset: settings.ratingPreset,
         openSkillEnabled: settings.openSkillEnabled,
+        rankMax: settings.rankMax,
         initialPlayers: trimmedNames.map((name) => ({ name })),
       })
 
@@ -191,6 +199,28 @@ export function CreateTournamentWizard(): ReactElement {
                     }))
                   }
                 />
+              </div>
+
+              <div className="flex flex-col gap-1">
+                <label className="text-sm font-medium" htmlFor="rank-max">
+                  Rang maximum
+                </label>
+                <Input
+                  id="rank-max"
+                  type="number"
+                  min={1}
+                  max={50}
+                  value={settings.rankMax}
+                  onChange={(event) =>
+                    setSettings((current) => ({
+                      ...current,
+                      rankMax: Number.parseInt(event.target.value || '0', 10),
+                    }))
+                  }
+                />
+                <p className="text-xs text-slate-400">
+                  Détermine le rang maximal sélectionnable lors de l'enregistrement d'une partie.
+                </p>
               </div>
             </div>
 

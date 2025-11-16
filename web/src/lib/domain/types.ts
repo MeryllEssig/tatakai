@@ -24,6 +24,7 @@ export interface TournamentSettings {
   maxBenchStreak: number
   matchmakingMaxPlayers: number
   matchmakingMinPlayers: number
+  rankMax: number
 }
 
 export interface Player {

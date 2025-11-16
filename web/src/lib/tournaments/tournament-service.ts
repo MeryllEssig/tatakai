@@ -15,6 +15,7 @@ export interface CreateTournamentInput {
   ratingPreset: RatingPreset
   openSkillEnabled: boolean
   initialPlayers?: { name: string }[]
+  rankMax?: number
 }
 
 export interface CreateTournamentResult {
@@ -69,10 +70,16 @@ function createDefaultTournamentSettings(
   openSkillEnabled: boolean,
   maxPlayersPerGame: number,
   initialPlayerCount: number,
+  rankMaxInput?: number,
 ): TournamentSettings {
   const safeMaxPlayers = Math.max(1, maxPlayersPerGame)
   const basePlayers = initialPlayerCount > 0 ? initialPlayerCount : safeMaxPlayers
   const maxBenchStreak = Math.max(1, Math.ceil(basePlayers / safeMaxPlayers))
+
+  const fallbackRankMax = 20
+  const rankMax = Number.isFinite(rankMaxInput ?? NaN) && (rankMaxInput ?? 0) > 0
+    ? Math.floor(rankMaxInput as number)
+    : fallbackRankMax
 
   return {
     openSkillEnabled,
@@ -81,6 +88,7 @@ function createDefaultTournamentSettings(
     maxBenchStreak,
     matchmakingMaxPlayers: safeMaxPlayers,
     matchmakingMinPlayers: Math.min(2, safeMaxPlayers),
+    rankMax,
   }
 }
 
@@ -140,6 +148,7 @@ export function createTournament(input: CreateTournamentInput): CreateTournament
       input.openSkillEnabled,
       input.maxPlayersPerGame,
       initialPlayers.length,
+      input.rankMax,
     ),
     players: [],
     games: [],

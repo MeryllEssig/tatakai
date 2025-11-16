@@ -10,7 +10,7 @@
 ### Session 2025-11-13
 
 - Q: Which OpenSkill.js rating model and initial parameters should be used for player ratings? → A: Make parameters configurable per tournament with three preset modes: default (mu=25, sigma=8.333) with Bradley-Terry, conservative (mu=1500, sigma=350) for slower changes, and aggressive (mu=1000, sigma=500) for faster adjustments
-- Q: What validation rules should be enforced for data integrity? → A: Enforce unique player names per tournament, valid team compositions (no empty teams), and complete rankings (no ties)
+- Q: What validation rules should be enforced for data integrity? → A: Enforce unique player names per tournament, valid participant assignments (no empty groups), and consistent rankings (every active participant has an explicit rank within allowed bounds; ties are represented as groups of players sharing the same rank)
 - Q: What data backup and recovery mechanisms should be implemented? → A: Automatic periodic backups with manual export option and corruption detection
 - Q: How should the matchmaking algorithm prioritize between rating balance and bench fairness when they conflict? → A: Bench fairness first: for N players and M max players per game, nobody sits more than ceil(N/M) consecutive games. Once fairness constraint validated, prioritize players with highest sigma, then form balanced teams using mu ratings
 - Q: How should the system handle tournament setting changes after games have been recorded? → A: Allow setting changes but preserve historical game data and apply new settings only to future games
@@ -39,11 +39,11 @@ As a tournament organizer, I want to record game results with flexible team comp
 
 **Why this priority**: This is the core competitive functionality that provides value to tournament organizers and players. Without game recording and rating updates, the system cannot fulfill its primary purpose.
 
-**Independent Test**: Can be fully tested by recording a game result through the dedicated game result screen (team setup + ranking) and verifying that player ratings are updated according to OpenSkill.js algorithm. Delivers the essential competitive tracking value.
+**Independent Test**: Can be fully tested by recording a game result through the dedicated game result screen (per-player rank input) and verifying that player ratings are updated according to OpenSkill.js algorithm. Delivers the essential competitive tracking value.
 
 **Acceptance Scenarios**:
 
-1. **Given** I have a tournament with players, **When** I record a game by setting up teams and ranking them, **Then** the game is saved and all player ratings are automatically updated based on the OpenSkill.js algorithm with proper bench streak tracking
+1. **Given** I have a tournament with players, **When** I record a game by selecting which players participated and assigning each of them a final rank (with possible ties), **Then** the game is saved and all player ratings are automatically updated based on the OpenSkill.js algorithm with proper bench streak tracking
 2. **Given** I have recorded multiple games, **When** I view a player's statistics, **Then** I can see their current rating (µ, σ), uncertainty level, bench streak, games played, and rating history
 3. **Given** I have games recorded, **When** I view the tournament leaderboard, **Then** players are ranked by their current OpenSkill.js ratings (µ or µ-3σ) with uncertainty indicators and game count
 
@@ -87,7 +87,7 @@ As a tournament organizer, I want to view complete chronological game history an
 - How does system handle deleted players who have game history?
 - What happens when OpenSkill.js calculation encounters mathematical edge cases (zero uncertainty, extreme ratings)?
 - How does system handle concurrent tournament modifications?
-- What happens when game results are inconsistent (duplicate rankings, missing players)?
+- What happens when game results are inconsistent (invalid ranks, missing players)?
 - How does system handle matchmaking when insufficient players are selected for configured team count?
 - How does system handle tournament settings changes after games have been recorded? (RESOLVED: Changes apply only to future games, historical data preserved)
 - How does system handle players with very high bench streaks when fairness constraints conflict with balance requirements? (RESOLVED: Bench fairness prioritized with max ceil(N/M) consecutive games limit)
@@ -99,7 +99,7 @@ As a tournament organizer, I want to view complete chronological game history an
 - **FR-001**: System MUST allow users to create and manage multiple tournaments simultaneously through a centralized tournament list
 - **FR-002**: System MUST provide a 2-step tournament creation wizard (basic configuration + player setup) with solo/teams mode selection
 - **FR-003**: System MUST allow adding, editing, removing, and activating/deactivating players from tournaments with unique name validation per tournament
-- **FR-004**: System MUST record game results with flexible team compositions, drag-and-drop ranking interface, and validation for complete rankings (no ties) and valid team compositions (no empty teams)
+- **FR-004**: System MUST record game results using per-player rank input that supports flexible groupings (one or more players sharing the same rank) and enforce validation so that each active player has a rank within the tournament's allowed range and no active player is omitted from the results
 - **FR-005**: System MUST automatically update player ratings using OpenSkill.js algorithm after each game with configurable parameters (default, conservative, aggressive modes) and proper uncertainty tracking
 - **FR-006**: System MUST display current player ratings with uncertainty levels (µ, σ) and conservative rating (µ-3σ)
 - **FR-007**: System MUST provide tournament leaderboards ranked by OpenSkill.js ratings with game count and bench streak indicators
@@ -118,10 +118,10 @@ As a tournament organizer, I want to view complete chronological game history an
 ### Key Entities *(include if feature involves data)*
 
 - **StoredData**: Logical root view that combines tournaments metadata array and `lastOpenedTournamentId` for local storage persistence and navigation (tournaments are persisted individually under per-tournament keys)
-- **Tournament**: Represents a competitive event with id, name, defaultMaxPlayersPerGame, players array, games array, and configuration settings
+- **Tournament**: Represents a competitive event with id, name, defaultMaxPlayersPerGame, players array, games array, and configuration settings including per-tournament maximum allowed rank for game results
 - **Player**: Represents a participant with id, name, OpenSkill.js rating {mu, sigma}, benchStreak, gamesPlayed, and isActive status
-- **Team**: Represents a team composition with id, optional name, and array of playerIds for flexible team management
-- **GameResult**: Represents a played match with id, createdAt timestamp, and teamResults array containing teamId and rank (1=winner)
+- **Team**: Represents a logical result group (team in team-based modes or group of tied players) with id, optional name, and array of playerIds
+- **GameResult**: Represents a played match with id, createdAt timestamp, and teamResults array containing teamId and rank (1 = best rank; multiple players can share the same rank by belonging to the same team/group)
 - **Rating**: Represents a player's skill level using OpenSkill.js algorithm with mu (mean) and sigma (uncertainty) values
 - **TeamResult**: Represents a team's performance in a specific game with teamId and rank placement
 
@@ -130,7 +130,7 @@ As a tournament organizer, I want to view complete chronological game history an
 ### Measurable Outcomes
 
 - **SC-001**: Users can create a tournament with 10 players through the 2-step wizard in under 3 minutes
-- **SC-002**: Game results are recorded through the team setup and ranking interface with ratings updated within 2 seconds of submission
+- **SC-002**: Game results are recorded through the per-player ranking interface with ratings updated within 2 seconds of submission
 - **SC-003**: Matchmaking suggestions provide balanced teams with rating variance under 10% between teams while respecting bench fairness constraints
 - **SC-004**: Game deletion and full sequential rating recalculation completes within 5 seconds for tournaments with up to 100 games
 - **SC-005**: Users can navigate between tournaments and access dashboard features within 1 second

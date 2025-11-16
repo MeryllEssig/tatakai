@@ -1,5 +1,5 @@
 import type { FormEvent, ReactElement } from 'react'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useAtom } from 'jotai/react'
 import { useNavigate } from 'react-router-dom'
 import { gameDataAtom } from '../../state/atoms'
@@ -12,30 +12,37 @@ import {
   CardTitle,
 } from '../../ui/components/card'
 import { Button } from '../../ui/components/button'
-import { Select } from '../../ui/components/select'
-import { Input } from '../../ui/components/input'
 
-interface TeamForm {
-  id: string
-  name: string
+interface PlayerGameState {
+  isActive: boolean
+  rank: number | null
 }
 
-type PlayerAssignments = Record<string, string | ''>
-
-function createInitialTeams(): TeamForm[] {
-  return [
-    { id: 'team-1', name: 'Équipe 1' },
-    { id: 'team-2', name: 'Équipe 2' },
-  ]
-}
+type PlayerStateById = Record<string, PlayerGameState>
 
 export function GameResultScreen(): ReactElement {
   const [gameData, setGameData] = useAtom(gameDataAtom)
   const navigate = useNavigate()
-  const [teams, setTeams] = useState<TeamForm[]>(createInitialTeams)
-  const [assignments, setAssignments] = useState<PlayerAssignments>({})
+  const [playerStates, setPlayerStates] = useState<PlayerStateById>({})
   const [error, setError] = useState<string | null>(null)
   const [isSubmitting, setIsSubmitting] = useState(false)
+
+  useEffect(() => {
+    if (!gameData) {
+      setPlayerStates({})
+      return
+    }
+
+    setPlayerStates((current) => {
+      const next: PlayerStateById = {}
+      gameData.players.forEach((player) => {
+        if (!player.isActive) return
+        const existing = current[player.id]
+        next[player.id] = existing ?? { isActive: false, rank: null }
+      })
+      return next
+    })
+  }, [gameData])
 
   if (!gameData) {
     return (
@@ -58,92 +65,120 @@ export function GameResultScreen(): ReactElement {
   }
 
   const activePlayers = gameData.players.filter((player) => player.isActive)
+  const rankMax = gameData.settings.rankMax || 12
+  const maxPlayersPerGame = gameData.maxPlayersPerGame
 
-  const maxTeams = gameData.settings.maxTeamsPerGame
-
-  const handleAddTeam = () => {
-    if (teams.length >= maxTeams) return
-
-    setTeams((current) => {
-      const nextIndex = current.length + 1
-      return [...current, { id: `team-${nextIndex}`, name: `Équipe ${nextIndex}` }]
+  const handleToggleActive = (playerId: string) => {
+    setPlayerStates((current) => {
+      const previous = current[playerId] ?? { isActive: false, rank: null }
+      return {
+        ...current,
+        [playerId]: { ...previous, isActive: !previous.isActive },
+      }
     })
   }
 
-  const handleRemoveTeam = (id: string) => {
-    if (teams.length <= 2) return
+  const handleSelectRank = (playerId: string, rank: number) => {
+    setPlayerStates((current) => {
+      const previous = current[playerId] ?? { isActive: false, rank: null }
+      const isSameRank = previous.rank === rank
+      const nextRank = isSameRank ? null : rank
+      const nextIsActive = previous.isActive || nextRank !== null
 
-    setTeams((current) => current.filter((team) => team.id !== id))
-    setAssignments((current) => {
-      const next: PlayerAssignments = {}
-      Object.entries(current).forEach(([playerId, teamId]) => {
-        next[playerId] = teamId === id ? '' : teamId
-      })
-      return next
+      return {
+        ...current,
+        [playerId]: { ...previous, isActive: nextIsActive, rank: nextRank },
+      }
     })
   }
 
-  const handleMoveTeam = (id: string, direction: 'up' | 'down') => {
-    setTeams((current) => {
-      const index = current.findIndex((team) => team.id === id)
-      if (index === -1) return current
-
-      const targetIndex = direction === 'up' ? index - 1 : index + 1
-      if (targetIndex < 0 || targetIndex >= current.length) return current
-
-      const next = [...current]
-      const temp = next[index]
-      next[index] = next[targetIndex]
-      next[targetIndex] = temp
-      return next
-    })
-  }
-
-  const handleTeamNameChange = (id: string, value: string) => {
-    setTeams((current) =>
-      current.map((team) => (team.id === id ? { ...team, name: value } : team)),
-    )
-  }
-
-  const handleAssignmentChange = (playerId: string, teamId: string) => {
-    setAssignments((current) => ({ ...current, [playerId]: teamId }))
-  }
-
-  const handleSubmit = (event: FormEvent) => {
+  const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault()
     setError(null)
 
-    const teamPlayerIds: Record<string, string[]> = {}
-    teams.forEach((team) => {
-      teamPlayerIds[team.id] = []
-    })
-
-    Object.entries(assignments).forEach(([playerId, teamId]) => {
-      if (teamId) {
-        teamPlayerIds[teamId]?.push(playerId)
-      }
-    })
-
-    const activeTeams = teams.filter((team) => (teamPlayerIds[team.id]?.length ?? 0) > 0)
-
-    if (activeTeams.length < 2) {
-      setError('Configurez au moins deux équipes avec des joueurs pour enregistrer une partie.')
+    if (!gameData) {
+      setError('Aucun tournoi sélectionné.')
       return
     }
 
+    type ParticipantCandidate = {
+      playerId: string
+      name: string
+      rank: number | null
+    }
+
+    const candidates: ParticipantCandidate[] = gameData.players
+      .filter((player) => player.isActive)
+      .map((player) => {
+        const state = playerStates[player.id]
+        if (!state?.isActive) return null
+        return {
+          playerId: player.id,
+          name: player.name,
+          rank: state.rank,
+        }
+      })
+      .filter((entry): entry is ParticipantCandidate => entry !== null)
+
+    if (candidates.length < 2) {
+      setError('Sélectionnez au moins deux joueurs actifs pour enregistrer une partie.')
+      return
+    }
+
+    if (candidates.length > maxPlayersPerGame) {
+      setError(
+        `Au maximum ${maxPlayersPerGame} joueurs peuvent participer à une partie pour ce tournoi.`,
+      )
+      return
+    }
+
+    const invalidRank = candidates.find(
+      (candidate) =>
+        candidate.rank == null ||
+        !Number.isInteger(candidate.rank) ||
+        candidate.rank <= 0 ||
+        candidate.rank > rankMax,
+    )
+
+    if (invalidRank) {
+      setError(`Les rangs doivent être des entiers positifs compris entre 1 et ${rankMax}.`)
+      return
+    }
+
+    const participants = candidates.map((candidate) => ({
+      ...candidate,
+      rank: candidate.rank as number,
+    }))
+
+    const groupsByRank = new Map<number, typeof participants>()
+
+    participants.forEach((participant) => {
+      const existing = groupsByRank.get(participant.rank)
+      if (existing) {
+        existing.push(participant)
+      } else {
+        groupsByRank.set(participant.rank, [participant])
+      }
+    })
+
+    const sortedRanks = Array.from(groupsByRank.keys()).sort((a, b) => a - b)
+
+    const teamsInput = sortedRanks.map((rankValue, index) => {
+      const group = groupsByRank.get(rankValue) ?? []
+      return {
+        id: `rank-group-${index + 1}`,
+        name: `Rang ${rankValue}`,
+        playerIds: group.map((participant) => participant.playerId),
+      }
+    })
+
+    const resultsInput = teamsInput.map((team, index) => ({
+      teamId: team.id,
+      rank: index + 1,
+    }))
+
     try {
       setIsSubmitting(true)
-
-      const teamsInput = activeTeams.map((team) => ({
-        id: team.id,
-        name: team.name.trim() || undefined,
-        playerIds: teamPlayerIds[team.id] ?? [],
-      }))
-
-      const resultsInput = activeTeams.map((team, index) => ({
-        teamId: team.id,
-        rank: index + 1,
-      }))
 
       const updated = recordGameResult({
         gameData,
@@ -155,10 +190,16 @@ export function GameResultScreen(): ReactElement {
       navigate('/')
     } catch (unknownError) {
       console.error(unknownError)
-      setError("Impossible d'enregistrer la partie. Vérifiez la configuration des équipes.")
+      setError("Impossible d'enregistrer la partie. Vérifiez les rangs des joueurs.")
     } finally {
       setIsSubmitting(false)
     }
+  }
+
+  const rankNumbers = Array.from({ length: rankMax }, (_, index) => index + 1)
+  const rankRows: number[][] = []
+  for (let index = 0; index < rankNumbers.length; index += 4) {
+    rankRows.push(rankNumbers.slice(index, index + 4))
   }
 
   return (
@@ -166,7 +207,7 @@ export function GameResultScreen(): ReactElement {
       <div>
         <h2 className="text-xl font-semibold">Nouvelle partie</h2>
         <p className="text-sm text-slate-300">
-          Configurez les équipes et l'ordre de classement, puis enregistrez le résultat.
+          Sélectionnez les joueurs actifs pour cette partie et assignez-leur un rang.
         </p>
       </div>
 
@@ -179,137 +220,90 @@ export function GameResultScreen(): ReactElement {
             </CardDescription>
           </CardHeader>
           <CardContent>
-            <Button type="button" variant="outline" onClick={() => navigate('/') }>
+            <Button type="button" variant="outline" onClick={() => navigate('/')}>
               Retour au tournoi
             </Button>
           </CardContent>
         </Card>
       ) : (
-        <form
-          onSubmit={handleSubmit}
-          className="grid gap-4 lg:grid-cols-[minmax(0,1.4fr)_minmax(0,1fr)]"
-        >
+        <form onSubmit={handleSubmit} className="grid gap-4 lg:grid-cols-[minmax(0,1fr)]">
           <Card>
             <CardHeader>
-              <CardTitle>Équipes</CardTitle>
+              <CardTitle>Joueurs et rangs</CardTitle>
               <CardDescription>
-                Créez jusqu'à {maxTeams} équipes et ordonnez-les de la meilleure à la dernière.
-              </CardDescription>
-            </CardHeader>
-            <CardContent className="flex flex-col gap-3">
-              {teams.map((team, index) => {
-                const label = team.name.trim() || `Équipe ${index + 1}`
-
-                return (
-                  <div
-                    key={team.id}
-                    className="flex flex-col gap-2 rounded-md border border-slate-800 bg-slate-950/40 p-3 md:flex-row md:items-center md:justify-between"
-                  >
-                    <div className="flex flex-1 flex-col gap-1">
-                      <label className="text-xs font-medium" htmlFor={`team-name-${team.id}`}>
-                        Nom de l'équipe (optionnel)
-                      </label>
-                      <Input
-                        id={`team-name-${team.id}`}
-                        value={team.name}
-                        onChange={(event) => handleTeamNameChange(team.id, event.target.value)}
-                        placeholder={label}
-                      />
-                      <span className="text-xs text-slate-400">Position : {index + 1}</span>
-                    </div>
-
-                    <div className="mt-2 flex items-center gap-2 md:mt-0">
-                      <Button
-                        type="button"
-                        size="sm"
-                        variant="ghost"
-                        onClick={() => handleMoveTeam(team.id, 'up')}
-                      >
-                        Monter
-                      </Button>
-                      <Button
-                        type="button"
-                        size="sm"
-                        variant="ghost"
-                        onClick={() => handleMoveTeam(team.id, 'down')}
-                      >
-                        Descendre
-                      </Button>
-                      {teams.length > 2 && (
-                        <Button
-                          type="button"
-                          size="sm"
-                          variant="outline"
-                          onClick={() => handleRemoveTeam(team.id)}
-                        >
-                          Supprimer
-                        </Button>
-                      )}
-                    </div>
-                  </div>
-                )
-              })}
-
-              <div>
-                <Button
-                  type="button"
-                  size="sm"
-                  variant="ghost"
-                  onClick={handleAddTeam}
-                  disabled={teams.length >= maxTeams}
-                >
-                  + Ajouter une équipe
-                </Button>
-              </div>
-            </CardContent>
-          </Card>
-
-          <Card>
-            <CardHeader>
-              <CardTitle>Joueurs</CardTitle>
-              <CardDescription>
-                Assignez chaque joueur à une équipe ou laissez-le sur le banc pour cette partie.
+                Basculez les joueurs sur le banc ou actifs, puis choisissez un rang entre 1 et{' '}
+                {rankMax}. Au moins deux joueurs actifs avec un rang sont requis.
               </CardDescription>
             </CardHeader>
             <CardContent className="flex flex-col gap-3">
               {error ? <p className="text-sm text-red-400">{error}</p> : null}
 
               <div className="flex flex-col gap-2">
-                {activePlayers.map((player) => (
-                  <div
-                    key={player.id}
-                    className="flex flex-col gap-1 rounded-md border border-slate-800 bg-slate-950/40 p-2 md:flex-row md:items-center md:justify-between"
-                  >
-                    <div>
-                      <p className="text-sm font-medium text-slate-50">{player.name}</p>
-                      <p className="text-xs text-slate-400">
-                        Parties jouées : {player.gamesPlayed} · banc : {player.benchStreak}
-                      </p>
+                {activePlayers.map((player) => {
+                  const state = playerStates[player.id] ?? { isActive: false, rank: null }
+                  const isActive = state.isActive
+                  const selectedRank = state.rank
+
+                  return (
+                    <div
+                      key={player.id}
+                      className="flex flex-col gap-2 rounded-md border border-slate-800 bg-slate-950/40 p-3 md:flex-row md:items-center md:justify-between"
+                    >
+                      <div>
+                        <p className="text-sm font-medium text-slate-50">{player.name}</p>
+                        <p className="text-xs text-slate-400">
+                          Parties jouées : {player.gamesPlayed} · banc : {player.benchStreak}
+                        </p>
+                      </div>
+
+                      <div className="mt-2 flex flex-1 flex-col gap-2 md:mt-0 md:items-end">
+                        <div className="flex items-center gap-2">
+                          <span className="text-xs uppercase tracking-wide text-slate-400">
+                            {isActive ? 'Actif pour cette partie' : 'Sur le banc'}
+                          </span>
+                          <Button
+                            type="button"
+                            size="sm"
+                            variant={isActive ? 'default' : 'outline'}
+                            onClick={() => handleToggleActive(player.id)}
+                          >
+                            {isActive ? 'Mettre sur le banc' : 'Activer'}
+                          </Button>
+                        </div>
+
+                        {isActive ? (
+                          <div className="flex flex-col gap-1">
+                            <p className="text-xs text-slate-400">Rang</p>
+                            <div className="flex flex-col gap-1">
+                              {rankRows.map((row, rowIndex) => (
+                                <div key={rowIndex} className="flex flex-wrap gap-1">
+                                  {row.map((rank) => {
+                                    const isSelected = selectedRank === rank
+                                    return (
+                                      <Button
+                                        key={rank}
+                                        type="button"
+                                        size="sm"
+                                        variant={isSelected ? 'default' : 'outline'}
+                                        onClick={() => handleSelectRank(player.id, rank)}
+                                      >
+                                        {rank}
+                                      </Button>
+                                    )
+                                  })}
+                                </div>
+                              ))}
+                            </div>
+                          </div>
+                        ) : null}
+                      </div>
                     </div>
-                    <div className="mt-2 w-full md:mt-0 md:w-48">
-                      <Select
-                        value={assignments[player.id] ?? ''}
-                        onChange={(event) =>
-                          handleAssignmentChange(player.id, event.target.value || '')
-                        }
-                      >
-                        <option value="">Non assigné</option>
-                        {teams.map((team, index) => {
-                          const label = team.name.trim() || `Équipe ${index + 1}`
-                          return (
-                            <option key={team.id} value={team.id}>
-                              {label}
-                            </option>
-                          )
-                        })}
-                      </Select>
-                    </div>
-                  </div>
-                ))}
+                  )
+                })}
               </div>
 
               <div className="flex justify-between gap-2">
-                <Button type="button" variant="ghost" onClick={() => navigate('/') }>
+                <Button type="button" variant="ghost" onClick={() => navigate('/')}>
                   Annuler
                 </Button>
                 <Button type="submit" disabled={isSubmitting}>
