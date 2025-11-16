@@ -113,7 +113,7 @@ As a tournament organizer, I want to view complete chronological game history an
 - **FR-015**: System MUST handle tournaments with up to 50 players per tournament
 - **FR-016**: System MUST support tournament settings management (max players per game, algorithm toggles, data export/reset) with changes applying only to future games while preserving historical data
 - **FR-017**: System MUST automatically open last opened tournament on app launch using lastOpenedTournamentId
-- **FR-018**: System MUST provide data export functionality (JSON to clipboard), tournament reset capabilities, and automatic backup recovery options
+- **FR-018**: System MUST provide data export functionality (JSON to clipboard), tournament reset capabilities, JSON import functionality (from clipboard or file), and automatic backup recovery options. If imported JSON corresponds to an existing tournament (same id), the existing tournament data MUST be overwritten.
 
 ### Key Entities *(include if feature involves data)*
 

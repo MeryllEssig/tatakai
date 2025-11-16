@@ -6,6 +6,7 @@ import { listStoredTournamentSummaries } from '../persistence/local-storage-adap
 import { useTournamentSelection } from './use-tournament-selection'
 import { PlayerListPanel } from '../players/player-list-panel'
 import { PlayerStatsPanel } from '../ratings/player-stats-panel'
+import { TournamentSettingsPanel } from './tournament-settings-panel'
 import {
   Card,
   CardContent,
@@ -118,6 +119,7 @@ export function TournamentListScreen(): ReactElement {
         <div className="flex flex-col gap-4">
           <PlayerListPanel />
           <PlayerStatsPanel />
+          <TournamentSettingsPanel />
         </div>
       </div>
     </div>

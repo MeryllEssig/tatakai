@@ -48,32 +48,69 @@ export function tournamentStorageKey(id: string): string {
   return id
 }
 
+function isValidGameData(value: unknown): value is GameData {
+  if (!value || typeof value !== 'object') return false
+
+  const data = value as GameData
+
+  if (typeof data.id !== 'string') return false
+  if (!Array.isArray(data.players) || !Array.isArray(data.games)) return false
+
+  return true
+}
+
 export function saveTournament(gameData: GameData, backend?: StorageBackend): void {
   const storage = getStorage(backend)
   const key = tournamentStorageKey(gameData.id)
   const serialized = JSON.stringify(gameData)
+  const backupKey = `${key}-backup`
+
+  // Write backup first, then primary, to reduce chances of ending up with two corrupted entries.
+  storage.setItem(backupKey, serialized)
   storage.setItem(key, serialized)
 }
 
 export function loadTournament(id: string, backend?: StorageBackend): GameData | null {
   const storage = getStorage(backend)
   const key = tournamentStorageKey(id)
+  const backupKey = `${key}-backup`
+
   const value = storage.getItem(key)
 
-  if (!value) return null
+  if (value) {
+    try {
+      const parsed = JSON.parse(value) as GameData
+      if (isValidGameData(parsed)) {
+        return parsed
+      }
+    } catch {
+      // Fall through to backup.
+    }
+  }
+
+  const backupValue = storage.getItem(backupKey)
+
+  if (!backupValue) return null
 
   try {
-    const parsed = JSON.parse(value) as GameData
-    return parsed
+    const parsedBackup = JSON.parse(backupValue) as GameData
+    if (isValidGameData(parsedBackup)) {
+      return parsedBackup
+    }
   } catch {
     return null
   }
+
+  return null
 }
 
 export function deleteTournament(id: string, backend?: StorageBackend): void {
   const storage = getStorage(backend)
   const key = tournamentStorageKey(id)
+  const backupKey = `${key}-backup`
+
   storage.removeItem(key)
+  storage.removeItem(backupKey)
 }
 
 export function listStoredTournamentSummaries(backend?: StorageBackend): TournamentSummary[] {

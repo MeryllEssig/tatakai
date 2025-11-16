@@ -139,10 +139,11 @@ description: "Task list for feature 001-tournament-manager"
 - [ ] T043 [P] Performance checks and optimizations for rating updates and recomputation in `web/src/lib/` and `web/src/features/`
 - [ ] T044 [P] Add any missing unit tests for core business utilities (OpenSkill integration, matchmaking, recomputation) in `web/tests/unit/`
 - [ ] T045 Run full manual validation flows described in `specs/001-tournament-manager/quickstart.md`
- - [ ] T046 Implement tournament export to JSON clipboard in `web/src/features/tournaments/export-tournament.ts` and wire it into the tournament settings UI
- - [ ] T047 Implement tournament reset flow with confirmation in `web/src/features/tournaments/tournament-settings-panel.tsx` and ensure it clears `GameData` and updates local storage
- - [ ] T048 [P] Implement backup and automatic recovery logic in `web/src/features/persistence/local-storage-adapter.ts` following R-004 (primary + `"-backup"` key per tournament)
- - [ ] T049 [P] Add unit tests for critical edge cases (deleted players with history, insufficient players for matchmaking, settings changes after games) in `web/tests/unit/edgecases/`
+- [X] T046 Implement tournament export to JSON clipboard in `web/src/features/tournaments/export-tournament.ts` and wire it into the tournament settings UI
+- [X] T047 Implement tournament reset flow with confirmation in `web/src/features/tournaments/tournament-settings-panel.tsx` and ensure it clears `GameData` and updates local storage
+- [X] T048 [P] Implement backup and automatic recovery logic in `web/src/features/persistence/local-storage-adapter.ts` following R-004 (primary + `"-backup"` key per tournament)
+- [ ] T049 [P] Add unit tests for critical edge cases (deleted players with history, insufficient players for matchmaking, settings changes after games) in `web/tests/unit/edgecases/`
+ - [ ] T050 Implement tournament import from JSON in `web/src/features/tournaments/import-tournament.ts` and add an "Importer un tournoi" button in `web/src/features/tournaments/tournament-list-screen.tsx` that overwrites any existing tournament when the imported JSON has the same id.
 
 ---
 
