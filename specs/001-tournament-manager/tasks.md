@@ -85,7 +85,7 @@ description: "Task list for feature 001-tournament-manager"
 
 - [X] T025 [US2] Implement `RecordGameResult` command using OpenSkill wrapper in `web/src/lib/games/game-service.ts`
 - [X] T026 [P] [US2] Add unit tests for rating updates and bench streak tracking in `web/tests/unit/games/game-service.test.ts`
-- [ ] T027 [US2] Implement game result entry screen with team builder and ranking UI (no empty teams, no ties) in `web/src/features/games/game-result-screen.tsx`
+- [X] T027 [US2] Implement game result entry screen with team builder and ranking UI (no empty teams, no ties) in `web/src/features/games/game-result-screen.tsx`
 - [ ] T028 [US2] Implement player statistics view (µ, σ, µ-3σ, bench streak, games played, rating history) in `web/src/features/ratings/player-stats-panel.tsx`
 - [ ] T029 [US2] Implement tournament leaderboard view sorted by rating with uncertainty and game count in `web/src/features/ratings/leaderboard-screen.tsx`
 - [ ] T030 [US2] Wire game save flow to persist updated `GameData` via `state/persistence` in `web/src/features/games/game-result-screen.tsx`

@@ -26,7 +26,7 @@ export function TournamentListScreen(): ReactElement {
     listStoredTournamentSummaries(),
   )
   const navigate = useNavigate()
-  const { selectTournament } = useTournamentSelection()
+  const { selectTournament, hasSelection } = useTournamentSelection()
 
   const hasTournaments = tournaments.length > 0
 
@@ -39,9 +39,19 @@ export function TournamentListScreen(): ReactElement {
             Gérez vos tournois locaux. Créez un tournoi puis ajoutez des joueurs.
           </p>
         </div>
-        <Button type="button" onClick={() => navigate('/tournaments/new')}>
-          + Nouveau tournoi
-        </Button>
+        <div className="flex gap-2">
+          <Button
+            type="button"
+            variant="outline"
+            disabled={!hasSelection}
+            onClick={() => navigate('/games/new')}
+          >
+            Nouvelle partie
+          </Button>
+          <Button type="button" onClick={() => navigate('/tournaments/new')}>
+            + Nouveau tournoi
+          </Button>
+        </div>
       </div>
 
       <div className="grid gap-4 lg:grid-cols-[minmax(0,1.4fr)_minmax(0,1fr)]">
