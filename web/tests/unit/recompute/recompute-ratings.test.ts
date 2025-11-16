@@ -3,7 +3,7 @@ import { createTournament } from '../../../src/lib/tournaments/tournament-servic
 import type { CreateTournamentInput } from '../../../src/lib/tournaments/tournament-service'
 import type { GameData, Player } from '../../../src/lib/domain/types'
 import { recordGameResult } from '../../../src/lib/games/game-service'
-import { deleteGameAndRecompute } from '../../../src/lib/recompute/recompute-ratings'
+import { deleteGameAndRecompute, recomputeAllRatings } from '../../../src/lib/recompute/recompute-ratings'
 
 function makeCreateInput(overrides: Partial<CreateTournamentInput> = {}): CreateTournamentInput {
   return {
@@ -186,6 +186,57 @@ describe('recompute deleteGameAndRecompute', () => {
       expect(recomputedPlayer.rating.sigma).toBeCloseTo(baselinePlayer.rating.sigma, 10)
       expect(recomputedPlayer.gamesPlayed).toBe(baselinePlayer.gamesPlayed)
       expect(recomputedPlayer.benchStreak).toBe(baselinePlayer.benchStreak)
+    })
+  })
+})
+
+describe('recomputeAllRatings', () => {
+  it('produces the same ratings and stats as the live recordGameResult flow', () => {
+    const { gameData: initial } = createTournament(makeCreateInput())
+
+    const alice = getPlayer(initial, 'Alice')
+    const bob = getPlayer(initial, 'Bob')
+    const charlie = getPlayer(initial, 'Charlie')
+    const daisy = getPlayer(initial, 'Daisy')
+
+    const afterFirst = recordGameResult({
+      gameData: initial,
+      teams: [
+        { id: 'g1-t1', playerIds: [alice.id, bob.id] },
+        { id: 'g1-t2', playerIds: [charlie.id] },
+      ],
+      results: [
+        { teamId: 'g1-t1', rank: 1 },
+        { teamId: 'g1-t2', rank: 2 },
+      ],
+      createdAt: '2024-01-01T10:00:00.000Z',
+    })
+
+    const afterSecond = recordGameResult({
+      gameData: afterFirst,
+      teams: [
+        { id: 'g2-t1', playerIds: [bob.id, charlie.id] },
+        { id: 'g2-t2', playerIds: [daisy.id] },
+      ],
+      results: [
+        { teamId: 'g2-t1', rank: 1 },
+        { teamId: 'g2-t2', rank: 2 },
+      ],
+      createdAt: '2024-01-01T11:00:00.000Z',
+    })
+
+    const recomputed = recomputeAllRatings(afterSecond)
+
+    const players = ['Alice', 'Bob', 'Charlie', 'Daisy'] as const
+
+    players.forEach((name) => {
+      const livePlayer = getPlayer(afterSecond, name)
+      const recomputedPlayer = getPlayer(recomputed, name)
+
+      expect(recomputedPlayer.rating.mu).toBeCloseTo(livePlayer.rating.mu, 10)
+      expect(recomputedPlayer.rating.sigma).toBeCloseTo(livePlayer.rating.sigma, 10)
+      expect(recomputedPlayer.gamesPlayed).toBe(livePlayer.gamesPlayed)
+      expect(recomputedPlayer.benchStreak).toBe(livePlayer.benchStreak)
     })
   })
 })

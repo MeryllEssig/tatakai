@@ -159,4 +159,51 @@ describe('matchmaking engine generateMatchmakingSuggestion', () => {
     expect(team1Ids).toEqual([... [alice.id, charlie.id]].sort())
     expect(team2Ids).toEqual([... [bob.id, daisy.id]].sort())
   })
+
+  it('ignores inactive players when building suggestions', () => {
+    const { gameData } = createTournament(makeCreateInput())
+
+    const alice = getPlayer(gameData, 'Alice')
+    const bob = getPlayer(gameData, 'Bob')
+    const charlie = getPlayer(gameData, 'Charlie')
+
+    // Mark Bob as inactive; he should not appear in teams or bench candidates.
+    bob.isActive = false
+
+    const result = generateMatchmakingSuggestion(
+      gameData,
+      [alice.id, bob.id, charlie.id],
+      {
+        maxPlayersPerGame: 3,
+        maxTeams: 2,
+        benchFairnessEnabled: false,
+      },
+    )
+
+    expect(result).not.toBeNull()
+    if (!result) return
+
+    const selectedIds = result.suggestion.teams.flatMap((team) => team.playerIds)
+    const benchIds = result.benchCandidates
+
+    expect(selectedIds).not.toContain(bob.id)
+    expect(benchIds).not.toContain(bob.id)
+  })
+
+  it('caps the number of teams by the number of selected players', () => {
+    const { gameData } = createTournament(makeCreateInput())
+
+    const selectedIds = gameData.players.slice(0, 3).map((player) => player.id)
+
+    const result = generateMatchmakingSuggestion(gameData, selectedIds, {
+      maxPlayersPerGame: 3,
+      maxTeams: 10,
+      benchFairnessEnabled: false,
+    })
+
+    expect(result).not.toBeNull()
+    if (!result) return
+
+    expect(result.suggestion.teams).toHaveLength(3)
+  })
 })
