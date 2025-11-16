@@ -77,9 +77,10 @@ function createDefaultTournamentSettings(
   const maxBenchStreak = Math.max(1, Math.ceil(basePlayers / safeMaxPlayers))
 
   const fallbackRankMax = 20
-  const rankMax = Number.isFinite(rankMaxInput ?? NaN) && (rankMaxInput ?? 0) > 0
-    ? Math.floor(rankMaxInput as number)
-    : fallbackRankMax
+  const rankMax =
+    typeof rankMaxInput === 'number' && Number.isFinite(rankMaxInput) && rankMaxInput > 0
+      ? Math.floor(rankMaxInput)
+      : fallbackRankMax
 
   return {
     openSkillEnabled,

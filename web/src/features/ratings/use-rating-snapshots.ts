@@ -15,19 +15,18 @@ export function useRatingSnapshots(): RatingSnapshot[] {
     return []
   }
 
-  const players = [...gameData.players].sort((a, b) => {
-    const aCons = conservativeRating(a.rating)
-    const bCons = conservativeRating(b.rating)
-
-    if (aCons !== bCons) {
-      return bCons - aCons
-    }
-
-    return a.name.localeCompare(b.name)
-  })
-
-  return players.map((player) => ({
+  const snapshots: RatingSnapshot[] = gameData.players.map((player) => ({
     player,
     conservative: conservativeRating(player.rating),
   }))
+
+  snapshots.sort((a, b) => {
+    if (a.conservative !== b.conservative) {
+      return b.conservative - a.conservative
+    }
+
+    return a.player.name.localeCompare(b.player.name)
+  })
+
+  return snapshots
 }

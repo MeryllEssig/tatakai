@@ -135,8 +135,8 @@ description: "Task list for feature 001-tournament-manager"
 **Purpose**: Improvements that affect multiple user stories and overall quality.
 
 - [X] T041 Documentation updates to reference `quickstart.md` in `web/README.md` or `web/docs/quickstart.md`
-- [ ] T042 [P] Code cleanup and type tightening across `web/src/**/*`
-- [ ] T043 [P] Performance checks and optimizations for rating updates and recomputation in `web/src/lib/` and `web/src/features/`
+- [X] T042 [P] Code cleanup and type tightening across `web/src/**/*`
+- [X] T043 [P] Performance checks and optimizations for rating updates and recomputation in `web/src/lib/` and `web/src/features/`
 - [X] T044 [P] Add any missing unit tests for core business utilities (OpenSkill integration, matchmaking, recomputation) in `web/tests/unit/`
 - [ ] T045 Run full manual validation flows described in `specs/001-tournament-manager/quickstart.md`
 - [X] T046 Implement tournament export to JSON clipboard in `web/src/features/tournaments/export-tournament.ts` and wire it into the tournament settings UI

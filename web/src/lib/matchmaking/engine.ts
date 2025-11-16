@@ -2,6 +2,7 @@ import type {
   GameData,
   MatchmakingSuggestion,
   Player,
+  Rating,
   TeamInGame,
 } from '../domain/types'
 import { conservativeRating } from '../openskill/ratings'
@@ -73,10 +74,15 @@ export function generateMatchmakingSuggestion(
     benchPlayerIds: benchCandidates,
   }
 
+  const ratingById = new Map<string, Rating>()
+  gameData.players.forEach((player) => {
+    ratingById.set(player.id, player.rating)
+  })
+
   const teamMeans = teams.map((team) => {
     const ratings = team.playerIds
-      .map((playerId) => gameData.players.find((player) => player.id === playerId)?.rating)
-      .filter((rating): rating is NonNullable<typeof rating> => Boolean(rating))
+      .map((playerId) => ratingById.get(playerId))
+      .filter((rating): rating is Rating => Boolean(rating))
 
     if (ratings.length === 0) {
       return 0
@@ -88,8 +94,8 @@ export function generateMatchmakingSuggestion(
 
   const teamConservativeMeans = teams.map((team) => {
     const ratings = team.playerIds
-      .map((playerId) => gameData.players.find((player) => player.id === playerId)?.rating)
-      .filter((rating): rating is NonNullable<typeof rating> => Boolean(rating))
+      .map((playerId) => ratingById.get(playerId))
+      .filter((rating): rating is Rating => Boolean(rating))
 
     if (ratings.length === 0) {
       return 0
