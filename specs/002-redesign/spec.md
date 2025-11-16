@@ -191,7 +191,7 @@ As a user, I want buttons to have meaningful icons and players to have avatars g
 
 - **FR-201 (REST-style routing & consistent URLs)**  
   The system MUST use consistent REST-style URLs for **all pages**:
-  - resource-structured paths (e.g. `/tournaments`, `/tournament/{id}`, `/tournament/{id}/history`, `/help`),
+  - resource-structured paths (e.g. `/tournaments`, `/new-tournament`, `/tournament/{id}`, `/tournament/{id}/history`, `/tournament/{id}/new-game`, `/help`), with legacy paths `/tournaments/new` and `/games/new` redirecting respectively to `/new-tournament` and `/tournament/{id}/new-game`,
   - no language parameters in the URL,
   - resources related to a tournament (history, leaderboard, stats, matchmaking, settings, etc.) MUST live under `/tournament/{id}/…`.
 
