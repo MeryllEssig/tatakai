@@ -143,7 +143,7 @@ description: "Task list for feature 001-tournament-manager"
 - [X] T047 Implement tournament reset flow with confirmation in `web/src/features/tournaments/tournament-settings-panel.tsx` and ensure it clears `GameData` and updates local storage
 - [X] T048 [P] Implement backup and automatic recovery logic in `web/src/features/persistence/local-storage-adapter.ts` following R-004 (primary + `"-backup"` key per tournament)
 - [ ] T049 [P] Add unit tests for critical edge cases (deleted players with history, insufficient players for matchmaking, settings changes after games) in `web/tests/unit/edgecases/`
- - [ ] T050 Implement tournament import from JSON in `web/src/features/tournaments/import-tournament.ts` and add an "Importer un tournoi" button in `web/src/features/tournaments/tournament-list-screen.tsx` that overwrites any existing tournament when the imported JSON has the same id.
+- [X] T050 Implement tournament import from JSON in `web/src/features/tournaments/import-tournament.ts` and add an "Importer un tournoi" button in `web/src/features/tournaments/tournament-list-screen.tsx` that overwrites any existing tournament when the imported JSON has the same id.
 
 ---
 
