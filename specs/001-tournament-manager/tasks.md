@@ -102,11 +102,11 @@ description: "Task list for feature 001-tournament-manager"
 
 ### Implementation for User Story 3
 
-- [ ] T031 [US3] Implement `GenerateMatchmakingSuggestion` algorithm (bench fairness → sigma → rating balance) in `web/src/lib/matchmaking/engine.ts`
-- [ ] T032 [P] [US3] Add unit tests for matchmaking engine scenarios in `web/tests/unit/matchmaking/engine.test.ts`
-- [ ] T033 [US3] Implement matchmaking configuration and candidate selection UI in `web/src/features/matchmaking/matchmaking-screen.tsx`
-- [ ] T034 [US3] Implement display of suggested teams and bench recommendations in `web/src/features/matchmaking/matchmaking-screen.tsx`
-- [ ] T035 [US3] Implement "accept suggestion" flow to prefill game result screen in `web/src/features/matchmaking/use-accept-suggestion.ts`
+- [X] T031 [US3] Implement `GenerateMatchmakingSuggestion` algorithm (bench fairness → sigma → rating balance) in `web/src/lib/matchmaking/engine.ts`
+- [X] T032 [P] [US3] Add unit tests for matchmaking engine scenarios in `web/tests/unit/matchmaking/engine.test.ts`
+- [X] T033 [US3] Implement matchmaking configuration and candidate selection UI in `web/src/features/matchmaking/matchmaking-screen.tsx`
+- [X] T034 [US3] Implement display of suggested teams and bench recommendations in `web/src/features/matchmaking/matchmaking-screen.tsx`
+- [X] T035 [US3] Implement "accept suggestion" flow to prefill game result screen in `web/src/features/matchmaking/use-accept-suggestion.ts`
 
 **Checkpoint**: Matchmaking suggestions should be independently testable and usable on top of completed US1+US2 flows.
 

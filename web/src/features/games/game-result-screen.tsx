@@ -2,7 +2,7 @@ import type { FormEvent, ReactElement } from 'react'
 import { useEffect, useState } from 'react'
 import { useAtom } from 'jotai/react'
 import { useNavigate } from 'react-router-dom'
-import { gameDataAtom } from '../../state/atoms'
+import { gameDataAtom, nextGameSuggestedPlayerIdsAtom } from '../../state/atoms'
 import { recordGameResult } from '../../lib/games/game-service'
 import {
   Card,
@@ -22,6 +22,7 @@ type PlayerStateById = Record<string, PlayerGameState>
 
 export function GameResultScreen(): ReactElement {
   const [gameData, setGameData] = useAtom(gameDataAtom)
+  const [suggestedPlayerIds, setSuggestedPlayerIds] = useAtom(nextGameSuggestedPlayerIdsAtom)
   const navigate = useNavigate()
   const [playerStates, setPlayerStates] = useState<PlayerStateById>({})
   const [error, setError] = useState<string | null>(null)
@@ -35,14 +36,22 @@ export function GameResultScreen(): ReactElement {
 
     setPlayerStates((current) => {
       const next: PlayerStateById = {}
+      const suggested = suggestedPlayerIds ?? []
+
       gameData.players.forEach((player) => {
         if (!player.isActive) return
         const existing = current[player.id]
-        next[player.id] = existing ?? { isActive: false, rank: null }
+        if (existing) {
+          next[player.id] = existing
+        } else {
+          const isSuggested = suggested.includes(player.id)
+          next[player.id] = { isActive: isSuggested, rank: null }
+        }
       })
+
       return next
     })
-  }, [gameData])
+  }, [gameData, suggestedPlayerIds])
 
   if (!gameData) {
     return (
@@ -187,6 +196,7 @@ export function GameResultScreen(): ReactElement {
       })
 
       setGameData(updated)
+      setSuggestedPlayerIds(null)
       navigate('/')
     } catch (unknownError) {
       console.error(unknownError)
