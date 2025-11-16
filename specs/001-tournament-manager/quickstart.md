@@ -97,7 +97,7 @@ The following flows map directly to the P1/P2 user stories in the spec.
 
 1. With one or more tournaments created and games recorded, refresh the browser:
    - Validate that the last opened tournament is reopened automatically.
-2. Simulate storage corruption in a dev build (e.g., manually alter a `mon-tournoi-<id>` entry in `localStorage`):
+2. Simulate storage corruption in a dev build (e.g., manually alter an entry whose key is the normalized tournament name such as `"montournoi1"` in `localStorage`):
    - Validate that the app detects invalid data and either recovers from a backup or shows a clear error with recovery options.
 
 These flows collectively validate the core requirements and success criteria of the feature.

@@ -6,6 +6,7 @@ import { AppShell } from './app/layout/app-shell'
 import { JotaiRootProvider } from './app/providers/jotai-provider'
 import { ThemeProvider } from './app/providers/theme-provider'
 import { ErrorBoundary } from './app/providers/error-boundary'
+import { TournamentPersistenceGate } from './app/providers/tournament-persistence-gate'
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
@@ -13,6 +14,7 @@ createRoot(document.getElementById('root')!).render(
       <JotaiRootProvider>
         <ThemeProvider>
           <AppShell>
+            <TournamentPersistenceGate />
             <App />
           </AppShell>
         </ThemeProvider>

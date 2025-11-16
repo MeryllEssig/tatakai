@@ -8,7 +8,7 @@ It is the canonical reference for the `GameData` structure stored per tournament
 
 ## Overview
 
-- Each **tournament** is persisted independently under a key like `"mon-tournoi-<id>"` in `localStorage`.
+- Each **tournament** is persisted independently under a key equal to the tournament name normalized to alphanumeric characters without spaces (e.g. `"Mon Tournoi 1!"` → `"montournoi1"`) in `localStorage`.
 - The value of each key is a **`GameData`** object representing that tournament’s full state (players, games, settings, rating config).
 - At runtime, the UI loads exactly **one `GameData`** into the Jotai store at a time.
 - Aggregate views (leaderboards, stats, matchmaking suggestions) are **derived** from `GameData` and not persisted separately.
@@ -23,7 +23,7 @@ Represents all persisted state for a single tournament.
 
 | Field                    | Type                      | Description                                                     | Notes |
 |--------------------------|---------------------------|-----------------------------------------------------------------|-------|
-| `id`                     | `string`                  | Unique tournament id (used in storage key suffix).              | Stable across app restarts. |
+| `id`                     | `string`                  | Unique tournament id equal to the tournament name normalized to alphanumeric characters without spaces, used as the storage key. | Stable across app restarts. |
 | `name`                   | `string`                  | Human-readable tournament name.                                 | Shown in tournament list. |
 | `createdAt`              | `string (ISO datetime)`   | Timestamp when the tournament was created.                      | |
 | `updatedAt`              | `string (ISO datetime)`   | Timestamp of last structural change (players/games/settings).   | |
@@ -132,7 +132,7 @@ Where `TournamentSummary` is:
 
 | Field                    | Type       | Description                                           |
 |--------------------------|------------|-------------------------------------------------------|
-| `id`                     | `string`   | Tournament id (suffix used in `mon-tournoi-<id>`).    |
+| `id`                     | `string`   | Tournament id (same as the normalized tournament name used as the storage key). |
 | `name`                   | `string`   | Tournament name.                                      |
 | `playerCount`            | `number`   | Number of players in `GameData.players`.              |
 | `gameCount`              | `number`   | Number of games in `GameData.games`.                  |

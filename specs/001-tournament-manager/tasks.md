@@ -41,15 +41,15 @@ description: "Task list for feature 001-tournament-manager"
 - [X] T006 Implement React entrypoint and app shell in `web/src/main.tsx` and `web/src/app/layout/app-shell.tsx`
 - [X] T007 [P] Implement Jotai provider component in `web/src/app/providers/jotai-provider.tsx`
 - [X] T008 [P] Implement theme provider and base theming in `web/src/app/providers/theme-provider.tsx`
-- [ ] T009 Set up routing configuration for main screens in `web/src/app/router/routes.tsx`
-- [ ] T010 Define shared domain TypeScript types from `data-model.md` in `web/src/lib/domain/types.ts`
-- [ ] T011 [P] Implement localStorage tournament storage adapter (key-per-tournament `mon-tournoi-<id>`) in `web/src/features/persistence/local-storage-adapter.ts`
-- [ ] T012 Implement root Jotai atoms for `GameData` and current tournament selection in `web/src/state/atoms.ts`
-- [ ] T013 [P] Implement persistence helpers to load/save Jotai atoms from localStorage (including lastOpenedTournamentId) in `web/src/state/persistence.ts`
-- [ ] T014 Implement OpenSkill.js wrapper utilities for rating updates in `web/src/lib/openskill/ratings.ts`
-- [ ] T015 Implement sequential recomputation utilities skeleton in `web/src/lib/recompute/recompute-ratings.ts`
-- [ ] T016 Implement matchmaking engine skeleton in `web/src/lib/matchmaking/engine.ts`
-- [ ] T017 [P] Configure Vitest and basic test setup for unit and integration tests in `web/vitest.config.*`, `web/tests/unit/`, `web/tests/integration/`
+- [X] T009 Set up routing configuration for main screens in `web/src/app/router/routes.tsx`
+- [X] T010 Define shared domain TypeScript types from `data-model.md` in `web/src/lib/domain/types.ts`
+- [X] T011 [P] Implement localStorage tournament storage adapter (key-per-tournament equal to the tournament name normalized to alphanumeric characters without spaces, e.g. `"Mon Tournoi 1!"` → `"montournoi1"`) in `web/src/features/persistence/local-storage-adapter.ts`
+- [X] T012 Implement root Jotai atoms for `GameData` and current tournament selection in `web/src/state/atoms.ts`
+- [X] T013 [P] Implement persistence helpers to load/save Jotai atoms from localStorage (including lastOpenedTournamentId) in `web/src/state/persistence.ts`
+- [X] T014 Implement OpenSkill.js wrapper utilities for rating updates in `web/src/lib/openskill/ratings.ts`
+- [X] T015 Implement sequential recomputation utilities skeleton in `web/src/lib/recompute/recompute-ratings.ts`
+- [X] T016 Implement matchmaking engine skeleton in `web/src/lib/matchmaking/engine.ts`
+- [X] T017 [P] Configure Vitest and basic test setup for unit and integration tests in `web/vitest.config.*`, `web/tests/unit/`, `web/tests/integration/`
 
 **Checkpoint**: Foundation ready – user story implementation can now begin in parallel.
 
@@ -63,13 +63,13 @@ description: "Task list for feature 001-tournament-manager"
 
 ### Implementation for User Story 1
 
-- [ ] T018 Implement `CreateTournament` and `AddOrUpdatePlayer` domain functions in `web/src/lib/tournaments/tournament-service.ts`
-- [ ] T019 [P] [US1] Add unit tests for tournament-service functions in `web/tests/unit/tournaments/tournament-service.test.ts`
-- [ ] T020 [US1] Implement tournament list screen (showing name, player count, game count, last game date) in `web/src/features/tournaments/tournament-list-screen.tsx`
-- [ ] T021 [P] [US1] Implement 2-step tournament creation wizard (settings → players) in `web/src/features/tournaments/create-tournament-wizard.tsx`
-- [ ] T022 [US1] Implement hook for tournament selection and lastOpenedTournamentId handling in `web/src/features/tournaments/use-tournament-selection.ts`
-- [ ] T023 [US1] Implement player management UI (add/edit/deactivate players with unique name validation) in `web/src/features/players/player-list-panel.tsx`
-- [ ] T024 [US1] Wire persistence of created/updated tournaments via `state/persistence` helpers in `web/src/features/tournaments/tournament-list-screen.tsx`
+- [X] T018 Implement `CreateTournament` and `AddOrUpdatePlayer` domain functions in `web/src/lib/tournaments/tournament-service.ts`
+- [X] T019 [P] [US1] Add unit tests for tournament-service functions in `web/tests/unit/tournaments/tournament-service.test.ts`
+- [X] T020 [US1] Implement tournament list screen (showing name, player count, game count, last game date) in `web/src/features/tournaments/tournament-list-screen.tsx`
+- [X] T021 [P] [US1] Implement 2-step tournament creation wizard (settings → players) in `web/src/features/tournaments/create-tournament-wizard.tsx`
+- [X] T022 [US1] Implement hook for tournament selection and lastOpenedTournamentId handling in `web/src/features/tournaments/use-tournament-selection.ts`
+- [X] T023 [US1] Implement player management UI (add/edit/deactivate players with unique name validation) in `web/src/features/players/player-list-panel.tsx`
+- [X] T024 [US1] Wire persistence of created/updated tournaments via `state/persistence` helpers in `web/src/features/tournaments/tournament-list-screen.tsx`
 
 **Checkpoint**: User Story 1 should be fully functional and testable independently as the MVP.
 

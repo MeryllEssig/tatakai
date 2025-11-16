@@ -107,7 +107,7 @@ As a tournament organizer, I want to view complete chronological game history an
 - **FR-009**: System MUST track bench streak and prioritize players who haven't played recently while maintaining team balance
 - **FR-010**: System MUST maintain complete chronological game history with detailed team compositions and rankings
 - **FR-011**: System MUST allow deletion of games with automatic sequential rating recalculation from remaining history
-- **FR-012**: System MUST store tournament data locally in browser storage (via a storage abstraction backed by `localStorage`) using a per-tournament key pattern (e.g. `"mon-tournoi-1"`), with automatic periodic backups and corruption detection
+- **FR-012**: System MUST store tournament data locally in browser storage (via a storage abstraction backed by `localStorage`) using a per-tournament key equal to the tournament name normalized to alphanumeric characters without spaces (e.g. `"Mon Tournoi 1!"` → `"montournoi1"`), with automatic periodic backups and corruption detection
 - **FR-013**: System MUST provide comprehensive player statistics including rating history, bench streak, and performance metrics
 - **FR-014**: System MUST support any team size from 1-10 players per team with flexible team composition
 - **FR-015**: System MUST handle tournaments with up to 50 players per tournament

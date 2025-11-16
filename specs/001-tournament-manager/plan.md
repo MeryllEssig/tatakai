@@ -16,7 +16,7 @@ The application is a mobile-first React single-page app built with Vite and Type
 - **Run advanced matchmaking** that prioritizes bench fairness, then rating uncertainty, then rating balance.
 - **Maintain full game history** and support deletion with **sequential rating recomputation**.
 
-All data for the **active tournament** lives in a **Jotai store** that mirrors a `GameData` model and is persisted to browser `localStorage` under a **tournament-specific key** (e.g. `"mon-tournoi-1"`). Multiple tournaments can be stored concurrently under distinct keys, but only one is loaded into the Jotai store at a time; switching tournaments unloads the current data and loads the selected tournament from `localStorage`.
+All data for the **active tournament** lives in a **Jotai store** that mirrors a `GameData` model and is persisted to browser `localStorage` under a **tournament-specific key** equal to the tournament name normalized to alphanumeric characters without spaces (e.g. `"Mon Tournoi 1!"` → `"montournoi1"`). Multiple tournaments can be stored concurrently under distinct keys, but only one is loaded into the Jotai store at a time; switching tournaments unloads the current data and loads the selected tournament from `localStorage`.
 
 ## Technical Context
 
@@ -28,7 +28,7 @@ All data for the **active tournament** lives in a **Jotai store** that mirrors a
 
 **Language/Version**: TypeScript 5.x with React 19  
 **Primary Dependencies**: Vite (React + TS), React Router, Jotai, openskill, Tailwind CSS, shadcn/ui  
-**Storage**: Browser `localStorage` behind a small AsyncStorage-like adapter, using a key per tournament (`"mon-tournoi-1"`) that stores the multi-tournament `GameData` object. We can have multiple tournaments stored concurrently, but the jotai store loads one only at a time. Changing tournament selection should switch the jotai store data to the selected tournament by loading the data from `localStorage` and unloading the previous data.
+**Storage**: Browser `localStorage` behind a small AsyncStorage-like adapter, using a key per tournament equal to the tournament name normalized to alphanumeric characters without spaces (e.g. `"Mon Tournoi 1!"` → `"montournoi1"`) that stores the per-tournament `GameData` object. We can have multiple tournaments stored concurrently, but the jotai store loads one only at a time. Changing tournament selection should switch the jotai store data to the selected tournament by loading the data from `localStorage` and unloading the previous data.
 **Testing**: Vitest + @testing-library/react focused on pure business utilities (OpenSkill integration, matchmaking, sequential recomputation)  
 **Target Platform**: Mobile-first web SPA targeting modern evergreen browsers (mobile and desktop)
 **Project Type**: web  

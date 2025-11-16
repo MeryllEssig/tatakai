@@ -18,7 +18,7 @@ Each command should correspond to a small, testable function or service in the `
   - `initialPlayers?: { name: string }[]`
 - **Output**
   - `gameData: GameData` (fresh tournament state)
-  - `storageKey: string` (e.g. `"mon-tournoi-<id>"`)
+  - `storageKey: string` (normalized tournament name, e.g. `"Mon Tournoi 1!"` → `"montournoi1"`)
 
 ---
 
@@ -99,7 +99,7 @@ Each command should correspond to a small, testable function or service in the `
 
 - **Purpose**: Load a tournament `GameData` from `localStorage` into memory.
 - **Input**
-  - `storageKey: string` (e.g. `"mon-tournoi-<id>"`)
+  - `storageKey: string` (normalized tournament name, e.g. `"montournoi1"`)
 - **Output**
   - `gameData: GameData` (or a recoverable error if corrupted)
 - **Notes**

@@ -81,13 +81,13 @@ The Technical Context in `plan.md` has no remaining `NEEDS CLARIFICATION` marker
 ## R-004: Local storage layout, multi-tournament handling & Jotai integration
 
 - **Decision**
-  - Persist each tournament independently under a **per-tournament key** in `localStorage`, e.g. `"mon-tournoi-<id>"`, where `<id>` is a stable tournament id.
+  - Persist each tournament independently under a **per-tournament key** in `localStorage` equal to the tournament name normalized to alphanumeric characters without spaces (e.g. `"Mon Tournoi 1!"` → `"montournoi1"`). This normalized name is also used as the tournament `id`.
   - Each key stores a **`GameData` object** representing the full state of one tournament (players, games, settings, ratings).
   - The Jotai store only loads **one `GameData` at a time**:
     - Selecting a tournament in the UI triggers loading its `GameData` from `localStorage` and hydrating the root atom.
     - Switching to another tournament unloads the current `GameData` and loads the new one.
   - The tournament list screen is built by scanning known keys (or a small index) and reading lightweight metadata (id, name, counts, last game date).
-  - For each tournament, maintain a **backup entry** alongside the primary key: for `"mon-tournoi-<id>"`, keep `"mon-tournoi-<id>-backup"`. On successful save, write the backup first, then the primary. On load, if the primary value is missing or corrupted (JSON parse error or invalid shape), fall back to the backup entry.
+  - For each tournament, maintain a **backup entry** alongside the primary key: for key `K` (e.g. `"montournoi1"`), keep `"${K}-backup"` (e.g. `"montournoi1-backup"`). On successful save, write the backup first, then the primary. On load, if the primary value is missing or corrupted (JSON parse error or invalid shape), fall back to the backup entry.
 
 - **Rationale**
   - Keeps each tournament state **isolated** and makes backup/export operations trivial per tournament.
