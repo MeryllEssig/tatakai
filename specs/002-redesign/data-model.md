@@ -2,14 +2,6 @@
 
 This feature mostly extends the existing tournament data model with routing/i18n/view-layer concepts.
 
-## TournamentRouteContext
-
-Represents the active tournament context as encoded in the URL.
-
-- `tournamentId: string` – ID taken from the URL.
-- `currentView: 'overview' | 'history' | 'new-game' | 'leaderboard' | 'matchmaking' | 'settings' | 'help'` – logical sub-view.
-- `isValid: boolean` – derived flag indicating whether the ID points to an existing tournament.
-
 ## LanguagePreference
 
 Represents the effective display language and its origin.

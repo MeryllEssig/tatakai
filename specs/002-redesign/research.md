@@ -24,7 +24,6 @@
   - `/new-tournament` → canonical tournament creation page
   - `/tournament/:id/new-game` → canonical new game page for a given tournament
   - `/help` → static help page
-  Provide typed helpers to build URLs from `TournamentRouteContext`, and define redirects from legacy paths `/tournaments/new` → `/new-tournament` and `/games/new` → `/tournament/:id/new-game`.
 - **Rationale**: Aligns exactly with spec FR-201/FR-203 and clarifications, keeps navigation predictable and testable.
 - **Alternatives considered**: Query-parameter-based routing; hash-based routing. Rejected to preserve clean URLs and direct linkability.
 

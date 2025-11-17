@@ -7,16 +7,19 @@ import { JotaiRootProvider } from './app/providers/jotai-provider'
 import { ThemeProvider } from './app/providers/theme-provider'
 import { ErrorBoundary } from './app/providers/error-boundary'
 import { TournamentPersistenceGate } from './app/providers/tournament-persistence-gate'
+import { I18nProvider } from './app/providers/i18n-provider'
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
     <ErrorBoundary>
       <JotaiRootProvider>
         <ThemeProvider>
-          <AppShell>
-            <TournamentPersistenceGate />
-            <App />
-          </AppShell>
+          <I18nProvider>
+            <AppShell>
+              <TournamentPersistenceGate />
+              <App />
+            </AppShell>
+          </I18nProvider>
         </ThemeProvider>
       </JotaiRootProvider>
     </ErrorBoundary>
