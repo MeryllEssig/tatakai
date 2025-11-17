@@ -1,7 +1,7 @@
 import type { FormEvent, ReactElement } from 'react'
 import { useState } from 'react'
 import { useAtomValue } from 'jotai/react'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, useParams } from 'react-router-dom'
 import { gameDataAtom } from '../../state/atoms'
 import { generateMatchmakingSuggestion } from '../../lib/matchmaking/engine'
 import type { MatchmakingResult } from '../../lib/matchmaking/engine'
@@ -16,6 +16,7 @@ import {
 import { Button } from '../../ui/components/button'
 import { Input } from '../../ui/components/input'
 import { useAcceptSuggestion } from './use-accept-suggestion'
+import { buildTournamentRoute } from '../../lib/route-builders'
 
 interface MatchmakingFormState {
   maxPlayersPerGame: number
@@ -30,6 +31,7 @@ function getActivePlayers(gameData: { players: Player[] }): Player[] {
 export function MatchmakingScreen(): ReactElement {
   const gameData = useAtomValue(gameDataAtom)
   const navigate = useNavigate()
+  const { id } = useParams<{ id: string }>()
   const activePlayers = gameData ? getActivePlayers(gameData) : []
 
   const initialFormState: MatchmakingFormState = gameData
@@ -218,7 +220,17 @@ export function MatchmakingScreen(): ReactElement {
               </div>
 
               <div className="flex justify-between gap-2">
-                <Button type="button" variant="ghost" onClick={() => navigate('/') }>
+                <Button
+                  type="button"
+                  variant="ghost"
+                  onClick={() => {
+                    if (!id) {
+                      navigate('/')
+                      return
+                    }
+                    navigate(buildTournamentRoute(id, 'overview'))
+                  }}
+                >
                   Retour au tournoi
                 </Button>
                 <Button type="button" onClick={handleGenerate} disabled={activePlayers.length < 2}>

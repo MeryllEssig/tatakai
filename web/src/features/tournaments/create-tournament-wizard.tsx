@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router-dom'
 import type { RatingPreset, TournamentMode } from '../../lib/domain/types'
 import { createTournament } from '../../lib/tournaments/tournament-service'
 import { saveTournament } from '../persistence/local-storage-adapter'
+import { buildTournamentRoute } from '../../lib/route-builders'
 import { Card, CardContent, CardHeader, CardTitle } from '../../ui/components/card'
 import { Input } from '../../ui/components/input'
 import { Select } from '../../ui/components/select'
@@ -110,7 +111,7 @@ export function CreateTournamentWizard(): ReactElement {
 
       saveTournament(gameData)
 
-      navigate('/')
+      navigate(buildTournamentRoute(gameData.id, 'overview'))
     } catch (creationError) {
       setError('Impossible de créer le tournoi. Réessayez plus tard.')
       console.error(creationError)

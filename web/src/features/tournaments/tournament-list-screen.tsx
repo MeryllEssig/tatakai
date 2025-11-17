@@ -1,6 +1,6 @@
 import type { ReactElement } from 'react'
 import { useState } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, useParams } from 'react-router-dom'
 import type { TournamentSummary } from '../../lib/domain/types'
 import { listStoredTournamentSummaries } from '../persistence/local-storage-adapter'
 import { useTournamentSelection } from './use-tournament-selection'
@@ -16,6 +16,7 @@ import {
   CardTitle,
 } from '../../ui/components/card'
 import { Button } from '../../ui/components/button'
+import { buildTournamentRoute } from '../../lib/route-builders'
 
 function formatLastGameDate(value: string | null): string {
   if (!value) return 'Aucune'
@@ -33,7 +34,8 @@ export function TournamentListScreen(): ReactElement {
   const [importStatus, setImportStatus] = useState<string | null>(null)
   const [importError, setImportError] = useState<string | null>(null)
   const navigate = useNavigate()
-  const { selectTournament, hasSelection } = useTournamentSelection()
+  const { selectTournament } = useTournamentSelection()
+  const { id } = useParams<{ id?: string }>()
 
   const hasTournaments = tournaments.length > 0
 
@@ -71,62 +73,72 @@ export function TournamentListScreen(): ReactElement {
     <div className="flex flex-col gap-4">
       <div className="flex items-center justify-between gap-2">
         <div>
-          <h2 className="text-xl font-semibold">Tournois</h2>
+          <h2 className="text-xl font-semibold">
+            {id ? 'Vue d\'ensemble du tournoi' : 'Tournois'}
+          </h2>
           <p className="text-sm text-slate-300">
-            Gérez vos tournois locaux. Créez un tournoi puis ajoutez des joueurs.
+            {id
+              ? 'Consultez les joueurs, le classement et l\'historique de ce tournoi.'
+              : 'Gérez vos tournois locaux. Créez un tournoi puis ajoutez des joueurs.'}
           </p>
         </div>
-        <div className="flex gap-2">
-          <Button
-            type="button"
-            variant="outline"
-            disabled={!hasSelection}
-            onClick={() => navigate('/history')}
-          >
-            Historique
-          </Button>
-          <Button
-            type="button"
-            variant="outline"
-            disabled={!hasSelection}
-            onClick={() => navigate('/matchmaking')}
-          >
-            Matchmaking
-          </Button>
-          <Button
-            type="button"
-            variant="outline"
-            disabled={!hasSelection}
-            onClick={() => navigate('/leaderboard')}
-          >
-            Classement
-          </Button>
-          <Button
-            type="button"
-            variant="outline"
-            disabled={!hasSelection}
-            onClick={() => navigate('/games/new')}
-          >
-            Nouvelle partie
-          </Button>
-          <Button
-            type="button"
-            variant="outline"
-            onClick={() => {
-              setIsImportOpen((prev) => !prev)
-              setImportStatus(null)
-              setImportError(null)
-            }}
-          >
-            Importer un tournoi
-          </Button>
-          <Button type="button" onClick={() => navigate('/tournaments/new')}>
-            + Nouveau tournoi
-          </Button>
+        <div className="flex flex-wrap justify-end gap-2">
+          {id ? (
+            <>
+              <Button
+                type="button"
+                variant="outline"
+                onClick={() => navigate(buildTournamentRoute(id, 'history'))}
+              >
+                Historique
+              </Button>
+              <Button
+                type="button"
+                variant="outline"
+                onClick={() => navigate(buildTournamentRoute(id, 'matchmaking'))}
+              >
+                Matchmaking
+              </Button>
+              <Button
+                type="button"
+                variant="outline"
+                onClick={() => navigate(buildTournamentRoute(id, 'leaderboard'))}
+              >
+                Classement
+              </Button>
+              <Button
+                type="button"
+                variant="outline"
+                onClick={() => navigate(buildTournamentRoute(id, 'new-game'))}
+              >
+                Nouvelle partie
+              </Button>
+              <Button type="button" variant="ghost" onClick={() => navigate('/') }>
+                Quitter
+              </Button>
+            </>
+          ) : (
+            <>
+              <Button
+                type="button"
+                variant="outline"
+                onClick={() => {
+                  setIsImportOpen((prev) => !prev)
+                  setImportStatus(null)
+                  setImportError(null)
+                }}
+              >
+                Importer un tournoi
+              </Button>
+              <Button type="button" onClick={() => navigate('/new-tournament')}>
+                + Nouveau tournoi
+              </Button>
+            </>
+          )}
         </div>
       </div>
 
-      {isImportOpen ? (
+      {!id && isImportOpen ? (
         <Card className="border border-dashed border-slate-700">
           <CardHeader>
             <CardTitle>Importer un tournoi</CardTitle>
@@ -171,45 +183,58 @@ export function TournamentListScreen(): ReactElement {
 
       <div className="grid gap-4 lg:grid-cols-[minmax(0,1.4fr)_minmax(0,1fr)]">
         <div>
-          {!hasTournaments ? (
+          {!id ? (
+            !hasTournaments ? (
+              <Card>
+                <CardHeader>
+                  <CardTitle>Aucun tournoi pour le moment</CardTitle>
+                  <CardDescription>
+                    Créez votre premier tournoi pour commencer à enregistrer des parties.
+                  </CardDescription>
+                </CardHeader>
+              </Card>
+            ) : (
+              <div className="grid gap-3 md:grid-cols-2">
+                {tournaments.map((tournament) => (
+                  <Card
+                    key={tournament.id}
+                    className="cursor-pointer"
+                    onClick={() => navigate(buildTournamentRoute(tournament.id, 'overview'))}
+                  >
+                    <CardHeader>
+                      <CardTitle>{tournament.name}</CardTitle>
+                      <CardDescription>
+                        {tournament.playerCount} joueur
+                        {tournament.playerCount > 1 ? 's' : ''} · {tournament.gameCount} partie
+                        {tournament.gameCount > 1 ? 's' : ''}
+                      </CardDescription>
+                    </CardHeader>
+                    <CardContent className="flex items-center justify-between text-xs text-slate-400">
+                      <span>Dernière partie : {formatLastGameDate(tournament.lastGameDate)}</span>
+                    </CardContent>
+                  </Card>
+                ))}
+              </div>
+            )
+          ) : (
             <Card>
               <CardHeader>
-                <CardTitle>Aucun tournoi pour le moment</CardTitle>
+                <CardTitle>Détails du tournoi</CardTitle>
                 <CardDescription>
-                  Créez votre premier tournoi pour commencer à enregistrer des parties.
+                  Utilisez les actions ci-dessus et les panneaux à droite pour gérer ce tournoi.
                 </CardDescription>
               </CardHeader>
             </Card>
-          ) : (
-            <div className="grid gap-3 md:grid-cols-2">
-              {tournaments.map((tournament) => (
-                <Card
-                  key={tournament.id}
-                  className="cursor-pointer"
-                  onClick={() => selectTournament(tournament.id)}
-                >
-                  <CardHeader>
-                    <CardTitle>{tournament.name}</CardTitle>
-                    <CardDescription>
-                      {tournament.playerCount} joueur
-                      {tournament.playerCount > 1 ? 's' : ''} · {tournament.gameCount} partie
-                      {tournament.gameCount > 1 ? 's' : ''}
-                    </CardDescription>
-                  </CardHeader>
-                  <CardContent className="flex items-center justify-between text-xs text-slate-400">
-                    <span>Dernière partie : {formatLastGameDate(tournament.lastGameDate)}</span>
-                  </CardContent>
-                </Card>
-              ))}
-            </div>
           )}
         </div>
 
-        <div className="flex flex-col gap-4">
-          <PlayerListPanel />
-          <PlayerStatsPanel />
-          <TournamentSettingsPanel />
-        </div>
+        {id ? (
+          <div className="flex flex-col gap-4">
+            <PlayerListPanel />
+            <PlayerStatsPanel />
+            <TournamentSettingsPanel />
+          </div>
+        ) : null}
       </div>
     </div>
   )

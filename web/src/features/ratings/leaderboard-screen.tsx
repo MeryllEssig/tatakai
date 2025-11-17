@@ -1,6 +1,6 @@
 import type { ReactElement } from 'react'
 import { useAtomValue } from 'jotai/react'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, useParams } from 'react-router-dom'
 import { gameDataAtom } from '../../state/atoms'
 import { useRatingSnapshots } from './use-rating-snapshots'
 import {
@@ -11,11 +11,13 @@ import {
   CardTitle,
 } from '../../ui/components/card'
 import { Button } from '../../ui/components/button'
+import { buildTournamentRoute } from '../../lib/route-builders'
 
 export function LeaderboardScreen(): ReactElement {
   const gameData = useAtomValue(gameDataAtom)
   const navigate = useNavigate()
   const snapshots = useRatingSnapshots()
+  const { id } = useParams<{ id: string }>()
 
   if (!gameData) {
     return (
@@ -48,7 +50,17 @@ export function LeaderboardScreen(): ReactElement {
             </CardDescription>
           </CardHeader>
           <CardContent>
-            <Button type="button" variant="outline" onClick={() => navigate('/') }>
+            <Button
+              type="button"
+              variant="outline"
+              onClick={() => {
+                if (!id) {
+                  navigate('/')
+                  return
+                }
+                navigate(buildTournamentRoute(id, 'overview'))
+              }}
+            >
               Retour au tournoi
             </Button>
           </CardContent>
@@ -119,7 +131,17 @@ export function LeaderboardScreen(): ReactElement {
       </Card>
 
       <div className="flex justify-end">
-        <Button type="button" variant="ghost" onClick={() => navigate('/') }>
+        <Button
+          type="button"
+          variant="ghost"
+          onClick={() => {
+            if (!id) {
+              navigate('/')
+              return
+            }
+            navigate(buildTournamentRoute(id, 'overview'))
+          }}
+        >
           Retour au tournoi
         </Button>
       </div>

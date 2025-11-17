@@ -100,7 +100,7 @@ By implementing only i18n + the language selector, we can test that the existing
 
 ---
 
-### User Story 4 – Tatakai visual identity & light neobrutalism (Priority: P2)
+### User Story 4 – Tatakai visual identity & light theme neobrutalism (Priority: P2)
 
 As a user, I want a strong visual identity with a “戦” logo, coherent typography and a neobrutalist design **across the whole site**, so that the app is recognizable and pleasant to use.
 
@@ -238,7 +238,7 @@ As a user, I want buttons to have meaningful icons and players to have avatars g
 - **FR-209 (Player avatars)**  
   The system MUST display, for each player, an avatar generated from the player’s name, in a deterministic way, reusable across lists (players, leaderboard, stats, matchmaking).
 
-- **FR-210 (Visual identity & light neobrutalism)**  
+- **FR-210 (Visual identity & light theme neobrutalism)**  
   The system MUST apply, across **the entire site and all features**:
   - a logo based on the kanji 戦 with the Yuji Syuku font, alongside the text “Tatakai” + “Tournament Manager” on the right,
   - **Syne** font (weight ~750) for headings,

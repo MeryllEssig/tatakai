@@ -1,10 +1,11 @@
 import type { ReactElement } from 'react'
 import { useState } from 'react'
 import { useAtom } from 'jotai/react'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, useParams } from 'react-router-dom'
 import { gameDataAtom } from '../../state/atoms'
 import { deleteGameAndRecompute } from '../../lib/recompute/recompute-ratings'
 import type { Player } from '../../lib/domain/types'
+import { buildTournamentRoute } from '../../lib/route-builders'
 import {
   Card,
   CardContent,
@@ -23,6 +24,7 @@ function formatDate(value: string): string {
 export function GameHistoryScreen(): ReactElement {
   const [gameData, setGameData] = useAtom(gameDataAtom)
   const navigate = useNavigate()
+  const { id } = useParams<{ id: string }>()
   const [error, setError] = useState<string | null>(null)
 
   if (!gameData) {
@@ -82,7 +84,17 @@ export function GameHistoryScreen(): ReactElement {
             </CardDescription>
           </CardHeader>
           <CardContent>
-            <Button type="button" variant="outline" onClick={() => navigate('/') }>
+            <Button
+              type="button"
+              variant="outline"
+              onClick={() => {
+                if (!id) {
+                  navigate('/')
+                  return
+                }
+                navigate(buildTournamentRoute(id, 'overview'))
+              }}
+            >
               Retour au tournoi
             </Button>
           </CardContent>
@@ -100,7 +112,17 @@ export function GameHistoryScreen(): ReactElement {
             Liste chronologique des parties jouées, avec compositions d'équipes et rangs.
           </p>
         </div>
-        <Button type="button" variant="ghost" onClick={() => navigate('/') }>
+        <Button
+          type="button"
+          variant="ghost"
+          onClick={() => {
+            if (!id) {
+              navigate('/')
+              return
+            }
+            navigate(buildTournamentRoute(id, 'overview'))
+          }}
+        >
           Retour au tournoi
         </Button>
       </div>

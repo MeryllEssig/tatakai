@@ -4,6 +4,7 @@ import { useAtom } from 'jotai/react'
 import { useNavigate } from 'react-router-dom'
 import { gameDataAtom, nextGameSuggestedPlayerIdsAtom } from '../../state/atoms'
 import { recordGameResult } from '../../lib/games/game-service'
+import { buildTournamentRoute } from '../../lib/route-builders'
 import {
   Card,
   CardContent,
@@ -197,7 +198,7 @@ export function GameResultScreen(): ReactElement {
 
       setGameData(updated)
       setSuggestedPlayerIds(null)
-      navigate('/')
+      navigate(buildTournamentRoute(updated.id, 'overview'))
     } catch (unknownError) {
       console.error(unknownError)
       setError("Impossible d'enregistrer la partie. Vérifiez les rangs des joueurs.")
@@ -230,7 +231,11 @@ export function GameResultScreen(): ReactElement {
             </CardDescription>
           </CardHeader>
           <CardContent>
-            <Button type="button" variant="outline" onClick={() => navigate('/')}>
+            <Button
+              type="button"
+              variant="outline"
+              onClick={() => navigate(buildTournamentRoute(gameData.id, 'overview'))}
+            >
               Retour au tournoi
             </Button>
           </CardContent>
@@ -313,7 +318,11 @@ export function GameResultScreen(): ReactElement {
               </div>
 
               <div className="flex justify-between gap-2">
-                <Button type="button" variant="ghost" onClick={() => navigate('/')}>
+                <Button
+                  type="button"
+                  variant="ghost"
+                  onClick={() => navigate(buildTournamentRoute(gameData.id, 'overview'))}
+                >
                   Annuler
                 </Button>
                 <Button type="submit" disabled={isSubmitting}>

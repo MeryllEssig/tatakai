@@ -50,12 +50,12 @@
 
 ### Implementation for User Story 1
 
- - [ ] T011 [P] [US1] Define route config for tournament overview/history/leaderboard/matchmaking/settings in `web/src/app/router/routes.tsx`
- - [ ] T012 [P] [US1] Implement a typed `buildTournamentRoute` helper (history/leaderboard/etc.) in `web/src/lib/route-builders.ts`
- - [ ] T013 [US1] Ensure history screen reads tournament ID from route params and not from previous UI state in `web/src/features/games/*` (history view component)
- - [ ] T014 [US1] Ensure leaderboard screen reads tournament ID from route params and not from previous UI state in `web/src/features/ratings/*` (leaderboard component)
- - [ ] T016 [US1] Make the router default for unknown tournament IDs render the "Tournament not found" view on `/tournament/:id/...` in `web/src/app/router/routes.tsx`
- - [ ] T017 [P] [US1] Add a small vitest suite for `buildTournamentRoute` in `web/tests/unit/route-builders.test.ts`
+ - [X] T011 [P] [US1] Define route config for tournament overview/history/leaderboard/matchmaking/settings in `web/src/app/router/routes.tsx`
+ - [X] T012 [P] [US1] Implement a typed `buildTournamentRoute` helper (history/leaderboard/etc.) in `web/src/lib/route-builders.ts`
+ - [X] T013 [US1] Ensure history screen reads tournament ID from route params and not from previous UI state in `web/src/features/games/*` (history view component)
+ - [X] T014 [US1] Ensure leaderboard screen reads tournament ID from route params and not from previous UI state in `web/src/features/ratings/*` (leaderboard component)
+ - [X] T016 [US1] Make the router default for unknown tournament IDs render the "Tournament not found" view on `/tournament/:id/...` in `web/src/app/router/routes.tsx`
+ - [X] T017 [P] [US1] Add a small vitest suite for `buildTournamentRoute` in `web/tests/unit/route-builders.test.ts`
 
 **Checkpoint**: Navigating, refreshing, or pasting deep links to `/tournament/:id/...` should be stable and predictable.
 
@@ -69,11 +69,11 @@
 
 ### Implementation for User Story 2
 
-- [ ] T018 [P] [US2] Ensure `"/"` route renders only the tournament list screen in `web/src/app/router/routes.tsx` and `web/src/features/tournaments/tournament-list-screen.tsx`
-- [ ] T019 [US2] Wire "New tournament" button to navigate to `/new-tournament` (canonical route) instead of any legacy path in `web/src/features/tournaments/tournament-list-screen.tsx`
-- [ ] T020 [US2] Wire "Import tournament" button to the appropriate import flow (under home) in `web/src/features/tournaments/tournament-list-screen.tsx`
-- [ ] T021 [P] [US2] Ensure clicking a tournament row navigates to `/tournament/{id}` (overview) in `web/src/features/tournaments/tournament-list-screen.tsx`
-- [ ] T022 [US2] Implement `/new-tournament` route and screen composition using the existing 2-step creation wizard in `web/src/app/router/routes.tsx` and `web/src/features/tournaments/create-tournament-wizard.tsx`
+- [X] T018 [P] [US2] Ensure `"/"` route renders only the tournament list screen in `web/src/app/router/routes.tsx` and `web/src/features/tournaments/tournament-list-screen.tsx`
+- [X] T019 [US2] Wire "New tournament" button to navigate to `/new-tournament` (canonical route) instead of any legacy path in `web/src/features/tournaments/tournament-list-screen.tsx`
+- [X] T020 [US2] Wire "Import tournament" button to the appropriate import flow (under home) in `web/src/features/tournaments/tournament-list-screen.tsx`
+- [X] T021 [P] [US2] Ensure clicking a tournament row navigates to `/tournament/{id}` (overview) in `web/src/features/tournaments/tournament-list-screen.tsx`
+- [X] T022 [US2] Implement `/new-tournament` route and screen composition using the existing 2-step creation wizard in `web/src/app/router/routes.tsx` and `web/src/features/tournaments/create-tournament-wizard.tsx`
 
 **Checkpoint**: Home behaves as a clean entry point with clear navigation to tournament overview and creation.
 
@@ -100,11 +100,11 @@
 
 ---
 
-## Phase 6: User Story 4 – Tatakai visual identity & light neobrutalism (Priority: P2)
+## Phase 6: User Story 4 – Tatakai visual identity & light theme neobrutalism (Priority: P2)
 
-**Goal**: Apply the Tatakai brand (戦 logo, typography) and consistent light neobrutalist design via Retro UI across the app.
+**Goal**: Apply the Tatakai brand (戦 logo, typography) and consistent light theme neobrutalist design via Retro UI across the app.
 
-**Independent Test**: Any main page clearly shows the brand and light neobrutalist style.
+**Independent Test**: Any main page clearly shows the brand and light theme neobrutalist style.
 
 ### Implementation for User Story 4
 
