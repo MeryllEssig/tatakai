@@ -2,6 +2,7 @@ import type { ReactElement } from 'react'
 import { useState } from 'react'
 import { useAtom } from 'jotai/react'
 import { useNavigate, useParams } from 'react-router-dom'
+import { useTranslation } from 'react-i18next'
 import { gameDataAtom } from '../../state/atoms'
 import { deleteGameAndRecompute } from '../../lib/recompute/recompute-ratings'
 import type { Player } from '../../lib/domain/types'
@@ -26,20 +27,19 @@ export function GameHistoryScreen(): ReactElement {
   const navigate = useNavigate()
   const { id } = useParams<{ id: string }>()
   const [error, setError] = useState<string | null>(null)
+  const { t } = useTranslation()
 
   if (!gameData) {
     return (
       <div className="flex flex-col gap-4">
         <Card>
           <CardHeader>
-            <CardTitle>Historique des parties</CardTitle>
-            <CardDescription>
-              Sélectionnez un tournoi dans la liste avant de consulter l'historique des parties.
-            </CardDescription>
+            <CardTitle>{t('history.title')}</CardTitle>
+            <CardDescription>{t('history.noTournamentDescription')}</CardDescription>
           </CardHeader>
           <CardContent>
-            <Button type="button" variant="outline" onClick={() => navigate('/') }>
-              Retour à la liste des tournois
+            <Button type="button" variant="outline" onClick={() => navigate('/')}>
+              {t('history.backToList')}
             </Button>
           </CardContent>
         </Card>
@@ -57,9 +57,7 @@ export function GameHistoryScreen(): ReactElement {
   const handleDelete = (gameId: string) => {
     if (!gameData) return
 
-    const confirmed = window.confirm(
-      'Supprimer cette partie ? Les ratings seront recalculés à partir de l\'historique restant.',
-    )
+    const confirmed = window.confirm(t('history.deleteConfirm'))
 
     if (!confirmed) return
 
@@ -69,7 +67,7 @@ export function GameHistoryScreen(): ReactElement {
       setGameData(updated)
     } catch (unknownError) {
       console.error(unknownError)
-      setError("Impossible de supprimer la partie. Veuillez réessayer.")
+      setError(t('history.deleteError'))
     }
   }
 
@@ -78,10 +76,8 @@ export function GameHistoryScreen(): ReactElement {
       <div className="flex flex-col gap-4">
         <Card>
           <CardHeader>
-            <CardTitle>Historique des parties</CardTitle>
-            <CardDescription>
-              Aucune partie enregistrée pour ce tournoi pour le moment.
-            </CardDescription>
+            <CardTitle>{t('history.title')}</CardTitle>
+            <CardDescription>{t('history.noGamesDescription')}</CardDescription>
           </CardHeader>
           <CardContent>
             <Button
@@ -95,7 +91,7 @@ export function GameHistoryScreen(): ReactElement {
                 navigate(buildTournamentRoute(id, 'overview'))
               }}
             >
-              Retour au tournoi
+              {t('history.backToTournament')}
             </Button>
           </CardContent>
         </Card>
@@ -107,10 +103,8 @@ export function GameHistoryScreen(): ReactElement {
     <div className="flex flex-col gap-4">
       <div className="flex items-center justify-between gap-2">
         <div>
-          <h2 className="text-xl font-semibold">Historique des parties</h2>
-          <p className="text-sm text-slate-300">
-            Liste chronologique des parties jouées, avec compositions d'équipes et rangs.
-          </p>
+          <h2 className="text-xl font-semibold">{t('history.title')}</h2>
+          <p className="text-sm text-slate-300">{t('history.subtitle')}</p>
         </div>
         <Button
           type="button"
@@ -123,16 +117,14 @@ export function GameHistoryScreen(): ReactElement {
             navigate(buildTournamentRoute(id, 'overview'))
           }}
         >
-          Retour au tournoi
+          {t('history.backToTournament')}
         </Button>
       </div>
 
       <Card>
         <CardHeader>
-          <CardTitle>Parties</CardTitle>
-          <CardDescription>
-            Supprimez une partie pour recalculer tous les ratings comme si elle n'avait jamais eu lieu.
-          </CardDescription>
+          <CardTitle>{t('history.gamesTitle')}</CardTitle>
+          <CardDescription>{t('history.gamesDescription')}</CardDescription>
         </CardHeader>
         <CardContent className="flex flex-col gap-3">
           {error ? <p className="text-sm text-red-400">{error}</p> : null}
@@ -141,9 +133,11 @@ export function GameHistoryScreen(): ReactElement {
             <table className="w-full table-auto border-collapse text-sm">
               <thead>
                 <tr className="border-b border-slate-800 text-xs text-slate-400">
-                  <th className="py-1 pr-2 text-left font-medium">Date</th>
-                  <th className="py-1 px-2 text-left font-medium">Equipes & rangs</th>
-                  <th className="py-1 pl-2 text-right font-medium">Actions</th>
+                  <th className="py-1 pr-2 text-left font-medium">{t('history.tableDate')}</th>
+                  <th className="py-1 px-2 text-left font-medium">
+                    {t('history.tableTeamsAndRanks')}
+                  </th>
+                  <th className="py-1 pl-2 text-right font-medium">{t('history.tableActions')}</th>
                 </tr>
               </thead>
               <tbody>
@@ -166,13 +160,13 @@ export function GameHistoryScreen(): ReactElement {
                           {game.teams.map((team) => {
                             const rank = rankByTeamId.get(team.id)
                             const playerNames = team.playerIds
-                              .map((playerId) => playersById.get(playerId)?.name ?? 'Inconnu')
+                              .map((playerId) => playersById.get(playerId)?.name ?? t('history.unknownPlayerName'))
                               .join(', ')
 
                             return (
                               <li key={team.id}>
                                 <span className="font-medium text-slate-50">
-                                  Rang {rank ?? '?'}
+                                  {t('history.rankLabel', { rank: rank ?? '?' })}
                                 </span>{' '}
                                 <span className="text-slate-300">: {playerNames}</span>
                               </li>
@@ -187,7 +181,7 @@ export function GameHistoryScreen(): ReactElement {
                           variant="outline"
                           onClick={() => handleDelete(game.id)}
                         >
-                          Supprimer
+                          {t('history.deleteButton')}
                         </Button>
                       </td>
                     </tr>

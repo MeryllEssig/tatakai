@@ -1,6 +1,7 @@
 import type { ReactElement } from 'react'
 import { useState } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
+import { useTranslation } from 'react-i18next'
 import type { TournamentSummary } from '../../lib/domain/types'
 import { listStoredTournamentSummaries } from '../persistence/local-storage-adapter'
 import { useTournamentSelection } from './use-tournament-selection'
@@ -18,10 +19,13 @@ import {
 import { Button } from '../../ui/components/button'
 import { buildTournamentRoute } from '../../lib/route-builders'
 
-function formatLastGameDate(value: string | null): string {
-  if (!value) return 'Aucune'
+function formatLastGameDate(
+  value: string | null,
+  labels: { none: string; unknown: string },
+): string {
+  if (!value) return labels.none
   const date = new Date(value)
-  if (Number.isNaN(date.getTime())) return 'Inconnue'
+  if (Number.isNaN(date.getTime())) return labels.unknown
   return date.toLocaleString()
 }
 
@@ -36,6 +40,7 @@ export function TournamentListScreen(): ReactElement {
   const navigate = useNavigate()
   const { selectTournament } = useTournamentSelection()
   const { id } = useParams<{ id?: string }>()
+  const { t } = useTranslation()
 
   const hasTournaments = tournaments.length > 0
 
@@ -46,7 +51,7 @@ export function TournamentListScreen(): ReactElement {
     setImportError(null)
 
     if (!trimmed) {
-      setImportError('Veuillez coller un JSON de tournoi avant d\'importer.')
+      setImportError(t('home.importErrorEmpty'))
       return
     }
 
@@ -54,7 +59,7 @@ export function TournamentListScreen(): ReactElement {
       const imported = importTournamentFromJson(trimmed)
       setTournaments(listStoredTournamentSummaries())
       selectTournament(imported.id)
-      setImportStatus('Tournoi importé avec succès.')
+      setImportStatus(t('home.importStatusSuccess'))
       setIsImportOpen(false)
       setImportText('')
     } catch (unknownError) {
@@ -63,7 +68,7 @@ export function TournamentListScreen(): ReactElement {
       const message =
         unknownError instanceof Error && unknownError.message
           ? unknownError.message
-          : "Impossible d'importer le tournoi."
+          : t('home.importErrorGeneric')
 
       setImportError(message)
     }
@@ -74,12 +79,10 @@ export function TournamentListScreen(): ReactElement {
       <div className="flex items-center justify-between gap-2">
         <div>
           <h2 className="text-xl font-semibold">
-            {id ? 'Vue d\'ensemble du tournoi' : 'Tournois'}
+            {id ? t('home.titleWithId') : t('home.title')}
           </h2>
           <p className="text-sm text-slate-300">
-            {id
-              ? 'Consultez les joueurs, le classement et l\'historique de ce tournoi.'
-              : 'Gérez vos tournois locaux. Créez un tournoi puis ajoutez des joueurs.'}
+            {id ? t('home.subtitleWithId') : t('home.subtitle')}
           </p>
         </div>
         <div className="flex flex-wrap justify-end gap-2">
@@ -90,31 +93,31 @@ export function TournamentListScreen(): ReactElement {
                 variant="outline"
                 onClick={() => navigate(buildTournamentRoute(id, 'history'))}
               >
-                Historique
+                {t('home.history')}
               </Button>
               <Button
                 type="button"
                 variant="outline"
                 onClick={() => navigate(buildTournamentRoute(id, 'matchmaking'))}
               >
-                Matchmaking
+                {t('home.matchmaking')}
               </Button>
               <Button
                 type="button"
                 variant="outline"
                 onClick={() => navigate(buildTournamentRoute(id, 'leaderboard'))}
               >
-                Classement
+                {t('home.leaderboard')}
               </Button>
               <Button
                 type="button"
                 variant="outline"
                 onClick={() => navigate(buildTournamentRoute(id, 'new-game'))}
               >
-                Nouvelle partie
+                {t('home.newGame')}
               </Button>
-              <Button type="button" variant="ghost" onClick={() => navigate('/') }>
-                Quitter
+              <Button type="button" variant="ghost" onClick={() => navigate('/')}>
+                {t('home.quit')}
               </Button>
             </>
           ) : (
@@ -128,10 +131,10 @@ export function TournamentListScreen(): ReactElement {
                   setImportError(null)
                 }}
               >
-                Importer un tournoi
+                {t('home.importButton')}
               </Button>
               <Button type="button" onClick={() => navigate('/new-tournament')}>
-                + Nouveau tournoi
+                {t('home.newTournamentButton')}
               </Button>
             </>
           )}
@@ -141,11 +144,8 @@ export function TournamentListScreen(): ReactElement {
       {!id && isImportOpen ? (
         <Card className="border border-dashed border-slate-700">
           <CardHeader>
-            <CardTitle>Importer un tournoi</CardTitle>
-            <CardDescription>
-              Collez ici le JSON d&apos;un tournoi exporté. Si un tournoi avec le même id existe
-              déjà, il sera écrasé.
-            </CardDescription>
+            <CardTitle>{t('home.importTitle')}</CardTitle>
+            <CardDescription>{t('home.importDescription')}</CardDescription>
           </CardHeader>
           <CardContent className="flex flex-col gap-2 text-xs">
             {importStatus ? (
@@ -157,7 +157,7 @@ export function TournamentListScreen(): ReactElement {
               className="min-h-[120px] w-full rounded-md border border-slate-700 bg-slate-950 p-2 font-mono text-slate-100"
               value={importText}
               onChange={(event) => setImportText(event.target.value)}
-              placeholder={`{\n  "id": "mon-tournoi",\n  "name": "Mon tournoi",\n  ...\n}`}
+              placeholder={t('home.importPlaceholder')}
             />
 
             <div className="flex justify-end gap-2">
@@ -171,10 +171,10 @@ export function TournamentListScreen(): ReactElement {
                   setImportError(null)
                 }}
               >
-                Annuler
+                {t('home.importCancel')}
               </Button>
               <Button type="button" variant="outline" onClick={handleImport}>
-                Importer
+                {t('home.importSubmit')}
               </Button>
             </div>
           </CardContent>
@@ -187,10 +187,8 @@ export function TournamentListScreen(): ReactElement {
             !hasTournaments ? (
               <Card>
                 <CardHeader>
-                  <CardTitle>Aucun tournoi pour le moment</CardTitle>
-                  <CardDescription>
-                    Créez votre premier tournoi pour commencer à enregistrer des parties.
-                  </CardDescription>
+                  <CardTitle>{t('home.noTournamentTitle')}</CardTitle>
+                  <CardDescription>{t('home.noTournamentDescription')}</CardDescription>
                 </CardHeader>
               </Card>
             ) : (
@@ -204,13 +202,19 @@ export function TournamentListScreen(): ReactElement {
                     <CardHeader>
                       <CardTitle>{tournament.name}</CardTitle>
                       <CardDescription>
-                        {tournament.playerCount} joueur
-                        {tournament.playerCount > 1 ? 's' : ''} · {tournament.gameCount} partie
-                        {tournament.gameCount > 1 ? 's' : ''}
+                        {t('home.cardPlayersCount', { count: tournament.playerCount })} ·{' '}
+                        {t('home.cardGamesCount', { count: tournament.gameCount })}
                       </CardDescription>
                     </CardHeader>
                     <CardContent className="flex items-center justify-between text-xs text-slate-400">
-                      <span>Dernière partie : {formatLastGameDate(tournament.lastGameDate)}</span>
+                      <span>
+                        {t('home.lastGameLabel', {
+                          date: formatLastGameDate(tournament.lastGameDate, {
+                            none: t('home.lastGameNone'),
+                            unknown: t('home.lastGameUnknown'),
+                          }),
+                        })}
+                      </span>
                     </CardContent>
                   </Card>
                 ))}
@@ -219,10 +223,8 @@ export function TournamentListScreen(): ReactElement {
           ) : (
             <Card>
               <CardHeader>
-                <CardTitle>Détails du tournoi</CardTitle>
-                <CardDescription>
-                  Utilisez les actions ci-dessus et les panneaux à droite pour gérer ce tournoi.
-                </CardDescription>
+                <CardTitle>{t('home.detailsTitle')}</CardTitle>
+                <CardDescription>{t('home.detailsDescription')}</CardDescription>
               </CardHeader>
             </Card>
           )}

@@ -29,13 +29,14 @@
 
 ## i18n Architecture
 
-- **Decision**: Implement i18n with a lightweight custom solution:
-  - Typed translation dictionaries per locale (FR/EN/JA) stored as TS modules.
-  - A `LanguagePreference` model persisted via the existing storage abstraction (backed by localStorage) plus browser language detection per FR-205.
-  - A React context/provider exposing the effective language and a `t()` function.
-  - Fallback for missing keys stays consistent with the effective language (per clarification).
-- **Rationale**: Keeps dependencies minimal, matches the constitution’s simplicity principle, and is sufficient for a small SPA.
-- **Alternatives considered**: `react-intl`, `react-i18next`. Rejected for now to avoid extra runtime abstraction and configuration overhead.
+- **Decision**: Implement i18n with `react-i18next` on top of `i18next`:
+  - Translation dictionaries per locale (FR/EN/JA) are defined as JSON resources under `web/src/assets/locales/{fr,en,ja}/translation.json`.
+  - `web/src/i18n.ts` configures `i18next` + `react-i18next` + `i18next-browser-languagedetector` (per FR-205), handling browser language detection and fallbacks.
+  - The React tree uses `useTranslation()` (and optionally a thin `useI18n()` wrapper) to access `t()` and `i18n.changeLanguage()`.
+  - The existing `LanguagePreference` model and helper remain the reference for the documented resolution order (stored preference via storage abstraction > browser language > fallback) and are validated via unit tests.
+  - Fallback for missing keys is delegated to `i18next` configuration and remains consistent with the effective language per spec.
+- **Rationale**: Uses a well-known, battle-tested i18n stack while still keeping the app small and simple, and aligns the implementation with the updated constitution (react-i18next).
+- **Alternatives considered**: A fully custom dictionary-based helper or `react-intl`. Rejected in favour of the standard `react-i18next` ecosystem and its existing language detection/plugins.
 
 ## Help Content Delivery
 

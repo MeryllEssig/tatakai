@@ -17,7 +17,7 @@ Redesign the tournament UI and routing as a React/Vite web SPA so that:
 ## Technical Context
 
 **Language/Version**: TypeScript + React 19 on Vite 7 (web SPA)  
-**Primary Dependencies**: React, React DOM, React Router DOM 7, Jotai for state, Tailwind CSS 4 + tailwind-merge/tailwindcss-animate, class-variance-authority, vitest + jsdom for tests, shadcn ant-design icon set, Retro UI (retroui) for light neobrutalist styling  
+**Primary Dependencies**: React, React DOM, React Router DOM 7, Jotai for state, Tailwind CSS 4 + tailwind-merge/tailwindcss-animate, class-variance-authority, vitest + jsdom for tests, shadcn ant-design icon set, Retro UI (retroui) for light neobrutalist styling, **react-i18next + i18next + i18next-browser-languagedetector** for i18n  
 **Storage**: Browser `localStorage` behind the existing storage abstraction (no new backend)  
 **Testing**: vitest for non-trivial utilities (e.g. language resolution, routing helpers); UI behavior validated mainly via manual testing per constitution  
 **Target Platform**: Web browser (desktop + mobile) as a single-page React app  

@@ -33,6 +33,8 @@ Chaque module doit être réutilisable et indépendant autant que possible.
 ### Structure du Code
 - React (web) + Vite (SPA)
 - React Router (ou équivalent) pour la navigation
+- react-i18next pour la traduction. Les clés de traduction doivent être claires et cohérentes, et en format flat (pas de nested keys).
+- jotai pour le state management
 - UI mobile-first responsive (par exemple Tailwind CSS + librairie de composants)
 - Storage local : `localStorage` (ou équivalent persistance web) derrière une abstraction de stockage
 
@@ -52,6 +54,7 @@ Chaque module doit être réutilisable et indépendant autant que possible.
   - que le code reste compréhensible,
   - que la logique métier est testée,
   - que les composants UI restent simples et universels.
+  - que les strings fixes soient toutes traduites.
 - Objectif : une app lisible, maintenable, contrôlée.
 
 ## Governance

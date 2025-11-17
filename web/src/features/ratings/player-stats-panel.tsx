@@ -1,5 +1,6 @@
 import type { ReactElement } from 'react'
 import { useAtomValue } from 'jotai/react'
+import { useTranslation } from 'react-i18next'
 import { gameDataAtom } from '../../state/atoms'
 import { useRatingSnapshots } from './use-rating-snapshots'
 import {
@@ -13,15 +14,14 @@ import {
 export function PlayerStatsPanel(): ReactElement {
   const gameData = useAtomValue(gameDataAtom)
   const snapshots = useRatingSnapshots()
+  const { t } = useTranslation()
 
   if (!gameData) {
     return (
       <Card>
         <CardHeader>
-          <CardTitle>Statistiques des joueurs</CardTitle>
-          <CardDescription>
-            Sélectionnez un tournoi pour voir les statistiques des joueurs.
-          </CardDescription>
+          <CardTitle>{t('stats.title')}</CardTitle>
+          <CardDescription>{t('stats.noTournamentDescription')}</CardDescription>
         </CardHeader>
       </Card>
     )
@@ -31,10 +31,8 @@ export function PlayerStatsPanel(): ReactElement {
     return (
       <Card>
         <CardHeader>
-          <CardTitle>Statistiques des joueurs</CardTitle>
-          <CardDescription>
-            Ajoutez des joueurs au tournoi pour voir leurs statistiques.
-          </CardDescription>
+          <CardTitle>{t('stats.title')}</CardTitle>
+          <CardDescription>{t('stats.noSnapshotsDescription')}</CardDescription>
         </CardHeader>
       </Card>
     )
@@ -43,21 +41,21 @@ export function PlayerStatsPanel(): ReactElement {
   return (
     <Card>
       <CardHeader>
-        <CardTitle>Statistiques des joueurs</CardTitle>
-        <CardDescription>
-          µ, σ, µ-3σ, parties jouées et banc actuel pour chaque joueur.
-        </CardDescription>
+        <CardTitle>{t('stats.title')}</CardTitle>
+        <CardDescription>{t('stats.subtitle')}</CardDescription>
       </CardHeader>
       <CardContent className="overflow-x-auto">
         <table className="w-full table-auto border-collapse text-sm">
           <thead>
             <tr className="border-b border-slate-800 text-xs text-slate-400">
-              <th className="py-1 pr-2 text-left font-medium">Joueur</th>
-              <th className="py-1 px-2 text-right font-medium">µ</th>
-              <th className="py-1 px-2 text-right font-medium">σ</th>
-              <th className="py-1 px-2 text-right font-medium">µ-3σ</th>
-              <th className="py-1 px-2 text-right font-medium">Parties</th>
-              <th className="py-1 pl-2 text-right font-medium">Banc</th>
+              <th className="py-1 pr-2 text-left font-medium">{t('leaderboard.tablePlayer')}</th>
+              <th className="py-1 px-2 text-right font-medium">{t('leaderboard.tableMu')}</th>
+              <th className="py-1 px-2 text-right font-medium">{t('leaderboard.tableSigma')}</th>
+              <th className="py-1 px-2 text-right font-medium">
+                {t('leaderboard.tableMuConservative')}
+              </th>
+              <th className="py-1 px-2 text-right font-medium">{t('leaderboard.tableGames')}</th>
+              <th className="py-1 pl-2 text-right font-medium">{t('leaderboard.tableBench')}</th>
             </tr>
           </thead>
           <tbody>
@@ -69,7 +67,9 @@ export function PlayerStatsPanel(): ReactElement {
                 <td className="py-1 pr-2 text-left">
                   <span className="font-medium text-slate-50">{player.name}</span>
                   {!player.isActive ? (
-                    <span className="ml-1 text-xs text-slate-400">(inactif)</span>
+                    <span className="ml-1 text-xs text-slate-400">
+                      {t('leaderboard.inactiveBadge')}
+                    </span>
                   ) : null}
                 </td>
                 <td className="py-1 px-2 text-right tabular-nums">

@@ -34,7 +34,7 @@
 - [X] T004 Add shadcn ant-design icon dependency and minimal setup in `web/package.json` and `web/src/ui/components/*`
 - [X] T005 [P] Add Retro UI (retroui) dependency to `web/package.json` and integrate its Tailwind/Vite setup in `web/vite.config.ts` and `web/tailwind.config` (if needed)
 - [X] T006 [P] Define global font imports (Syne, Darker Grotesque, Noto Sans JP) in `web/src/index.css` or `web/src/App.css`
-- [X] T007 Create i18n infrastructure skeleton: language context/provider and `t()` helper in `web/src/lib/i18n.ts` and `web/src/app/providers/i18n-provider.tsx`
+- [X] T007 Create i18n infrastructure skeleton using `react-i18next`/`i18next`: initialize the i18n instance in `web/src/i18n.ts` and expose a `t()` helper via React integration
 - [X] T008 [P] Implement `LanguagePreference` storage helper using the existing storage abstraction (backed by localStorage) plus browser detection in `web/src/lib/language-preference.ts` and `web/src/features/persistence/local-storage-adapter.ts`
 - [X] T009 Wire new i18n provider into the app shell in `web/src/app/providers/*` and `web/src/app/layout/app-shell.tsx`
 
@@ -87,13 +87,13 @@
 
 ### Implementation for User Story 3
 
-- [ ] T024 [P] [US3] Define translation dictionaries for FR/EN/JA covering existing UI strings (home, tournament, history, leaderboard, matchmaking, help, settings) in `web/src/lib/i18n-dictionaries.ts`
-- [ ] T025 [US3] Implement `LanguagePreference` resolution logic (stored preference via storage abstraction > browser language > fallback) in `web/src/lib/language-preference.ts`
-- [ ] T026 [P] [US3] Connect i18n provider to app shell and expose `useI18n()` hook (with `t()` and `language` setter) in `web/src/app/providers/i18n-context.tsx`
-- [ ] T027 [US3] Implement a header language selector (flags + names) using shadcn/Retro UI components in `web/src/ui/components/language-selector.tsx`
-- [ ] T028 [P] [US3] Wire language selector into the app header layout so it is visible on all main pages in `web/src/app/layout/app-shell.tsx`
-- [ ] T029 [US3] Replace hard-coded strings on the home and tournament list screens with calls to `t()` in `web/src/features/tournaments/tournament-list-screen.tsx`
-- [ ] T030 [US3] Replace hard-coded strings on history/leaderboard/matchmaking/settings/help screens with `t()` calls in the relevant `web/src/features/*` components
+- [X] T024 [P] [US3] Define translation dictionaries for FR/EN/JA covering existing UI strings (home, tournament, history, leaderboard, matchmaking, help, settings) as JSON resources in `web/src/assets/locales/{fr,en,ja}/translation.json`
+- [X] T025 [US3] Validate and, if needed, refine `LanguagePreference` resolution logic (stored preference via storage abstraction > browser language > fallback) in `web/src/lib/language-preference.ts` so that it matches the documented FR-205 behavior
+- [X] T026 [P] [US3] Connect the `react-i18next`/`i18next` layer (configured in `web/src/i18n.ts`) to the app shell and expose a `useTranslation()`/`t()` helper in React components
+- [X] T027 [US3] Implement a header language selector (flags + names) using shadcn/Retro UI components in `web/src/ui/components/language-selector.tsx`, wiring it to `react-i18next` to change language
+- [X] T028 [P] [US3] Wire the language selector into the app header layout so it is visible on all main pages in `web/src/app/layout/app-shell.tsx`
+- [X] T029 [US3] Replace hard-coded strings on the home and tournament list screens with calls to `t()`/`useTranslation()` in `web/src/features/tournaments/tournament-list-screen.tsx`
+ - [X] T030 [US3] Replace hard-coded strings on history/leaderboard/matchmaking/settings/game-result/player-list/player-stats screens with `t()`/`useTranslation()` calls in the relevant `web/src/features/*` components
 - [ ] T031 [P] [US3] Add vitest unit tests for `LanguagePreference` resolution (including unsupported stored language and unsupported browser locale) to ensure correct priority and fallback per FR-205 in `web/tests/unit/language-preference.test.ts`
 
 **Checkpoint**: UI language is correctly determined, switchable, and persisted.

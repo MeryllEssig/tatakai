@@ -1,6 +1,7 @@
 import type { ReactElement } from 'react'
 import { useAtomValue } from 'jotai/react'
 import { useNavigate, useParams } from 'react-router-dom'
+import { useTranslation } from 'react-i18next'
 import { gameDataAtom } from '../../state/atoms'
 import { useRatingSnapshots } from './use-rating-snapshots'
 import {
@@ -18,20 +19,19 @@ export function LeaderboardScreen(): ReactElement {
   const navigate = useNavigate()
   const snapshots = useRatingSnapshots()
   const { id } = useParams<{ id: string }>()
+  const { t } = useTranslation()
 
   if (!gameData) {
     return (
       <div className="flex flex-col gap-4">
         <Card>
           <CardHeader>
-            <CardTitle>Classement du tournoi</CardTitle>
-            <CardDescription>
-              Sélectionnez un tournoi dans la liste avant de consulter le classement.
-            </CardDescription>
+            <CardTitle>{t('leaderboard.title')}</CardTitle>
+            <CardDescription>{t('leaderboard.noTournamentDescription')}</CardDescription>
           </CardHeader>
           <CardContent>
-            <Button type="button" variant="outline" onClick={() => navigate('/') }>
-              Retour à la liste des tournois
+            <Button type="button" variant="outline" onClick={() => navigate('/')}>
+              {t('leaderboard.backToList')}
             </Button>
           </CardContent>
         </Card>
@@ -44,10 +44,8 @@ export function LeaderboardScreen(): ReactElement {
       <div className="flex flex-col gap-4">
         <Card>
           <CardHeader>
-            <CardTitle>Classement du tournoi</CardTitle>
-            <CardDescription>
-              Ajoutez des joueurs au tournoi pour voir le classement.
-            </CardDescription>
+            <CardTitle>{t('leaderboard.title')}</CardTitle>
+            <CardDescription>{t('leaderboard.noSnapshotsDescription')}</CardDescription>
           </CardHeader>
           <CardContent>
             <Button
@@ -61,7 +59,7 @@ export function LeaderboardScreen(): ReactElement {
                 navigate(buildTournamentRoute(id, 'overview'))
               }}
             >
-              Retour au tournoi
+              {t('leaderboard.backToTournament')}
             </Button>
           </CardContent>
         </Card>
@@ -72,31 +70,28 @@ export function LeaderboardScreen(): ReactElement {
   return (
     <div className="flex flex-col gap-4">
       <div>
-        <h2 className="text-xl font-semibold">Classement du tournoi</h2>
-        <p className="text-sm text-slate-300">
-          Joueurs triés par rating conservateur (µ-3σ), avec incertitude et nombre de parties.
-        </p>
+        <h2 className="text-xl font-semibold">{t('leaderboard.title')}</h2>
+        <p className="text-sm text-slate-300">{t('leaderboard.subtitle')}</p>
       </div>
 
       <Card>
         <CardHeader>
-          <CardTitle>Leaderboard</CardTitle>
-          <CardDescription>
-            Classement basé sur le rating conservateur µ-3σ. Les joueurs inactifs apparaissent
-            avec une étiquette.
-          </CardDescription>
+          <CardTitle>{t('leaderboard.panelTitle')}</CardTitle>
+          <CardDescription>{t('leaderboard.panelDescription')}</CardDescription>
         </CardHeader>
         <CardContent className="overflow-x-auto">
           <table className="w-full table-auto border-collapse text-sm">
             <thead>
               <tr className="border-b border-slate-800 text-xs text-slate-400">
-                <th className="py-1 pr-2 text-left font-medium">#</th>
-                <th className="py-1 pr-2 text-left font-medium">Joueur</th>
-                <th className="py-1 px-2 text-right font-medium">µ</th>
-                <th className="py-1 px-2 text-right font-medium">σ</th>
-                <th className="py-1 px-2 text-right font-medium">µ-3σ</th>
-                <th className="py-1 px-2 text-right font-medium">Parties</th>
-                <th className="py-1 pl-2 text-right font-medium">Banc</th>
+                <th className="py-1 pr-2 text-left font-medium">{t('leaderboard.tableRank')}</th>
+                <th className="py-1 pr-2 text-left font-medium">{t('leaderboard.tablePlayer')}</th>
+                <th className="py-1 px-2 text-right font-medium">{t('leaderboard.tableMu')}</th>
+                <th className="py-1 px-2 text-right font-medium">{t('leaderboard.tableSigma')}</th>
+                <th className="py-1 px-2 text-right font-medium">
+                  {t('leaderboard.tableMuConservative')}
+                </th>
+                <th className="py-1 px-2 text-right font-medium">{t('leaderboard.tableGames')}</th>
+                <th className="py-1 pl-2 text-right font-medium">{t('leaderboard.tableBench')}</th>
               </tr>
             </thead>
             <tbody>
@@ -109,7 +104,9 @@ export function LeaderboardScreen(): ReactElement {
                     <td className="py-1 pr-2 text-left">
                       <span className="font-medium text-slate-50">{player.name}</span>
                       {!player.isActive ? (
-                        <span className="ml-1 text-xs text-slate-400">(inactif)</span>
+                        <span className="ml-1 text-xs text-slate-400">
+                          {t('leaderboard.inactiveBadge')}
+                        </span>
                       ) : null}
                     </td>
                     <td className="py-1 px-2 text-right tabular-nums">
@@ -142,7 +139,7 @@ export function LeaderboardScreen(): ReactElement {
             navigate(buildTournamentRoute(id, 'overview'))
           }}
         >
-          Retour au tournoi
+          {t('leaderboard.backToTournament')}
         </Button>
       </div>
     </div>

@@ -2,6 +2,7 @@ import type { FormEvent, ReactElement } from 'react'
 import { useEffect, useState } from 'react'
 import { useAtom } from 'jotai/react'
 import { useNavigate } from 'react-router-dom'
+import { useTranslation } from 'react-i18next'
 import { gameDataAtom, nextGameSuggestedPlayerIdsAtom } from '../../state/atoms'
 import { recordGameResult } from '../../lib/games/game-service'
 import { buildTournamentRoute } from '../../lib/route-builders'
@@ -28,6 +29,7 @@ export function GameResultScreen(): ReactElement {
   const [playerStates, setPlayerStates] = useState<PlayerStateById>({})
   const [error, setError] = useState<string | null>(null)
   const [isSubmitting, setIsSubmitting] = useState(false)
+  const { t } = useTranslation()
 
   useEffect(() => {
     if (!gameData) {
@@ -59,14 +61,12 @@ export function GameResultScreen(): ReactElement {
       <div className="flex flex-col gap-4">
         <Card>
           <CardHeader>
-            <CardTitle>Aucun tournoi sélectionné</CardTitle>
-            <CardDescription>
-              Sélectionnez un tournoi dans la liste avant d'enregistrer une nouvelle partie.
-            </CardDescription>
+            <CardTitle>{t('gameResult.noTournamentTitle')}</CardTitle>
+            <CardDescription>{t('gameResult.noTournamentDescription')}</CardDescription>
           </CardHeader>
           <CardContent>
             <Button type="button" variant="outline" onClick={() => navigate('/')}>
-              Retour à la liste des tournois
+              {t('gameResult.backToList')}
             </Button>
           </CardContent>
         </Card>
@@ -107,7 +107,7 @@ export function GameResultScreen(): ReactElement {
     setError(null)
 
     if (!gameData) {
-      setError('Aucun tournoi sélectionné.')
+      setError(t('gameResult.errorNoTournament'))
       return
     }
 
@@ -131,13 +131,13 @@ export function GameResultScreen(): ReactElement {
       .filter((entry): entry is ParticipantCandidate => entry !== null)
 
     if (candidates.length < 2) {
-      setError('Sélectionnez au moins deux joueurs actifs pour enregistrer une partie.')
+      setError(t('gameResult.errorNotEnoughPlayers'))
       return
     }
 
     if (candidates.length > maxPlayersPerGame) {
       setError(
-        `Au maximum ${maxPlayersPerGame} joueurs peuvent participer à une partie pour ce tournoi.`,
+        t('gameResult.errorTooManyPlayers', { max: maxPlayersPerGame }),
       )
       return
     }
@@ -151,7 +151,9 @@ export function GameResultScreen(): ReactElement {
     )
 
     if (invalidRank) {
-      setError(`Les rangs doivent être des entiers positifs compris entre 1 et ${rankMax}.`)
+      setError(
+        t('gameResult.errorInvalidRank', { maxRank: rankMax }),
+      )
       return
     }
 
@@ -177,7 +179,7 @@ export function GameResultScreen(): ReactElement {
       const group = groupsByRank.get(rankValue) ?? []
       return {
         id: `rank-group-${index + 1}`,
-        name: `Rang ${rankValue}`,
+        name: t('gameResult.rankGroup', { rank: rankValue }),
         playerIds: group.map((participant) => participant.playerId),
       }
     })
@@ -201,7 +203,7 @@ export function GameResultScreen(): ReactElement {
       navigate(buildTournamentRoute(updated.id, 'overview'))
     } catch (unknownError) {
       console.error(unknownError)
-      setError("Impossible d'enregistrer la partie. Vérifiez les rangs des joueurs.")
+      setError(t('gameResult.errorSaveFailed'))
     } finally {
       setIsSubmitting(false)
     }
@@ -216,19 +218,15 @@ export function GameResultScreen(): ReactElement {
   return (
     <div className="flex flex-col gap-4">
       <div>
-        <h2 className="text-xl font-semibold">Nouvelle partie</h2>
-        <p className="text-sm text-slate-300">
-          Sélectionnez les joueurs actifs pour cette partie et assignez-leur un rang.
-        </p>
+        <h2 className="text-xl font-semibold">{t('gameResult.title')}</h2>
+        <p className="text-sm text-slate-300">{t('gameResult.subtitle')}</p>
       </div>
 
       {activePlayers.length === 0 ? (
         <Card>
           <CardHeader>
-            <CardTitle>Aucun joueur actif</CardTitle>
-            <CardDescription>
-              Ajoutez ou réactivez des joueurs dans le tournoi avant d'enregistrer une partie.
-            </CardDescription>
+            <CardTitle>{t('gameResult.noActivePlayersTitle')}</CardTitle>
+            <CardDescription>{t('gameResult.noActivePlayersDescription')}</CardDescription>
           </CardHeader>
           <CardContent>
             <Button
@@ -236,7 +234,7 @@ export function GameResultScreen(): ReactElement {
               variant="outline"
               onClick={() => navigate(buildTournamentRoute(gameData.id, 'overview'))}
             >
-              Retour au tournoi
+              {t('gameResult.backToTournament')}
             </Button>
           </CardContent>
         </Card>
@@ -244,10 +242,9 @@ export function GameResultScreen(): ReactElement {
         <form onSubmit={handleSubmit} className="grid gap-4 lg:grid-cols-[minmax(0,1fr)]">
           <Card>
             <CardHeader>
-              <CardTitle>Joueurs et rangs</CardTitle>
+              <CardTitle>{t('gameResult.sectionTitle')}</CardTitle>
               <CardDescription>
-                Basculez les joueurs sur le banc ou actifs, puis choisissez un rang entre 1 et{' '}
-                {rankMax}. Au moins deux joueurs actifs avec un rang sont requis.
+                {t('gameResult.sectionDescription', { maxRank: rankMax })}
               </CardDescription>
             </CardHeader>
             <CardContent className="flex flex-col gap-3">
@@ -267,14 +264,19 @@ export function GameResultScreen(): ReactElement {
                       <div>
                         <p className="text-sm font-medium text-slate-50">{player.name}</p>
                         <p className="text-xs text-slate-400">
-                          Parties jouées : {player.gamesPlayed} · banc : {player.benchStreak}
+                          {t('gameResult.playerSummary', {
+                            games: player.gamesPlayed,
+                            bench: player.benchStreak,
+                          })}
                         </p>
                       </div>
 
                       <div className="mt-2 flex flex-1 flex-col gap-2 md:mt-0 md:items-end">
                         <div className="flex items-center gap-2">
                           <span className="text-xs uppercase tracking-wide text-slate-400">
-                            {isActive ? 'Actif pour cette partie' : 'Sur le banc'}
+                            {isActive
+                              ? t('gameResult.playerActiveLabelActive')
+                              : t('gameResult.playerActiveLabelBench')}
                           </span>
                           <Button
                             type="button"
@@ -282,13 +284,15 @@ export function GameResultScreen(): ReactElement {
                             variant={isActive ? 'default' : 'outline'}
                             onClick={() => handleToggleActive(player.id)}
                           >
-                            {isActive ? 'Mettre sur le banc' : 'Activer'}
+                            {isActive
+                              ? t('gameResult.playerToggleToBench')
+                              : t('gameResult.playerToggleToActive')}
                           </Button>
                         </div>
 
                         {isActive ? (
                           <div className="flex flex-col gap-1">
-                            <p className="text-xs text-slate-400">Rang</p>
+                            <p className="text-xs text-slate-400">{t('gameResult.rankLabel')}</p>
                             <div className="flex flex-col gap-1">
                               {rankRows.map((row, rowIndex) => (
                                 <div key={rowIndex} className="flex flex-wrap gap-1">
@@ -323,10 +327,10 @@ export function GameResultScreen(): ReactElement {
                   variant="ghost"
                   onClick={() => navigate(buildTournamentRoute(gameData.id, 'overview'))}
                 >
-                  Annuler
+                  {t('gameResult.cancel')}
                 </Button>
                 <Button type="submit" disabled={isSubmitting}>
-                  Enregistrer la partie
+                  {t('gameResult.submit')}
                 </Button>
               </div>
             </CardContent>
