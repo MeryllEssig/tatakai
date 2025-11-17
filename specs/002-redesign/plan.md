@@ -26,6 +26,15 @@ Redesign the tournament UI and routing as a React/Vite web SPA so that:
 **Constraints**: Keep routing/i18n/theme changes incremental over existing architecture; avoid introducing extra global state libraries; keep bundle size reasonable despite new icon/Retro UI dependencies  
 **Scale/Scope**: Single-user browser app managing dozens of tournaments; up to ~50 players per tournament and ~100 games per tournament (from 001 feature)
 
+### Testing workflow (002-redesign)
+
+Pour la feature 002-redesign, **chaque cycle de développement** doit se terminer par :
+
+1. L’exécution de la suite de tests vitest pertinente dans `web/` (au minimum les tests unitaires des utilitaires concernés).
+2. La correction de tous les tests en échec avant de passer au cycle suivant (nouvelle tâche, nouveau commit ou nouveau lot de modifications).
+
+Aucune évolution ne doit être considérée comme “terminée” tant que les tests ne sont pas verts pour cette feature.
+
 ## Constitution Check
 
 *GATE: Must pass before Phase 0 research. Re-check after Phase 1 design.*

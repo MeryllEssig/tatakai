@@ -94,7 +94,7 @@
 - [X] T028 [P] [US3] Wire the language selector into the app header layout so it is visible on all main pages in `web/src/app/layout/app-shell.tsx`
 - [X] T029 [US3] Replace hard-coded strings on the home and tournament list screens with calls to `t()`/`useTranslation()` in `web/src/features/tournaments/tournament-list-screen.tsx`
  - [X] T030 [US3] Replace hard-coded strings on history/leaderboard/matchmaking/settings/game-result/player-list/player-stats screens with `t()`/`useTranslation()` calls in the relevant `web/src/features/*` components
-- [ ] T031 [P] [US3] Add vitest unit tests for `LanguagePreference` resolution (including unsupported stored language and unsupported browser locale) to ensure correct priority and fallback per FR-205 in `web/tests/unit/language-preference.test.ts`
+- [X] T031 [P] [US3] Add vitest unit tests for `LanguagePreference` resolution (including unsupported stored language and unsupported browser locale) to ensure correct priority and fallback per FR-205 in `web/tests/unit/language-preference.test.ts`
 
 **Checkpoint**: UI language is correctly determined, switchable, and persisted.
 

@@ -79,7 +79,9 @@ export interface ResolveLanguagePreferenceOptions {
 function detectBrowserLanguage(browserLanguages?: readonly string[]): SupportedLanguage | null {
   const sources: string[] = []
 
-  if (browserLanguages && browserLanguages.length > 0) {
+  if (browserLanguages !== undefined) {
+    // When browserLanguages is provided (even an empty array), use it as the
+    // complete set of candidates and do not fall back to the global navigator.
     sources.push(...browserLanguages)
   } else if (typeof navigator !== 'undefined') {
     if (Array.isArray(navigator.languages) && navigator.languages.length > 0) {

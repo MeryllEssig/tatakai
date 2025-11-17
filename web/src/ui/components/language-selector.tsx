@@ -6,9 +6,9 @@ import { saveLanguageToStorage } from '../../lib/language-preference'
 import { getStorage } from '../../features/persistence/local-storage-adapter'
 
 const LANGUAGE_OPTIONS: { code: SupportedLanguage; label: string }[] = [
-  { code: 'fr', label: '🇫🇷 Français' },
-  { code: 'en', label: '🇬🇧 English' },
-  { code: 'ja', label: '🇯🇵 日本語' },
+  { code: 'fr', label: '🇫🇷' },
+  { code: 'en', label: '🇬🇧' },
+  { code: 'ja', label: '🇯🇵' },
 ]
 
 interface LanguageSelectorProps {
