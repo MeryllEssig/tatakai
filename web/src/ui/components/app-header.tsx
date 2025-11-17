@@ -16,7 +16,7 @@ export function AppHeader({ rightSlot }: AppHeaderProps) {
           <span className="sr-only">Tatakai Tournament Manager</span>
         </div>
         <div className="leading-tight">
-          <div className="text-base font-semibold tracking-tight">Tatakai</div>
+          <div className="font-heading text-base font-semibold tracking-tight">Tatakai</div>
           <div className="text-xs text-slate-300">{t('app.subtitle')}</div>
         </div>
       </div>
