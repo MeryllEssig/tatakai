@@ -1,5 +1,6 @@
 {
   "app.title": "Tatakai Tournament Manager",
+  "app.subtitle": "Tournament Manager",
 
   "home.title": "Tournaments",
   "home.titleWithId": "Tournament overview",

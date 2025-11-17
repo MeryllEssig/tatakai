@@ -108,10 +108,10 @@
 
 ### Implementation for User Story 4
 
-- [ ] T032 [P] [US4] Implement header logo block (戦 + "Tatakai" + "Tournament Manager") in `web/src/ui/components/app-header.tsx`
-- [ ] T033 [US4] Integrate header component into app shell layout in `web/src/app/layout/app-shell.tsx`
-- [ ] T034 [P] [US4] Configure font stacks (Syne for headings, Darker Grotesque for body, Noto Sans JP fallback) in `web/src/index.css` or `web/src/App.css`
-- [ ] T035 [US4] Apply Retro UI base styles and components to main layout blocks in `web/src/app/layout/app-shell.tsx` and `web/src/ui/components/*`
+ - [X] T032 [P] [US4] Implement header logo block (戦 + "Tatakai" + "Tournament Manager") in `web/src/ui/components/app-header.tsx`
+ - [X] T033 [US4] Integrate header component into app shell layout in `web/src/app/layout/app-shell.tsx`
+ - [ ] T034 [P] [US4] Configure font stacks (Syne for headings, Darker Grotesque for body, Noto Sans JP fallback) in `web/src/index.css` or `web/src/App.css`
+ - [ ] T035 [US4] Apply Retro UI base styles and components to main layout blocks in `web/src/app/layout/app-shell.tsx` and `web/src/ui/components/*`
 - [ ] T036 [P] [US4] Adjust key pages (home, tournament overview, history, leaderboard, matchmaking, help, settings) to follow light neobrutalist blocks/borders/shadows/colors using Retro UI in the corresponding `web/src/features/*` components
 
 **Checkpoint**: Visual identity is consistent and recognizable across core flows.
