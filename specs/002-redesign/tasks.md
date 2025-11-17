@@ -19,9 +19,9 @@
 
 **Purpose**: Prepare dependencies and base project state for 002-redesign.
 
-- [X] T001 Ensure `web` dependencies are installed (icons & Retro UI ready to add) in `web/package.json`
-- [X] T002 [P] Verify Vite/React Router/Jotai/Tailwind toolchain works by running `npm run dev` in `web/`
-- [X] T003 [P] Confirm vitest test runner works in `web/` by running `npm test`
+- [x] T001 Ensure `web` dependencies are installed (icons & Retro UI ready to add) in `web/package.json`
+- [x] T002 [P] Verify Vite/React Router/Jotai/Tailwind toolchain works by running `npm run dev` in `web/`
+- [x] T003 [P] Confirm vitest test runner works in `web/` by running `npm test`
 
 ---
 
@@ -31,12 +31,12 @@
 
 **⚠️ CRITICAL**: No user story work should begin until this phase is complete.
 
-- [X] T004 Add shadcn ant-design icon dependency and minimal setup in `web/package.json` and `web/src/ui/components/*`
-- [X] T005 [P] Add Retro UI (retroui) dependency to `web/package.json` and integrate its Tailwind/Vite setup in `web/vite.config.ts` and `web/tailwind.config` (if needed)
-- [X] T006 [P] Define global font imports (Syne, Darker Grotesque, Noto Sans JP) in `web/src/index.css` or `web/src/App.css`
-- [X] T007 Create i18n infrastructure skeleton using `react-i18next`/`i18next`: initialize the i18n instance in `web/src/i18n.ts` and expose a `t()` helper via React integration
-- [X] T008 [P] Implement `LanguagePreference` storage helper using the existing storage abstraction (backed by localStorage) plus browser detection in `web/src/lib/language-preference.ts` and `web/src/features/persistence/local-storage-adapter.ts`
-- [X] T009 Wire new i18n provider into the app shell in `web/src/app/providers/*` and `web/src/app/layout/app-shell.tsx`
+- [x] T004 Add shadcn ant-design icon dependency and minimal setup in `web/package.json` and `web/src/ui/components/*`
+- [x] T005 [P] Add Retro UI (retroui) dependency to `web/package.json` and integrate its Tailwind/Vite setup in `web/vite.config.ts` and `web/tailwind.config` (if needed)
+- [x] T006 [P] Define global font imports (Syne, Darker Grotesque, Noto Sans JP) in `web/src/index.css` or `web/src/App.css`
+- [x] T007 Create i18n infrastructure skeleton using `react-i18next`/`i18next`: initialize the i18n instance in `web/src/i18n.ts` and expose a `t()` helper via React integration
+- [x] T008 [P] Implement `LanguagePreference` storage helper using the existing storage abstraction (backed by localStorage) plus browser detection in `web/src/lib/language-preference.ts` and `web/src/features/persistence/local-storage-adapter.ts`
+- [x] T009 Wire new i18n provider into the app shell in `web/src/app/providers/*` and `web/src/app/layout/app-shell.tsx`
 
 **Checkpoint**: Router, i18n shell, and design system dependencies are in place.
 
@@ -50,12 +50,12 @@
 
 ### Implementation for User Story 1
 
- - [X] T011 [P] [US1] Define route config for tournament overview/history/leaderboard/matchmaking/settings in `web/src/app/router/routes.tsx`
- - [X] T012 [P] [US1] Implement a typed `buildTournamentRoute` helper (history/leaderboard/etc.) in `web/src/lib/route-builders.ts`
- - [X] T013 [US1] Ensure history screen reads tournament ID from route params and not from previous UI state in `web/src/features/games/*` (history view component)
- - [X] T014 [US1] Ensure leaderboard screen reads tournament ID from route params and not from previous UI state in `web/src/features/ratings/*` (leaderboard component)
- - [X] T016 [US1] Make the router default for unknown tournament IDs render the "Tournament not found" view on `/tournament/:id/...` in `web/src/app/router/routes.tsx`
- - [X] T017 [P] [US1] Add a small vitest suite for `buildTournamentRoute` in `web/tests/unit/route-builders.test.ts`
+- [x] T011 [P] [US1] Define route config for tournament overview/history/leaderboard/matchmaking/settings in `web/src/app/router/routes.tsx`
+- [x] T012 [P] [US1] Implement a typed `buildTournamentRoute` helper (history/leaderboard/etc.) in `web/src/lib/route-builders.ts`
+- [x] T013 [US1] Ensure history screen reads tournament ID from route params and not from previous UI state in `web/src/features/games/*` (history view component)
+- [x] T014 [US1] Ensure leaderboard screen reads tournament ID from route params and not from previous UI state in `web/src/features/ratings/*` (leaderboard component)
+- [x] T016 [US1] Make the router default for unknown tournament IDs render the "Tournament not found" view on `/tournament/:id/...` in `web/src/app/router/routes.tsx`
+- [x] T017 [P] [US1] Add a small vitest suite for `buildTournamentRoute` in `web/tests/unit/route-builders.test.ts`
 
 **Checkpoint**: Navigating, refreshing, or pasting deep links to `/tournament/:id/...` should be stable and predictable.
 
@@ -69,11 +69,11 @@
 
 ### Implementation for User Story 2
 
-- [X] T018 [P] [US2] Ensure `"/"` route renders only the tournament list screen in `web/src/app/router/routes.tsx` and `web/src/features/tournaments/tournament-list-screen.tsx`
-- [X] T019 [US2] Wire "New tournament" button to navigate to `/new-tournament` (canonical route) instead of any legacy path in `web/src/features/tournaments/tournament-list-screen.tsx`
-- [X] T020 [US2] Wire "Import tournament" button to the appropriate import flow (under home) in `web/src/features/tournaments/tournament-list-screen.tsx`
-- [X] T021 [P] [US2] Ensure clicking a tournament row navigates to `/tournament/{id}` (overview) in `web/src/features/tournaments/tournament-list-screen.tsx`
-- [X] T022 [US2] Implement `/new-tournament` route and screen composition using the existing 2-step creation wizard in `web/src/app/router/routes.tsx` and `web/src/features/tournaments/create-tournament-wizard.tsx`
+- [x] T018 [P] [US2] Ensure `"/"` route renders only the tournament list screen in `web/src/app/router/routes.tsx` and `web/src/features/tournaments/tournament-list-screen.tsx`
+- [x] T019 [US2] Wire "New tournament" button to navigate to `/new-tournament` (canonical route) instead of any legacy path in `web/src/features/tournaments/tournament-list-screen.tsx`
+- [x] T020 [US2] Wire "Import tournament" button to the appropriate import flow (under home) in `web/src/features/tournaments/tournament-list-screen.tsx`
+- [x] T021 [P] [US2] Ensure clicking a tournament row navigates to `/tournament/{id}` (overview) in `web/src/features/tournaments/tournament-list-screen.tsx`
+- [x] T022 [US2] Implement `/new-tournament` route and screen composition using the existing 2-step creation wizard in `web/src/app/router/routes.tsx` and `web/src/features/tournaments/create-tournament-wizard.tsx`
 
 **Checkpoint**: Home behaves as a clean entry point with clear navigation to tournament overview and creation.
 
@@ -87,14 +87,14 @@
 
 ### Implementation for User Story 3
 
-- [X] T024 [P] [US3] Define translation dictionaries for FR/EN/JA covering existing UI strings (home, tournament, history, leaderboard, matchmaking, help, settings) as JSON resources in `web/src/assets/locales/{fr,en,ja}/translation.json`
-- [X] T025 [US3] Validate and, if needed, refine `LanguagePreference` resolution logic (stored preference via storage abstraction > browser language > fallback) in `web/src/lib/language-preference.ts` so that it matches the documented FR-205 behavior
-- [X] T026 [P] [US3] Connect the `react-i18next`/`i18next` layer (configured in `web/src/i18n.ts`) to the app shell and expose a `useTranslation()`/`t()` helper in React components
-- [X] T027 [US3] Implement a header language selector (flags + names) using shadcn/Retro UI components in `web/src/ui/components/language-selector.tsx`, wiring it to `react-i18next` to change language
-- [X] T028 [P] [US3] Wire the language selector into the app header layout so it is visible on all main pages in `web/src/app/layout/app-shell.tsx`
-- [X] T029 [US3] Replace hard-coded strings on the home and tournament list screens with calls to `t()`/`useTranslation()` in `web/src/features/tournaments/tournament-list-screen.tsx`
- - [X] T030 [US3] Replace hard-coded strings on history/leaderboard/matchmaking/settings/game-result/player-list/player-stats screens with `t()`/`useTranslation()` calls in the relevant `web/src/features/*` components
-- [X] T031 [P] [US3] Add vitest unit tests for `LanguagePreference` resolution (including unsupported stored language and unsupported browser locale) to ensure correct priority and fallback per FR-205 in `web/tests/unit/language-preference.test.ts`
+- [x] T024 [P] [US3] Define translation dictionaries for FR/EN/JA covering existing UI strings (home, tournament, history, leaderboard, matchmaking, help, settings) as JSON resources in `web/src/assets/locales/{fr,en,ja}/translation.json`
+- [x] T025 [US3] Validate and, if needed, refine `LanguagePreference` resolution logic (stored preference via storage abstraction > browser language > fallback) in `web/src/lib/language-preference.ts` so that it matches the documented FR-205 behavior
+- [x] T026 [P] [US3] Connect the `react-i18next`/`i18next` layer (configured in `web/src/i18n.ts`) to the app shell and expose a `useTranslation()`/`t()` helper in React components
+- [x] T027 [US3] Implement a header language selector (flags + names) using shadcn/Retro UI components in `web/src/ui/components/language-selector.tsx`, wiring it to `react-i18next` to change language
+- [x] T028 [P] [US3] Wire the language selector into the app header layout so it is visible on all main pages in `web/src/app/layout/app-shell.tsx`
+- [x] T029 [US3] Replace hard-coded strings on the home and tournament list screens with calls to `t()`/`useTranslation()` in `web/src/features/tournaments/tournament-list-screen.tsx`
+- [x] T030 [US3] Replace hard-coded strings on history/leaderboard/matchmaking/settings/game-result/player-list/player-stats screens with `t()`/`useTranslation()` calls in the relevant `web/src/features/*` components
+- [x] T031 [P] [US3] Add vitest unit tests for `LanguagePreference` resolution (including unsupported stored language and unsupported browser locale) to ensure correct priority and fallback per FR-205 in `web/tests/unit/language-preference.test.ts`
 
 **Checkpoint**: UI language is correctly determined, switchable, and persisted.
 
@@ -108,10 +108,10 @@
 
 ### Implementation for User Story 4
 
- - [X] T032 [P] [US4] Implement header logo block (戦 + "Tatakai" + "Tournament Manager") in `web/src/ui/components/app-header.tsx`
- - [X] T033 [US4] Integrate header component into app shell layout in `web/src/app/layout/app-shell.tsx`
- - [X] T034 [P] [US4] Configure font stacks (Syne for headings, Darker Grotesque for body, Noto Sans JP fallback) in `web/src/index.css` or `web/src/App.css`
- - [ ] T035 [US4] Apply Retro UI base styles and components to main layout blocks in `web/src/app/layout/app-shell.tsx` and `web/src/ui/components/*`
+- [x] T032 [P] [US4] Implement header logo block (戦 + "Tatakai" + "Tournament Manager") in `web/src/ui/components/app-header.tsx`
+- [x] T033 [US4] Integrate header component into app shell layout in `web/src/app/layout/app-shell.tsx`
+- [x] T034 [P] [US4] Configure font stacks (Syne for headings, Darker Grotesque for body, Noto Sans JP fallback) in `web/src/index.css` or `web/src/App.css`
+- [x] T035 [US4] Apply Retro UI base styles and components to main layout blocks in `web/src/app/layout/app-shell.tsx` and `web/src/ui/components/*`
 - [ ] T036 [P] [US4] Adjust key pages (home, tournament overview, history, leaderboard, matchmaking, help, settings) to follow light neobrutalist blocks/borders/shadows/colors using Retro UI in the corresponding `web/src/features/*` components
 
 **Checkpoint**: Visual identity is consistent and recognizable across core flows.

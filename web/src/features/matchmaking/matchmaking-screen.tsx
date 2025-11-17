@@ -1,23 +1,17 @@
+import { useAtomValue } from 'jotai/react'
 import type { FormEvent, ReactElement } from 'react'
 import { useState } from 'react'
-import { useAtomValue } from 'jotai/react'
-import { useNavigate, useParams } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
-import { gameDataAtom } from '../../state/atoms'
-import { generateMatchmakingSuggestion } from '../../lib/matchmaking/engine'
-import type { MatchmakingResult } from '../../lib/matchmaking/engine'
+import { useNavigate, useParams } from 'react-router-dom'
 import type { Player } from '../../lib/domain/types'
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from '../../ui/components/card'
+import type { MatchmakingResult } from '../../lib/matchmaking/engine'
+import { generateMatchmakingSuggestion } from '../../lib/matchmaking/engine'
+import { buildTournamentRoute } from '../../lib/route-builders'
+import { gameDataAtom } from '../../state/atoms'
 import { Button } from '../../ui/components/button'
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '../../ui/components/card'
 import { Input } from '../../ui/components/input'
 import { useAcceptSuggestion } from './use-accept-suggestion'
-import { buildTournamentRoute } from '../../lib/route-builders'
 
 interface MatchmakingFormState {
   maxPlayersPerGame: number
@@ -39,8 +33,7 @@ export function MatchmakingScreen(): ReactElement {
   const initialFormState: MatchmakingFormState = gameData
     ? {
         maxPlayersPerGame:
-          gameData.settings.matchmakingMaxPlayers &&
-          gameData.settings.matchmakingMaxPlayers > 0
+          gameData.settings.matchmakingMaxPlayers && gameData.settings.matchmakingMaxPlayers > 0
             ? gameData.settings.matchmakingMaxPlayers
             : Math.max(2, Math.min(4, activePlayers.length || 2)),
         maxTeams: Math.max(2, Math.min(4, activePlayers.length || 2)),
@@ -59,7 +52,6 @@ export function MatchmakingScreen(): ReactElement {
   const [result, setResult] = useState<MatchmakingResult | null>(null)
   const [error, setError] = useState<string | null>(null)
   const acceptSuggestion = useAcceptSuggestion()
-  
 
   if (!gameData) {
     return (
@@ -137,7 +129,7 @@ export function MatchmakingScreen(): ReactElement {
     <div className="flex flex-col gap-4">
       <div>
         <h2 className="text-xl font-semibold">{t('matchmaking.title')}</h2>
-        <p className="text-sm text-slate-300">{t('matchmaking.subtitle')}</p>
+        <p className="text-sm text-slate-600">{t('matchmaking.subtitle')}</p>
       </div>
 
       <div className="grid gap-4 lg:grid-cols-[minmax(0,1.1fr)_minmax(0,1.2fr)]">
@@ -193,7 +185,7 @@ export function MatchmakingScreen(): ReactElement {
               <div className="flex items-center justify-between gap-2">
                 <div className="flex flex-col">
                   <span className="text-sm font-medium">{t('matchmaking.benchFairnessLabel')}</span>
-                  <span className="text-xs text-slate-400">
+                  <span className="text-xs text-slate-600">
                     {t('matchmaking.benchFairnessHelp')}
                   </span>
                 </div>
@@ -245,9 +237,7 @@ export function MatchmakingScreen(): ReactElement {
             {error ? <p className="text-sm text-red-400">{error}</p> : null}
 
             {activePlayers.length === 0 ? (
-              <p className="text-sm text-slate-400">
-                {t('matchmaking.noActivePlayers')}
-              </p>
+              <p className="text-sm text-slate-600">{t('matchmaking.noActivePlayers')}</p>
             ) : (
               <>
                 <div className="flex justify-between gap-2 text-xs">

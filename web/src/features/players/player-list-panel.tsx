@@ -1,13 +1,13 @@
+import { useAtom } from 'jotai/react'
 import type { FormEvent, ReactElement } from 'react'
 import { useState } from 'react'
-import { useAtom } from 'jotai/react'
 import { useTranslation } from 'react-i18next'
 import type { Player } from '../../lib/domain/types'
-import { gameDataAtom } from '../../state/atoms'
 import { addOrUpdatePlayer } from '../../lib/tournaments/tournament-service'
+import { gameDataAtom } from '../../state/atoms'
+import { Button } from '../../ui/components/button'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '../../ui/components/card'
 import { Input } from '../../ui/components/input'
-import { Button } from '../../ui/components/button'
 
 interface PlayerFormState {
   name: string
@@ -161,7 +161,7 @@ export function PlayerListPanel(): ReactElement {
         {error ? <p className="text-sm text-red-400">{error}</p> : null}
 
         {players.length === 0 ? (
-          <p className="text-sm text-slate-300">{t('players.empty')}</p>
+          <p className="text-sm text-slate-600">{t('players.empty')}</p>
         ) : (
           <div className="flex flex-col gap-2">
             {players.map((player) => {
@@ -174,7 +174,10 @@ export function PlayerListPanel(): ReactElement {
                 >
                   <div className="flex flex-1 flex-col gap-1 md:flex-row md:items-center md:gap-3">
                     {isEditing ? (
-                      <form onSubmit={handleUpdatePlayer} className="flex flex-1 items-center gap-2">
+                      <form
+                        onSubmit={handleUpdatePlayer}
+                        className="flex flex-1 items-center gap-2"
+                      >
                         <Input
                           value={editingName}
                           onChange={(event) => setEditingName(event.target.value)}
@@ -190,9 +193,11 @@ export function PlayerListPanel(): ReactElement {
                     ) : (
                       <div className="flex flex-col gap-0.5">
                         <span className="text-sm font-medium text-slate-50">{player.name}</span>
-                        <span className="text-xs text-slate-400">
+                        <span className="text-xs text-slate-300">
                           {t('players.statusSummary', {
-                            status: t(player.isActive ? 'players.statusActive' : 'players.statusInactive'),
+                            status: t(
+                              player.isActive ? 'players.statusActive' : 'players.statusInactive',
+                            ),
                             games: t('players.gamesCount', { count: player.gamesPlayed }),
                             bench: player.benchStreak,
                           })}
@@ -203,7 +208,12 @@ export function PlayerListPanel(): ReactElement {
 
                   {!isEditing && (
                     <div className="flex gap-2">
-                      <Button type="button" size="sm" variant="outline" onClick={() => startEditing(player)}>
+                      <Button
+                        type="button"
+                        size="sm"
+                        variant="outline"
+                        onClick={() => startEditing(player)}
+                      >
                         {t('players.renameButton')}
                       </Button>
                       <Button

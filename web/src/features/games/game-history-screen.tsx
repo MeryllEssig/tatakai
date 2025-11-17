@@ -1,20 +1,14 @@
+import { useAtom } from 'jotai/react'
 import type { ReactElement } from 'react'
 import { useState } from 'react'
-import { useAtom } from 'jotai/react'
-import { useNavigate, useParams } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
-import { gameDataAtom } from '../../state/atoms'
-import { deleteGameAndRecompute } from '../../lib/recompute/recompute-ratings'
+import { useNavigate, useParams } from 'react-router-dom'
 import type { Player } from '../../lib/domain/types'
+import { deleteGameAndRecompute } from '../../lib/recompute/recompute-ratings'
 import { buildTournamentRoute } from '../../lib/route-builders'
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from '../../ui/components/card'
+import { gameDataAtom } from '../../state/atoms'
 import { Button } from '../../ui/components/button'
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '../../ui/components/card'
 
 function formatDate(value: string): string {
   const date = new Date(value)
@@ -104,7 +98,7 @@ export function GameHistoryScreen(): ReactElement {
       <div className="flex items-center justify-between gap-2">
         <div>
           <h2 className="text-xl font-semibold">{t('history.title')}</h2>
-          <p className="text-sm text-slate-300">{t('history.subtitle')}</p>
+          <p className="text-sm text-slate-600">{t('history.subtitle')}</p>
         </div>
         <Button
           type="button"
@@ -132,7 +126,7 @@ export function GameHistoryScreen(): ReactElement {
           <div className="overflow-x-auto">
             <table className="w-full table-auto border-collapse text-sm">
               <thead>
-                <tr className="border-b border-slate-800 text-xs text-slate-400">
+                <tr className="border-b border-slate-800 text-xs text-slate-700">
                   <th className="py-1 pr-2 text-left font-medium">{t('history.tableDate')}</th>
                   <th className="py-1 px-2 text-left font-medium">
                     {t('history.tableTeamsAndRanks')}
@@ -160,15 +154,18 @@ export function GameHistoryScreen(): ReactElement {
                           {game.teams.map((team) => {
                             const rank = rankByTeamId.get(team.id)
                             const playerNames = team.playerIds
-                              .map((playerId) => playersById.get(playerId)?.name ?? t('history.unknownPlayerName'))
+                              .map(
+                                (playerId) =>
+                                  playersById.get(playerId)?.name ?? t('history.unknownPlayerName'),
+                              )
                               .join(', ')
 
                             return (
                               <li key={team.id}>
-                                <span className="font-medium text-slate-50">
+                                <span className="font-medium text-slate-900">
                                   {t('history.rankLabel', { rank: rank ?? '?' })}
                                 </span>{' '}
-                                <span className="text-slate-300">: {playerNames}</span>
+                                <span className="text-slate-700">: {playerNames}</span>
                               </li>
                             )
                           })}

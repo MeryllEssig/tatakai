@@ -1,19 +1,13 @@
+import { useAtom } from 'jotai/react'
 import type { FormEvent, ReactElement } from 'react'
 import { useEffect, useState } from 'react'
-import { useAtom } from 'jotai/react'
-import { useNavigate } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
-import { gameDataAtom, nextGameSuggestedPlayerIdsAtom } from '../../state/atoms'
+import { useNavigate } from 'react-router-dom'
 import { recordGameResult } from '../../lib/games/game-service'
 import { buildTournamentRoute } from '../../lib/route-builders'
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from '../../ui/components/card'
+import { gameDataAtom, nextGameSuggestedPlayerIdsAtom } from '../../state/atoms'
 import { Button } from '../../ui/components/button'
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '../../ui/components/card'
 
 interface PlayerGameState {
   isActive: boolean
@@ -136,9 +130,7 @@ export function GameResultScreen(): ReactElement {
     }
 
     if (candidates.length > maxPlayersPerGame) {
-      setError(
-        t('gameResult.errorTooManyPlayers', { max: maxPlayersPerGame }),
-      )
+      setError(t('gameResult.errorTooManyPlayers', { max: maxPlayersPerGame }))
       return
     }
 
@@ -151,9 +143,7 @@ export function GameResultScreen(): ReactElement {
     )
 
     if (invalidRank) {
-      setError(
-        t('gameResult.errorInvalidRank', { maxRank: rankMax }),
-      )
+      setError(t('gameResult.errorInvalidRank', { maxRank: rankMax }))
       return
     }
 
@@ -219,7 +209,7 @@ export function GameResultScreen(): ReactElement {
     <div className="flex flex-col gap-4">
       <div>
         <h2 className="text-xl font-semibold">{t('gameResult.title')}</h2>
-        <p className="text-sm text-slate-300">{t('gameResult.subtitle')}</p>
+        <p className="text-sm text-slate-600">{t('gameResult.subtitle')}</p>
       </div>
 
       {activePlayers.length === 0 ? (

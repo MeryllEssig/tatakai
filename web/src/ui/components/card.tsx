@@ -7,7 +7,7 @@ export function Card({ className, ...props }: CardProps) {
   return (
     <div
       className={twMerge(
-        'rounded-xl border border-slate-800 bg-slate-900/80 p-4 shadow-sm',
+        'rounded-3xl border-2 border-slate-900 bg-slate-50 p-4 shadow-[6px_6px_0_0_#020617]',
         className,
       )}
       {...props}
@@ -18,9 +18,7 @@ export function Card({ className, ...props }: CardProps) {
 type CardHeaderProps = HTMLAttributes<HTMLDivElement>
 
 export function CardHeader({ className, ...props }: CardHeaderProps) {
-  return (
-    <div className={twMerge('mb-2 flex flex-col gap-1', className)} {...props} />
-  )
+  return <div className={twMerge('mb-2 flex flex-col gap-1', className)} {...props} />
 }
 
 type CardTitleProps = HTMLAttributes<HTMLHeadingElement>
@@ -28,7 +26,10 @@ type CardTitleProps = HTMLAttributes<HTMLHeadingElement>
 export function CardTitle({ className, ...props }: CardTitleProps) {
   return (
     <h2
-      className={twMerge('text-lg font-semibold tracking-tight text-slate-50', className)}
+      className={twMerge(
+        'font-heading text-lg font-semibold tracking-tight text-slate-900',
+        className,
+      )}
       {...props}
     />
   )
@@ -37,9 +38,7 @@ export function CardTitle({ className, ...props }: CardTitleProps) {
 type CardDescriptionProps = HTMLAttributes<HTMLParagraphElement>
 
 export function CardDescription({ className, ...props }: CardDescriptionProps) {
-  return (
-    <p className={twMerge('text-sm text-slate-400', className)} {...props} />
-  )
+  return <p className={twMerge('text-sm text-slate-600', className)} {...props} />
 }
 
 type CardContentProps = HTMLAttributes<HTMLDivElement>

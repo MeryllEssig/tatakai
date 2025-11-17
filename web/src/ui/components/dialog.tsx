@@ -18,19 +18,19 @@ export function Dialog({ open, onClose, title, className, children, ...props }: 
         role="dialog"
         aria-modal="true"
         className={twMerge(
-          'mx-4 w-full max-w-md rounded-xl border border-slate-700 bg-slate-900 p-4 shadow-xl',
+          'mx-4 w-full max-w-md rounded-3xl border-2 border-slate-900 bg-slate-50 p-4 shadow-[10px_10px_0_0_#020617]',
           className,
         )}
         {...props}
       >
         {title ? (
           <div className="mb-3 flex items-center justify-between gap-2">
-            <h2 className="text-lg font-semibold text-slate-50">{title}</h2>
+            <h2 className="font-heading text-lg font-semibold text-slate-900">{title}</h2>
             {onClose && (
               <button
                 type="button"
                 onClick={onClose}
-                className="inline-flex h-7 w-7 items-center justify-center rounded-md text-slate-400 hover:bg-slate-800 hover:text-slate-50"
+                className="inline-flex h-7 w-7 items-center justify-center rounded-md border-2 border-slate-900 bg-slate-100 text-slate-900 shadow-[3px_3px_0_0_#020617] hover:bg-slate-200"
                 aria-label="Fermer le dialog"
               >
                 ×
@@ -38,8 +38,7 @@ export function Dialog({ open, onClose, title, className, children, ...props }: 
             )}
           </div>
         ) : null}
-
-        <div className="text-sm text-slate-200">{children}</div>
+        <div className="text-sm text-slate-800">{children}</div>
       </div>
     </div>
   )

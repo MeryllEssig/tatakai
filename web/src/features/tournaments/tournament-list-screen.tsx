@@ -1,23 +1,17 @@
 import type { ReactElement } from 'react'
 import { useState } from 'react'
-import { useNavigate, useParams } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
+import { useNavigate, useParams } from 'react-router-dom'
 import type { TournamentSummary } from '../../lib/domain/types'
+import { buildTournamentRoute } from '../../lib/route-builders'
+import { Button } from '../../ui/components/button'
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '../../ui/components/card'
 import { listStoredTournamentSummaries } from '../persistence/local-storage-adapter'
-import { useTournamentSelection } from './use-tournament-selection'
 import { PlayerListPanel } from '../players/player-list-panel'
 import { PlayerStatsPanel } from '../ratings/player-stats-panel'
-import { TournamentSettingsPanel } from './tournament-settings-panel'
 import { importTournamentFromJson } from './import-tournament'
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from '../../ui/components/card'
-import { Button } from '../../ui/components/button'
-import { buildTournamentRoute } from '../../lib/route-builders'
+import { TournamentSettingsPanel } from './tournament-settings-panel'
+import { useTournamentSelection } from './use-tournament-selection'
 
 function formatLastGameDate(
   value: string | null,
@@ -78,10 +72,8 @@ export function TournamentListScreen(): ReactElement {
     <div className="flex flex-col gap-4">
       <div className="flex items-center justify-between gap-2">
         <div>
-          <h2 className="text-xl font-semibold">
-            {id ? t('home.titleWithId') : t('home.title')}
-          </h2>
-          <p className="text-sm text-slate-300">
+          <h2 className="text-xl font-semibold">{id ? t('home.titleWithId') : t('home.title')}</h2>
+          <p className="text-sm text-slate-600">
             {id ? t('home.subtitleWithId') : t('home.subtitle')}
           </p>
         </div>
@@ -148,9 +140,7 @@ export function TournamentListScreen(): ReactElement {
             <CardDescription>{t('home.importDescription')}</CardDescription>
           </CardHeader>
           <CardContent className="flex flex-col gap-2 text-xs">
-            {importStatus ? (
-              <p className="text-emerald-400">{importStatus}</p>
-            ) : null}
+            {importStatus ? <p className="text-emerald-400">{importStatus}</p> : null}
             {importError ? <p className="text-red-400">{importError}</p> : null}
 
             <textarea
@@ -206,7 +196,7 @@ export function TournamentListScreen(): ReactElement {
                         {t('home.cardGamesCount', { count: tournament.gameCount })}
                       </CardDescription>
                     </CardHeader>
-                    <CardContent className="flex items-center justify-between text-xs text-slate-400">
+                    <CardContent className="flex items-center justify-between text-xs text-slate-600">
                       <span>
                         {t('home.lastGameLabel', {
                           date: formatLastGameDate(tournament.lastGameDate, {

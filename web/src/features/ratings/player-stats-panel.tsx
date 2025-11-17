@@ -1,15 +1,9 @@
-import type { ReactElement } from 'react'
 import { useAtomValue } from 'jotai/react'
+import type { ReactElement } from 'react'
 import { useTranslation } from 'react-i18next'
 import { gameDataAtom } from '../../state/atoms'
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '../../ui/components/card'
 import { useRatingSnapshots } from './use-rating-snapshots'
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from '../../ui/components/card'
 
 export function PlayerStatsPanel(): ReactElement {
   const gameData = useAtomValue(gameDataAtom)
@@ -47,7 +41,7 @@ export function PlayerStatsPanel(): ReactElement {
       <CardContent className="overflow-x-auto">
         <table className="w-full table-auto border-collapse text-sm">
           <thead>
-            <tr className="border-b border-slate-800 text-xs text-slate-400">
+            <tr className="border-b border-slate-800 text-xs text-slate-700">
               <th className="py-1 pr-2 text-left font-medium">{t('leaderboard.tablePlayer')}</th>
               <th className="py-1 px-2 text-right font-medium">{t('leaderboard.tableMu')}</th>
               <th className="py-1 px-2 text-right font-medium">{t('leaderboard.tableSigma')}</th>
@@ -65,22 +59,18 @@ export function PlayerStatsPanel(): ReactElement {
                 className="border-b border-slate-900/60 last:border-b-0 hover:bg-slate-900/40"
               >
                 <td className="py-1 pr-2 text-left">
-                  <span className="font-medium text-slate-50">{player.name}</span>
+                  <span className="font-medium text-slate-900">{player.name}</span>
                   {!player.isActive ? (
-                    <span className="ml-1 text-xs text-slate-400">
+                    <span className="ml-1 text-xs text-slate-600">
                       {t('leaderboard.inactiveBadge')}
                     </span>
                   ) : null}
                 </td>
-                <td className="py-1 px-2 text-right tabular-nums">
-                  {player.rating.mu.toFixed(2)}
-                </td>
+                <td className="py-1 px-2 text-right tabular-nums">{player.rating.mu.toFixed(2)}</td>
                 <td className="py-1 px-2 text-right tabular-nums">
                   {player.rating.sigma.toFixed(2)}
                 </td>
-                <td className="py-1 px-2 text-right tabular-nums">
-                  {conservative.toFixed(2)}
-                </td>
+                <td className="py-1 px-2 text-right tabular-nums">{conservative.toFixed(2)}</td>
                 <td className="py-1 px-2 text-right tabular-nums">{player.gamesPlayed}</td>
                 <td className="py-1 pl-2 text-right tabular-nums">{player.benchStreak}</td>
               </tr>
