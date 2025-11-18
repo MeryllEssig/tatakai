@@ -126,7 +126,7 @@
   "gameResult.sectionTitle": "Players and ranks",
   "gameResult.sectionDescription": "Toggle players between bench and active, then choose a rank between 1 and {{maxRank}}. At least two active players with a rank are required.",
   "gameResult.playerSummary": "Games played: {{games}} · bench: {{bench}}",
-  "gameResult.playerActiveLabelActive": "Active for this game",
+  "gameResult.playerActiveLabelActive": "Participates in this game",
   "gameResult.playerActiveLabelBench": "On the bench",
   "gameResult.playerToggleToBench": "Move to bench",
   "gameResult.playerToggleToActive": "Activate",

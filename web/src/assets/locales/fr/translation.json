@@ -126,7 +126,7 @@
   "gameResult.sectionTitle": "Joueurs et rangs",
   "gameResult.sectionDescription": "Basculez les joueurs sur le banc ou actifs, puis choisissez un rang entre 1 et {{maxRank}}. Au moins deux joueurs actifs avec un rang sont requis.",
   "gameResult.playerSummary": "Parties jouées : {{games}} · banc : {{bench}}",
-  "gameResult.playerActiveLabelActive": "Actif pour cette partie",
+  "gameResult.playerActiveLabelActive": "Participe à cette partie",
   "gameResult.playerActiveLabelBench": "Sur le banc",
   "gameResult.playerToggleToBench": "Mettre sur le banc",
   "gameResult.playerToggleToActive": "Activer",

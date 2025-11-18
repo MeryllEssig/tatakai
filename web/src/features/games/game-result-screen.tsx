@@ -6,6 +6,7 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/retroui/Card'
+import { Switch } from '@/components/retroui/Switch'
 import { useAtom } from 'jotai/react'
 import type { FormEvent, ReactElement } from 'react'
 import { useEffect, useState } from 'react'
@@ -86,12 +87,14 @@ export function GameResultScreen(): ReactElement {
   const rankMax = gameData.settings.rankMax || 12
   const maxPlayersPerGame = gameData.maxPlayersPerGame
 
-  const handleToggleActive = (playerId: string) => {
+  const handleToggleActive = (playerId: string, nextIsActive?: boolean) => {
     setPlayerStates((current) => {
       const previous = current[playerId] ?? { isActive: false, rank: null }
+      const isActive = nextIsActive ?? !previous.isActive
+
       return {
         ...current,
-        [playerId]: { ...previous, isActive: !previous.isActive },
+        [playerId]: { ...previous, isActive },
       }
     })
   }
@@ -214,10 +217,6 @@ export function GameResultScreen(): ReactElement {
   }
 
   const rankNumbers = Array.from({ length: rankMax }, (_, index) => index + 1)
-  const rankRows: number[][] = []
-  for (let index = 0; index < rankNumbers.length; index += 4) {
-    rankRows.push(rankNumbers.slice(index, index + 4))
-  }
 
   return (
     <div className="flex flex-col gap-4">
@@ -252,7 +251,7 @@ export function GameResultScreen(): ReactElement {
             <CardContent className="flex flex-col gap-3">
               {error ? <p className="text-sm text-red-400">{error}</p> : null}
 
-              <div className="flex flex-col gap-2">
+              <div className="flex flex-wrap gap-3">
                 {activePlayers.map((player) => {
                   const state = playerStates[player.id] ?? { isActive: false, rank: null }
                   const isActive = state.isActive
@@ -261,13 +260,13 @@ export function GameResultScreen(): ReactElement {
                   return (
                     <div
                       key={player.id}
-                      className="flex flex-col gap-2 rounded-md border border-slate-800 bg-slate-950/40 p-3 md:flex-row md:items-center md:justify-between"
+                      className="flex min-w-[260px] flex-1 flex-col gap-3 rounded-xl border border-slate-200 bg-slate-50 p-3"
                     >
                       <div className="flex items-center gap-3">
                         <PlayerAvatar playerId={player.id} displayName={player.name} size="sm" />
                         <div>
-                          <p className="text-sm font-medium text-slate-50">{player.name}</p>
-                          <p className="text-xs text-slate-400">
+                          <p className="text-sm font-medium text-slate-900">{player.name}</p>
+                          <p className="text-xs text-slate-600">
                             {t('gameResult.playerSummary', {
                               games: player.gamesPlayed,
                               bench: player.benchStreak,
@@ -276,51 +275,41 @@ export function GameResultScreen(): ReactElement {
                         </div>
                       </div>
 
-                      <div className="mt-2 flex flex-1 flex-col gap-2 md:mt-0 md:items-end">
-                        <div className="flex items-center gap-2">
-                          <span className="text-xs uppercase tracking-wide text-slate-400">
-                            {isActive
-                              ? t('gameResult.playerActiveLabelActive')
-                              : t('gameResult.playerActiveLabelBench')}
-                          </span>
-                          <Button
-                            type="button"
-                            size="sm"
-                            variant={isActive ? 'default' : 'outline'}
-                            onClick={() => handleToggleActive(player.id)}
-                          >
-                            {isActive
-                              ? t('gameResult.playerToggleToBench')
-                              : t('gameResult.playerToggleToActive')}
-                          </Button>
-                        </div>
-
-                        {isActive ? (
-                          <div className="flex flex-col gap-1">
-                            <p className="text-xs text-slate-400">{t('gameResult.rankLabel')}</p>
-                            <div className="flex flex-col gap-1">
-                              {rankRows.map((row, rowIndex) => (
-                                <div key={rowIndex} className="flex flex-wrap gap-1">
-                                  {row.map((rank) => {
-                                    const isSelected = selectedRank === rank
-                                    return (
-                                      <Button
-                                        key={rank}
-                                        type="button"
-                                        size="sm"
-                                        variant={isSelected ? 'default' : 'outline'}
-                                        onClick={() => handleSelectRank(player.id, rank)}
-                                      >
-                                        {rank}
-                                      </Button>
-                                    )
-                                  })}
-                                </div>
-                              ))}
-                            </div>
-                          </div>
-                        ) : null}
+                      <div className="flex items-center gap-2">
+                        <Switch
+                          checked={isActive}
+                          onCheckedChange={(checked) => handleToggleActive(player.id, checked)}
+                          aria-label={t('gameResult.playerActiveLabelActive')}
+                        />
+                        <span className="text-xs text-slate-700">
+                          {t('gameResult.playerActiveLabelActive')}
+                        </span>
                       </div>
+
+                      {isActive ? (
+                        <div
+                          className="mt-2 grid gap-1"
+                          style={{
+                            gridTemplateColumns: 'repeat(auto-fit, minmax(2.5rem, 1fr))',
+                          }}
+                        >
+                          {rankNumbers.map((rank) => {
+                            const isSelected = selectedRank === rank
+                            return (
+                              <Button
+                                key={rank}
+                                type="button"
+                                size="sm"
+                                className="h-10 w-10 grid place-content-center"
+                                variant={isSelected ? 'default' : 'outline'}
+                                onClick={() => handleSelectRank(player.id, rank)}
+                              >
+                                {rank}
+                              </Button>
+                            )
+                          })}
+                        </div>
+                      ) : null}
                     </div>
                   )
                 })}
