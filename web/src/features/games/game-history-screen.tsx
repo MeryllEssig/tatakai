@@ -6,6 +6,7 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/retroui/Card'
+import { Table } from '@/components/retroui/Table'
 import { ArrowLeftOutlined } from '@ant-design/icons'
 import { useAtom } from 'jotai/react'
 import type { ReactElement } from 'react'
@@ -136,17 +137,21 @@ export function GameHistoryScreen(): ReactElement {
           {error ? <p className="text-sm text-red-400">{error}</p> : null}
 
           <div className="overflow-x-auto">
-            <table className="w-full table-auto border-collapse text-sm">
-              <thead>
-                <tr className="border-b border-slate-800 text-xs text-slate-700">
-                  <th className="py-1 pr-2 text-left font-medium">{t('history.tableDate')}</th>
-                  <th className="py-1 px-2 text-left font-medium">
+            <Table className="table-auto text-sm">
+              <Table.Header>
+                <Table.Row>
+                  <Table.Head className="py-1 pr-2 text-left font-medium">
+                    {t('history.tableDate')}
+                  </Table.Head>
+                  <Table.Head className="py-1 px-2 text-left font-medium">
                     {t('history.tableTeamsAndRanks')}
-                  </th>
-                  <th className="py-1 pl-2 text-right font-medium">{t('history.tableActions')}</th>
-                </tr>
-              </thead>
-              <tbody>
+                  </Table.Head>
+                  <Table.Head className="py-1 pl-2 text-right font-medium">
+                    {t('history.tableActions')}
+                  </Table.Head>
+                </Table.Row>
+              </Table.Header>
+              <Table.Body>
                 {games.map((game) => {
                   const rankByTeamId = new Map<string, number>()
                   game.teamResults.forEach((result) => {
@@ -154,14 +159,14 @@ export function GameHistoryScreen(): ReactElement {
                   })
 
                   return (
-                    <tr
+                    <Table.Row
                       key={game.id}
                       className="border-b border-slate-900/60 last:border-b-0 hover:bg-slate-100"
                     >
-                      <td className="py-2 pr-2 align-top text-left text-xs tabular-nums">
+                      <Table.Cell className="py-2 pr-2 align-top text-left text-xs tabular-nums">
                         {formatDate(game.createdAt)}
-                      </td>
-                      <td className="py-2 px-2 align-top">
+                      </Table.Cell>
+                      <Table.Cell className="py-2 px-2 align-top">
                         <ul className="flex flex-col gap-1 text-xs">
                           {game.teams.map((team) => {
                             const rank = rankByTeamId.get(team.id)
@@ -182,8 +187,8 @@ export function GameHistoryScreen(): ReactElement {
                             )
                           })}
                         </ul>
-                      </td>
-                      <td className="py-2 pl-2 align-top text-right">
+                      </Table.Cell>
+                      <Table.Cell className="py-2 pl-2 align-top text-right">
                         <Button
                           type="button"
                           size="sm"
@@ -192,12 +197,12 @@ export function GameHistoryScreen(): ReactElement {
                         >
                           {t('history.deleteButton')}
                         </Button>
-                      </td>
-                    </tr>
+                      </Table.Cell>
+                    </Table.Row>
                   )
                 })}
-              </tbody>
-            </table>
+              </Table.Body>
+            </Table>
           </div>
         </CardContent>
       </Card>

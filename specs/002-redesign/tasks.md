@@ -161,7 +161,7 @@
 - [ ] T047 Address accessibility items (focus states, contrast, aria-labels on icons) in `web/src/ui/components/*` and key `web/src/features/*` screens
 - [ ] T048 Clean up any dead code or unused routes/components related to old home/routing and remove any `lastOpenedTournamentId`/"last opened tournament" state usage in storage or state in `web/src/app/router/routes.tsx`, `web/src/features/persistence/*` and `web/src/features/*`
 - [ ] T049 [P] Ensure vitest suite remains green and add any missing unit tests for route/i18n helpers in `web/tests/unit/*`
-- [ ] T050 Use the new Retro UI components in the whole app instead of the old ones (`web/src/components/retroui/*`)
+- [x] T050 Use the new Retro UI components in the whole app instead of the old ones (`web/src/components/retroui/*`)
 
 ---
 
