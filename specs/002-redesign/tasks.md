@@ -126,10 +126,10 @@
 
 ### Implementation for User Story 5
 
-- [ ] T037 [P] [US5] Define `HelpContent` data structures and localized content for principles/ranking/matchmaking in `web/src/features/help/help-content.ts`
-- [ ] T038 [US5] Implement `/help` route and page layout using Retro UI blocks in `web/src/app/router/routes.tsx` and `web/src/features/help/help-page.tsx`
-- [ ] T039 [US5] Ensure help content is fully translated via `t()` or localized content modules in `web/src/features/help/help-page.tsx`
-- [ ] T040 [P] [US5] Add navigation entry to `/help` (header or footer link) in `web/src/ui/components/app-header.tsx`
+- [x] T037 [P] [US5] Define `HelpContent` data structures and localized content for principles/ranking/matchmaking in `web/src/features/help/help-content.ts`
+- [x] T038 [US5] Implement `/help` route and page layout using Retro UI blocks in `web/src/app/router/routes.tsx` and `web/src/features/help/help-page.tsx`
+- [x] T039 [US5] Ensure help content is fully translated via `t()` or localized content modules in `web/src/features/help/help-page.tsx`
+- [x] T040 [P] [US5] Add navigation entry to `/help` (header link) in `web/src/ui/components/app-shell.tsx`
 
 **Checkpoint**: Help page reachable from anywhere, with clear structured content.
 

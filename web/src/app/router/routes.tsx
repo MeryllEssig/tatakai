@@ -10,9 +10,10 @@ import { ArrowLeftOutlined } from '@ant-design/icons'
 import { useSetAtom } from 'jotai/react'
 import type { ReactElement } from 'react'
 import { useEffect } from 'react'
-import { BrowserRouter, Outlet, Route, Routes, useNavigate, useParams } from 'react-router-dom'
+import { Outlet, Route, Routes, useNavigate, useParams } from 'react-router-dom'
 import { GameHistoryScreen } from '../../features/games/game-history-screen'
 import { GameResultScreen } from '../../features/games/game-result-screen'
+import { HelpPage } from '../../features/help/help-page'
 import { MatchmakingScreen } from '../../features/matchmaking/matchmaking-screen'
 import { loadTournament } from '../../features/persistence/local-storage-adapter'
 import { LeaderboardScreen } from '../../features/ratings/leaderboard-screen'
@@ -84,19 +85,18 @@ function TournamentSettingsRoute(): ReactElement {
 
 export function AppRouter(): ReactElement {
   return (
-    <BrowserRouter>
-      <Routes>
-        <Route path="/" element={<TournamentListScreen />} />
-        <Route path="/tournament/:id/*" element={<TournamentRouteGuard />}>
-          <Route index element={<TournamentListScreen />} />
-          <Route path="history" element={<GameHistoryScreen />} />
-          <Route path="leaderboard" element={<LeaderboardScreen />} />
-          <Route path="matchmaking" element={<MatchmakingScreen />} />
-          <Route path="settings" element={<TournamentSettingsRoute />} />
-          <Route path="new-game" element={<GameResultScreen />} />
-        </Route>
-        <Route path="/new-tournament" element={<CreateTournamentWizard />} />
-      </Routes>
-    </BrowserRouter>
+    <Routes>
+      <Route path="/" element={<TournamentListScreen />} />
+      <Route path="/tournament/:id/*" element={<TournamentRouteGuard />}>
+        <Route index element={<TournamentListScreen />} />
+        <Route path="history" element={<GameHistoryScreen />} />
+        <Route path="leaderboard" element={<LeaderboardScreen />} />
+        <Route path="matchmaking" element={<MatchmakingScreen />} />
+        <Route path="settings" element={<TournamentSettingsRoute />} />
+        <Route path="new-game" element={<GameResultScreen />} />
+      </Route>
+      <Route path="/new-tournament" element={<CreateTournamentWizard />} />
+      <Route path="/help" element={<HelpPage />} />
+    </Routes>
   )
 }

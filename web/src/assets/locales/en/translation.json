@@ -47,8 +47,8 @@
   "history.deleteButton": "Delete",
   "history.deleteConfirm": "Delete this game? Ratings will be recomputed from the remaining history.",
   "history.deleteError": "Unable to delete the game. Please try again.",
-   "history.gamesTitle": "Games",
-   "history.gamesDescription": "Delete a game to recompute all ratings as if it had never been played.",
+  "history.gamesTitle": "Games",
+  "history.gamesDescription": "Delete a game to recompute all ratings as if it had never been played.",
 
   "leaderboard.title": "Tournament leaderboard",
   "leaderboard.noTournamentDescription": "Select a tournament in the list before viewing the leaderboard.",
@@ -160,5 +160,15 @@
   "stats.title": "Player statistics",
   "stats.noTournamentDescription": "Select a tournament to view player statistics.",
   "stats.noSnapshotsDescription": "Add players to the tournament to see their statistics.",
-  "stats.subtitle": "µ, σ, µ-3σ, games played, and current bench for each player."
+  "stats.subtitle": "µ, σ, µ-3σ, games played, and current bench for each player.",
+  "help.navLabel": "Open help page",
+  "help.backToHome": "Back to home",
+  "help.title": "Help",
+  "help.subtitle": "Understand how Tatakai works: principles, ranking, and matchmaking.",
+  "help.principles.title": "Overall principles",
+  "help.principles.body": "Tatakai helps you run local tournaments. You record games, and the system keeps track of players, results and ratings.\n\nIt does not try to replace your tournament rules. Instead, it gives you a clear view of who played, how often, and how they performed over time.",
+  "help.ranking.title": "How ranking works",
+  "help.ranking.body": "Tatakai uses a rating model inspired by OpenSkill (similar to TrueSkill). Each player has a skill estimate (µ) and an uncertainty (σ).\n\nAfter each game, ratings are updated based on the teams, their ranks and previous ratings. Players who win against stronger opponents tend to gain more points.\n\nThe leaderboard is sorted by a conservative score µ-3σ: this favours players who have both good results and enough games played, while remaining cautious when there is little data.",
+  "help.matchmaking.title": "How matchmaking works",
+  "help.matchmaking.body": "The matchmaking tools help you propose balanced teams for the next game. You choose the candidate players and some parameters (number of teams, max players, bench fairness).\n\nThe system then tries to create teams with similar overall strength according to current ratings. It can also rotate who stays on the bench so that everyone plays regularly over time.\n\nYou remain in control: the suggested teams are a starting point that you can adjust before saving the game."
 }
