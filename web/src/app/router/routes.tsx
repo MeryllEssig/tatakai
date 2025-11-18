@@ -9,6 +9,7 @@ import {
 import { useSetAtom } from 'jotai/react'
 import type { ReactElement } from 'react'
 import { useEffect } from 'react'
+import { useTranslation } from 'react-i18next'
 import { Outlet, Route, Routes, useNavigate, useParams } from 'react-router-dom'
 import { GameHistoryScreen } from '../../features/games/game-history-screen'
 import { GameResultScreen } from '../../features/games/game-result-screen'
@@ -48,22 +49,20 @@ function TournamentRouteGuard(): ReactElement {
 
 function TournamentNotFoundScreen(): ReactElement {
   const navigate = useNavigate()
+  const { t } = useTranslation()
 
   return (
     <div className="flex min-h-screen items-center justify-center bg-slate-950 px-4">
       <div className="max-w-md">
         <Card>
           <CardHeader>
-            <CardTitle>Tournoi introuvable</CardTitle>
-            <CardDescription>
-              Le tournoi demandé n'existe pas ou n'est plus disponible. Retournez à la liste des
-              tournois pour en sélectionner un autre.
-            </CardDescription>
+            <CardTitle>{t('history.backToTournament')}</CardTitle>
+            <CardDescription>{t('history.noTournamentDescription')}</CardDescription>
           </CardHeader>
           <CardContent className="flex justify-end">
             <Button
               type="button"
-              aria-label="Retour à la liste des tournois"
+              aria-label={t('history.backToList')}
               onClick={() => navigate('/')}
             >
               <TatakaiIcon name="back" className="text-base" />

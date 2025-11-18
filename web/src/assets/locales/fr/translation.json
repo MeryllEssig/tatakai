@@ -12,7 +12,7 @@
   "home.newGame": "Nouvelle partie",
   "home.quit": "Quitter",
   "home.importButton": "Importer un tournoi",
-  "home.newTournamentButton": "+ Nouveau tournoi",
+  "home.newTournamentButton": "Nouveau tournoi",
   "home.importTitle": "Importer un tournoi",
   "home.importDescription": "Collez ici le JSON d'un tournoi exporté. Si un tournoi avec le même id existe déjà, il sera écrasé.",
   "home.importPlaceholder": "{\n  \"id\": \"mon-tournoi\",\n  \"name\": \"Mon tournoi\",\n  ...\n}",

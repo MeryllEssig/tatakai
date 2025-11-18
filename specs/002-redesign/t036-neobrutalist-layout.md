@@ -1,205 +1,205 @@
 # T036 – Tatakai light neobrutalist layout spec
 
-## 1. Objectif
+## 1. Objective
 
-Aligner les pages clés de Tatakai sur un style neobrutaliste clair, compétitif, arcade et fun, en s’appuyant sur Retro UI et les composants déjà introduits (buttons, cards, dialog, inputs, selects).
+Align Tatakai's key pages with a clear, competitive, arcade, and fun neobrutalist style, building on Retro UI and already introduced components (buttons, cards, dialog, inputs, selects).
 
-Pages concernées par T036 :
+Pages covered by T036:
 
-- Home (liste des tournois + création)
+- Home (tournament list + creation)
 - Tournament overview
 - Game history
 - Leaderboard
 - Matchmaking
-- Help (structure visuelle de type FAQ, contenu détaillé couvert en US5)
+- Help (FAQ-style visual structure, detailed content covered in US5)
 - Settings
 
-L’overview de tournoi est la page vitrine principale, mais toutes les pages doivent rester cohérentes entre elles.
+The tournament overview is the main showcase page, but all pages must remain consistent with each other.
 
 ---
 
-## 2. Priorités de contenu par page
+## 2. Content priorities by page
 
 ### 2.1 Home
 
-- **Éléments prioritaires**
-  - Action "Nouveau tournoi" (CTA principal).
-  - Liste des tournois existants.
-- **Organisation souhaitée**
-  - Layout plutôt aéré.
-  - Un bloc d’action visible pour créer un tournoi.
-  - Un bloc/table listant les tournois existants.
+- **Priority elements**
+  - "New tournament" action (main CTA).
+  - List of existing tournaments.
+- **Desired organization**
+  - Rather spacious layout.
+  - A visible action block to create a tournament.
+  - A block/table listing existing tournaments.
 
 ### 2.2 Tournament overview
 
-- **Éléments prioritaires**
-  - Action "Aller au matchmaking".
-  - Action "Voir le classement".
-  - Action "Créer une nouvelle partie".
-- **Organisation souhaitée**
-  - Le bloc de détails du tournoi actuel est jugé peu utile.
-  - Les blocs de droite doivent être réorganisés autour des actions clés ci-dessus.
-  - Plusieurs blocs de même importance plutôt qu’un seul gros bloc dominant.
+- **Priority elements**
+  - "Go to matchmaking" action.
+  - "View leaderboard" action.
+  - "Create new game" action.
+- **Desired organization**
+  - The current tournament details block is deemed not very useful.
+  - Right-side blocks should be reorganized around the key actions above.
+  - Multiple blocks of equal importance rather than a single dominant large block.
 
 ### 2.3 Game history
 
-- **Éléments prioritaires**
-  - La liste des parties (historique).
-- **Organisation souhaitée**
-  - Densité acceptable (table de parties) mais garder une structure claire et lisible.
+- **Priority elements**
+  - The list of games (history).
+- **Desired organization**
+  - Acceptable density (game table) but maintain a clear and readable structure.
 
 ### 2.4 Matchmaking
 
-- **Éléments prioritaires**
-  - Action "Générer une suggestion".
-  - Sélection des candidats.
-- **Organisation souhaitée**
-  - Page pouvant être un peu plus dense que la home.
-  - La section "Joueurs candidats" doit être simplifiée : actuellement, trop de mini-cards prennent beaucoup de place pour peu d’information.
-  - Le reste de la page est considéré comme globalement correct pour l’instant.
+- **Priority elements**
+  - "Generate suggestion" action.
+  - Candidate selection.
+- **Desired organization**
+  - Page can be slightly denser than home.
+  - The "Candidate players" section should be simplified: currently, too many mini-cards take up a lot of space for little information.
+  - The rest of the page is considered generally correct for now.
 
 ### 2.5 Leaderboard
 
-- **Éléments prioritaires**
-  - Nom du joueur.
-  - Rank (position dans le classement).
-- **Organisation souhaitée**
-  - Grande table pour le leaderboard.
-  - Emphase visuelle claire pour les 3 premiers rangs : utiliser 3 couleurs de fond de ligne différentes pour les rangs 1, 2 et 3.
+- **Priority elements**
+  - Player name.
+  - Rank (position in the leaderboard).
+- **Desired organization**
+  - Large table for the leaderboard.
+  - Clear visual emphasis for the top 3 ranks: use 3 different row background colors for ranks 1, 2, and 3.
 
 ### 2.6 Help
 
-- **Éléments prioritaires**
-  - Compréhension simple des principes, du ranking et du matchmaking (contenu détaillé en US5).
-- **Organisation souhaitée (T036)**
-  - Page structurée comme une FAQ.
-  - Utiliser le composant Accordion de Retro UI (`Accordion`, `AccordionItem`, etc. – cf. https://www.retroui.dev/docs/components/accordion).
-  - Une seule grande zone de contenu qui rassemble les sections FAQ.
+- **Priority elements**
+  - Simple understanding of principles, ranking, and matchmaking (detailed content covered in US5).
+- **Desired organization (T036)**
+  - Page structured as a FAQ.
+  - Use Retro UI's Accordion component (`Accordion`, `AccordionItem`, etc. – see https://www.retroui.dev/docs/components/accordion).
+  - A single large content area that gathers FAQ sections.
 
 ### 2.7 Settings
 
-- **Éléments prioritaires**
-  - Paramètres principaux (langue, comportements généraux, éventuellement export/reset selon l’évolution du projet).
-- **Organisation souhaitée**
-  - Un seul grand bloc principal contenant des sections internes (et pas une collection de petites cards séparées).
+- **Priority elements**
+  - Main settings (language, general behaviors, possibly export/reset depending on project evolution).
+- **Desired organization**
+  - A single large main block containing internal sections (not a collection of separate small cards).
 
 ---
 
-## 3. Densité et respiration
+## 3. Density and breathing room
 
-- Style général : **aéré**.
-- Pages pouvant être un peu plus denses :
+- General style: **spacious**.
+- Pages that can be slightly denser:
   - Matchmaking.
-  - Ajout de tournoi / création de game (wizard / formulaires).
-- Les autres pages (home, overview, history, leaderboard, help, settings) doivent prioriser la lisibilité et la respiration.
+  - Tournament addition / game creation (wizard / forms).
+- Other pages (home, overview, history, leaderboard, help, settings) should prioritize readability and breathing room.
 
-Contrainte complémentaire :
+Additional constraint:
 
-- Largeur max globale déjà fixée à `max-w-7xl` dans l’`AppShell`, on reste cohérent avec cette contrainte.
-
----
-
-## 4. Blocs neobrutalistes et structures
-
-### 4.1 Listes & tables
-
-- Préférence pour des **grandes tables** sur les écrans de type listing (surtout leaderboard et history).
-- Les tables doivent profiter du style neobrutaliste :
-  - Bordures bien marquées (2px) mais en cohérence avec les `Card` existantes.
-  - En-têtes contrastés (fond clair différencié, texte foncé).
-
-### 4.2 Cards et sections
-
-- Home et overview :
-  - Plusieurs blocs de même importance plutôt qu’un hero unique dominant.
-  - Blocs typiques : "Actions", "Prochain match", "Stats clés", etc. (à préciser à l’implémentation en fonction des données disponibles).
-- Matchmaking :
-  - Réduire la fragmentation en petites cards pour les joueurs candidats.
-  - Se rapprocher d’une structure table ou d’une liste plus compacte, tout en conservant l’esprit Retro UI.
-
-### 4.3 Emphase sur les 3 premiers du leaderboard
-
-- Rangs 1, 2 et 3 :
-  - Lignes de table avec un **fond coloré spécifique par rang**.
-  - Les couleurs exactes pourront être dérivées de la palette globale (ex. variation autour du jaune d’accent ou de couleurs complémentaires) mais doivent clairement ressortir.
+- Global max width already set to `max-w-7xl` in the `AppShell`, we remain consistent with this constraint.
 
 ---
 
-## 5. Palette, accents et éléments graphiques
+## 4. Neobrutalist blocks and structures
 
-### 5.1 Accent principal
+### 4.1 Lists & tables
 
-- Couleur d’accent principale : **jaune `#ffdb33`**.
-- Utiliser ce jaune pour :
-  - CTA principaux (boutons primaires clés).
-  - Tags/badges et éléments d’emphase ponctuels.
-  - Surbrillance de certains éléments (ex. label de section, highlight de score, etc.).
+- Preference for **large tables** on listing-type screens (especially leaderboard and history).
+- Tables should leverage the neobrutalist style:
+  - Well-defined borders (2px) but consistent with existing `Card` components.
+  - Contrasted headers (differentiated light background, dark text).
 
-### 5.2 Accents secondaires
+### 4.2 Cards and sections
 
-- Quelques accents supplémentaires sont autorisés (par ex. pour différencier succès / warning / danger), mais le jaune reste la couleur d’accent dominante.
-- Les autres accents doivent rester compatibles avec le ton "compétitif, arcade et fun" (verts/roses/bleus saturés, utilisés avec modération).
+- Home and overview:
+  - Multiple blocks of equal importance rather than a single dominant hero.
+  - Typical blocks: "Actions", "Next match", "Key stats", etc. (to be specified during implementation based on available data).
+- Matchmaking:
+  - Reduce fragmentation into small cards for candidate players.
+  - Move closer to a table structure or more compact list, while maintaining the Retro UI spirit.
 
-### 5.3 Barres latérales colorées
+### 4.3 Emphasis on top 3 in leaderboard
 
-- Préférence exprimée pour des **barres latérales colorées dans les blocs** plutôt que des backgrounds entièrement colorés pour tous les états.
-- Application typique :
-  - Informations de statut, alertes, aides contextuelles.
-  - Petits panneaux récapitulatifs (ex. info tournoi, warning sur matchmaking, etc.).
+- Ranks 1, 2, and 3:
+  - Table rows with a **specific colored background per rank**.
+  - Exact colors can be derived from the global palette (e.g., variation around the accent yellow or complementary colors) but must clearly stand out.
 
 ---
 
-## 6. Niveau de neobrutalisme
+## 5. Palette, accents, and graphic elements
 
-- Niveau global : **moyen à fort**, avec l’objectif "un truc fun qui pop".
-- Implications :
-  - Bordures "+ visibles" (épaisseur et contraste) sur blocs et tables.
-  - Ombres légèrement décalées dans l’esprit Retro UI (comme les boutons/cards existants), mais sans saturer les écrans de trop d’effets.
-  - Coins plutôt arrondis mais francs (rayon cohérent avec les Cards/Button).
+### 5.1 Main accent
 
-Ajustement à l’implémentation :
+- Main accent color: **yellow `#ffdb33`**.
+- Use this yellow for:
+  - Main CTAs (key primary buttons).
+  - Tags/badges and occasional emphasis elements.
+  - Highlighting certain elements (e.g., section label, score highlight, etc.).
 
-- On pourra moduler le niveau de "brutalité" par page : un peu plus marqué sur overview / leaderboard / matchmaking (pages compétitives), un peu plus soft sur help/settings.
+### 5.2 Secondary accents
+
+- A few additional accents are allowed (e.g., to differentiate success / warning / danger), but yellow remains the dominant accent color.
+- Other accents must remain compatible with the "competitive, arcade, and fun" tone (saturated greens/pinks/blues, used sparingly).
+
+### 5.3 Colored sidebars
+
+- Expressed preference for **colored sidebars in blocks** rather than fully colored backgrounds for all states.
+- Typical application:
+  - Status information, alerts, contextual help.
+  - Small summary panels (e.g., tournament info, matchmaking warning, etc.).
+
+---
+
+## 6. Neobrutalism level
+
+- Overall level: **medium to strong**, with the goal "a fun thing that pops".
+- Implications:
+  - "More visible" borders (thickness and contrast) on blocks and tables.
+  - Slightly offset shadows in the Retro UI spirit (like existing buttons/cards), but without saturating screens with too many effects.
+  - Rather rounded but sharp corners (radius consistent with Cards/Button).
+
+Implementation adjustment:
+
+- We can modulate the level of "brutality" per page: slightly more pronounced on overview / leaderboard / matchmaking (competitive pages), slightly softer on help/settings.
 
 ---
 
 ## 7. Mobile vs desktop
 
-- **Mobile est très important**.
-- Desktop : layout confortable sur `max-w-7xl`, structure de blocs claire.
-- Mobile :
-  - Layout simplifié (stack vertical des blocs, marges suffisantes).
-  - Certaines pages peuvent être **plus simplifiées** en mobile :
-    - Moins de détails visibles directement.
-    - Navigation secondaire ou collapsible pour les sections moins critiques.
-  - Les tables peuvent être transformées ou adaptées (par ex. colonnes réduites, labels au-dessus/au-dessous, utilisation de blocs type "row card").
+- **Mobile is very important**.
+- Desktop: comfortable layout on `max-w-7xl`, clear block structure.
+- Mobile:
+  - Simplified layout (vertical stack of blocks, sufficient margins).
+  - Some pages can be **more simplified** on mobile:
+    - Fewer details directly visible.
+    - Secondary or collapsible navigation for less critical sections.
+  - Tables can be transformed or adapted (e.g., reduced columns, labels above/below, use of "row card" type blocks).
 
 ---
 
-## 8. Style global & tonalité
+## 8. Overall style & tone
 
-- Références visuelles fournies :
-  - Interfaces mobiles neobrutalistes avec :
-    - Gros blocs, bordures épaisses et ombres marquées.
-    - Arrière-plans colorés ou texturés.
-    - CTA très visibles.
-- Tonalité souhaitée pour Tatakai sur ces pages :
-  - **Compétitif** : mettre en avant le classement, les stats, les performances.
-  - **Arcade** : interfaces fun, un peu "jeu" sans être infantiles.
-  - **Fun** : couleurs pétantes mais maîtrisées, micro-emphases (barres latérales, badges) plutôt que bruit visuel permanent.
+- Provided visual references:
+  - Neobrutalist mobile interfaces with:
+    - Large blocks, thick borders, and pronounced shadows.
+    - Colored or textured backgrounds.
+    - Very visible CTAs.
+- Desired tone for Tatakai on these pages:
+  - **Competitive**: highlight ranking, stats, performance.
+  - **Arcade**: fun interfaces, somewhat "game-like" without being childish.
+  - **Fun**: bright but controlled colors, micro-emphasis (sidebars, badges) rather than constant visual noise.
 
 ---
 
-## 9. Implications pour l’implémentation T036
+## 9. Implications for T036 implementation
 
-- S’appuyer sur les composants Retro UI déjà intégrés (`Button`, `Card`, `Dialog`, `Input`, `Select`) et les adapter aux structures par page.
-- Homogénéiser les blocs par type de page :
-  - Home : bloc action + bloc liste tournois.
-  - Overview : layout en plusieurs blocs d’égale importance (matchmaking, leaderboard, nouvelle partie, etc.), bloc détails tournoi simplifié ou relégué.
-  - History : grande table lisible, aérées avec en-têtes contrastés.
-  - Leaderboard : grande table, emphasis sur top 3 (lignes colorées).
-  - Matchmaking : page un peu plus dense, section joueurs candidats simplifiée (moins de mini-cards, structure plus compacte).
-  - Help : grand bloc unique contenant un Accordéon Retro UI pour la FAQ.
-  - Settings : grand bloc unique avec sous-sections internes.
+- Build on already integrated Retro UI components (`Button`, `Card`, `Dialog`, `Input`, `Select`) and adapt them to structures per page.
+- Standardize blocks by page type:
+  - Home: action block + tournament list block.
+  - Overview: layout with multiple blocks of equal importance (matchmaking, leaderboard, new game, etc.), tournament details block simplified or relegated.
+  - History: large readable table, spacious with contrasted headers.
+  - Leaderboard: large table, emphasis on top 3 (colored rows).
+  - Matchmaking: slightly denser page, candidate players section simplified (fewer mini-cards, more compact structure).
+  - Help: single large block containing a Retro UI Accordion for FAQ.
+  - Settings: single large block with internal subsections.
 
-Ce document sert de référence pour toutes les décisions de layout et de style prises dans T036. Toute divergence consciente par rapport à ces règles doit être documentée dans les PR ou commentaires de commit associés.
+This document serves as a reference for all layout and style decisions made in T036. Any conscious divergence from these rules must be documented in associated PRs or commit comments.

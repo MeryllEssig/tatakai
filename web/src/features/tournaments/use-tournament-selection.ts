@@ -1,9 +1,8 @@
-import { useCallback } from 'react'
 import { useAtom } from 'jotai/react'
+import { useCallback } from 'react'
 import type { GameData } from '../../lib/domain/types'
 import { currentTournamentIdAtom, gameDataAtom } from '../../state/atoms'
 import { loadTournament } from '../persistence/local-storage-adapter'
-import { saveLastOpenedTournamentId } from '../../state/persistence'
 
 export interface TournamentSelectionState {
   currentTournamentId: string | null
@@ -25,7 +24,6 @@ export function useTournamentSelection(): TournamentSelectionApi {
       if (!id) {
         setCurrentTournamentId(null)
         setGameData(null)
-        saveLastOpenedTournamentId(null)
         return
       }
 
@@ -34,13 +32,11 @@ export function useTournamentSelection(): TournamentSelectionApi {
       if (!data) {
         setCurrentTournamentId(null)
         setGameData(null)
-        saveLastOpenedTournamentId(null)
         return
       }
 
       setCurrentTournamentId(id)
       setGameData(data)
-      saveLastOpenedTournamentId(id)
     },
     [setCurrentTournamentId, setGameData],
   )

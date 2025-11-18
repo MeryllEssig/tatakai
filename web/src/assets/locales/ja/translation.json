@@ -12,7 +12,7 @@
   "home.newGame": "新しい対戦",
   "home.quit": "終了",
   "home.importButton": "トーナメントをインポート",
-  "home.newTournamentButton": "+ 新規トーナメント",
+  "home.newTournamentButton": "新規トーナメント",
   "home.importTitle": "トーナメントをインポート",
   "home.importDescription": "エクスポートしたトーナメントの JSON をここに貼り付けてください。同じ id のトーナメントが既に存在する場合は上書きされます。",
   "home.importPlaceholder": "{\n  \"id\": \"my-tournament\",\n  \"name\": \"マイトーナメント\",\n  ...\n}",

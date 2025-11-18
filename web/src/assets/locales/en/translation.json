@@ -12,7 +12,7 @@
   "home.newGame": "New game",
   "home.quit": "Quit",
   "home.importButton": "Import a tournament",
-  "home.newTournamentButton": "+ New tournament",
+  "home.newTournamentButton": "New tournament",
   "home.importTitle": "Import a tournament",
   "home.importDescription": "Paste here the JSON of an exported tournament. If a tournament with the same id already exists, it will be overwritten.",
   "home.importPlaceholder": "{\n  \"id\": \"my-tournament\",\n  \"name\": \"My tournament\",\n  ...\n}",
