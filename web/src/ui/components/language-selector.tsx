@@ -1,9 +1,8 @@
-import type { ChangeEvent } from 'react'
+import { Select } from '@/components/retroui/Select'
 import { useTranslation } from 'react-i18next'
-import { Select } from './select'
+import { getStorage } from '../../features/persistence/local-storage-adapter'
 import type { SupportedLanguage } from '../../lib/i18n'
 import { saveLanguageToStorage } from '../../lib/language-preference'
-import { getStorage } from '../../features/persistence/local-storage-adapter'
 
 const LANGUAGE_OPTIONS: { code: SupportedLanguage; label: string }[] = [
   { code: 'fr', label: '🇫🇷' },
@@ -24,8 +23,7 @@ export function LanguageSelector({ className }: LanguageSelectorProps) {
     ? normalizedLanguage
     : 'en'
 
-  const handleChange = (event: ChangeEvent<HTMLSelectElement>): void => {
-    const next = event.target.value as SupportedLanguage
+  const handleChange = (next: SupportedLanguage): void => {
     if (next === currentLanguage) return
 
     void i18n.changeLanguage(next)
@@ -39,16 +37,19 @@ export function LanguageSelector({ className }: LanguageSelectorProps) {
   }
 
   return (
-    <Select
-      className={className ?? 'w-40 text-xs'}
-      value={currentLanguage}
-      onChange={handleChange}
-    >
-      {LANGUAGE_OPTIONS.map((option) => (
-        <option key={option.code} value={option.code}>
-          {option.label}
-        </option>
-      ))}
+    <Select value={currentLanguage} onValueChange={handleChange}>
+      <Select.Trigger className={className ?? 'w-20 min-w-20 text-xs'}>
+        <Select.Value />
+      </Select.Trigger>
+      <Select.Content className={className ?? 'w-20 min-w-20 text-xs'}>
+        <Select.Group>
+          {LANGUAGE_OPTIONS.map((option) => (
+            <Select.Item key={option.code} value={option.code}>
+              {option.label}
+            </Select.Item>
+          ))}
+        </Select.Group>
+      </Select.Content>
     </Select>
   )
 }

@@ -1,3 +1,11 @@
+import { Button } from '@/components/retroui/Button'
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from '@/components/retroui/Card'
 import { ArrowLeftOutlined } from '@ant-design/icons'
 import { useSetAtom } from 'jotai/react'
 import type { ReactElement } from 'react'
@@ -12,8 +20,6 @@ import { CreateTournamentWizard } from '../../features/tournaments/create-tourna
 import { TournamentListScreen } from '../../features/tournaments/tournament-list-screen'
 import { TournamentSettingsPanel } from '../../features/tournaments/tournament-settings-panel'
 import { currentTournamentIdAtom, gameDataAtom } from '../../state/atoms'
-import { Button } from '../../ui/components/button'
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '../../ui/components/card'
 
 function TournamentRouteGuard(): ReactElement {
   const { id } = useParams<{ id: string }>()

@@ -1,3 +1,12 @@
+import { Button } from '@/components/retroui/Button'
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from '@/components/retroui/Card'
+import { Input } from '@/components/retroui/Input'
 import { ArrowLeftOutlined } from '@ant-design/icons'
 import { useAtomValue } from 'jotai/react'
 import type { FormEvent, ReactElement } from 'react'
@@ -9,9 +18,6 @@ import type { MatchmakingResult } from '../../lib/matchmaking/engine'
 import { generateMatchmakingSuggestion } from '../../lib/matchmaking/engine'
 import { buildTournamentRoute } from '../../lib/route-builders'
 import { gameDataAtom } from '../../state/atoms'
-import { Button } from '../../ui/components/button'
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '../../ui/components/card'
-import { Input } from '../../ui/components/input'
 import { PageContentHeader } from '../../ui/components/page-content-header'
 import { useAcceptSuggestion } from './use-accept-suggestion'
 
@@ -66,6 +72,7 @@ export function MatchmakingScreen(): ReactElement {
           <CardContent>
             <Button
               type="button"
+              variant="secondary"
               aria-label={t('matchmaking.backToList')}
               onClick={() => navigate('/')}
             >
@@ -136,6 +143,8 @@ export function MatchmakingScreen(): ReactElement {
       <PageContentHeader title={t('matchmaking.title')} subtitle={t('matchmaking.subtitle')}>
         <Button
           type="button"
+          size="sm"
+          variant="secondary"
           aria-label={t('matchmaking.backToTournament')}
           onClick={() => {
             if (!id) {
@@ -249,10 +258,10 @@ export function MatchmakingScreen(): ReactElement {
             ) : (
               <>
                 <div className="flex justify-between gap-2 text-xs">
-                  <Button type="button" size="sm" variant="ghost" onClick={handleSelectAll}>
+                  <Button type="button" size="sm" variant="link" onClick={handleSelectAll}>
                     {t('matchmaking.selectAll')}
                   </Button>
-                  <Button type="button" size="sm" variant="ghost" onClick={handleClearAll}>
+                  <Button type="button" size="sm" variant="link" onClick={handleClearAll}>
                     {t('matchmaking.clearAll')}
                   </Button>
                 </div>

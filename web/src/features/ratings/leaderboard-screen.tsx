@@ -1,3 +1,11 @@
+import { Button } from '@/components/retroui/Button'
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from '@/components/retroui/Card'
 import { ArrowLeftOutlined } from '@ant-design/icons'
 import { useAtomValue } from 'jotai/react'
 import type { ReactElement } from 'react'
@@ -5,8 +13,6 @@ import { useTranslation } from 'react-i18next'
 import { useNavigate, useParams } from 'react-router-dom'
 import { buildTournamentRoute } from '../../lib/route-builders'
 import { gameDataAtom } from '../../state/atoms'
-import { Button } from '../../ui/components/button'
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '../../ui/components/card'
 import { PageContentHeader } from '../../ui/components/page-content-header'
 import { useRatingSnapshots } from './use-rating-snapshots'
 
@@ -28,6 +34,7 @@ export function LeaderboardScreen(): ReactElement {
           <CardContent>
             <Button
               type="button"
+              variant="secondary"
               aria-label={t('leaderboard.backToList')}
               onClick={() => navigate('/')}
             >
@@ -50,6 +57,7 @@ export function LeaderboardScreen(): ReactElement {
           <CardContent>
             <Button
               type="button"
+              variant="secondary"
               aria-label={t('leaderboard.backToTournament')}
               onClick={() => {
                 if (!id) {
@@ -72,6 +80,8 @@ export function LeaderboardScreen(): ReactElement {
       <PageContentHeader title={t('leaderboard.title')} subtitle={t('leaderboard.subtitle')}>
         <Button
           type="button"
+          size="sm"
+          variant="secondary"
           aria-label={t('leaderboard.backToTournament')}
           onClick={() => {
             if (!id) {

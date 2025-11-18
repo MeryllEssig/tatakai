@@ -1,3 +1,11 @@
+import { Button } from '@/components/retroui/Button'
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from '@/components/retroui/Card'
 import { ArrowLeftOutlined } from '@ant-design/icons'
 import { useAtom } from 'jotai/react'
 import type { FormEvent, ReactElement } from 'react'
@@ -7,8 +15,6 @@ import { useNavigate } from 'react-router-dom'
 import { recordGameResult } from '../../lib/games/game-service'
 import { buildTournamentRoute } from '../../lib/route-builders'
 import { gameDataAtom, nextGameSuggestedPlayerIdsAtom } from '../../state/atoms'
-import { Button } from '../../ui/components/button'
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '../../ui/components/card'
 import { PageContentHeader } from '../../ui/components/page-content-header'
 
 interface PlayerGameState {
@@ -63,6 +69,7 @@ export function GameResultScreen(): ReactElement {
           <CardContent>
             <Button
               type="button"
+              variant="secondary"
               aria-label={t('gameResult.backToList')}
               onClick={() => navigate('/')}
             >
@@ -224,6 +231,7 @@ export function GameResultScreen(): ReactElement {
           <CardContent>
             <Button
               type="button"
+              variant="secondary"
               aria-label={t('gameResult.backToTournament')}
               onClick={() => navigate(buildTournamentRoute(gameData.id, 'overview'))}
             >

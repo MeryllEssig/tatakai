@@ -1,3 +1,12 @@
+import { Button } from '@/components/retroui/Button'
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from '@/components/retroui/Card'
+import { Input } from '@/components/retroui/Input'
 import { useAtom } from 'jotai/react'
 import type { FormEvent, ReactElement } from 'react'
 import { useState } from 'react'
@@ -5,9 +14,6 @@ import { useTranslation } from 'react-i18next'
 import type { Player } from '../../lib/domain/types'
 import { addOrUpdatePlayer } from '../../lib/tournaments/tournament-service'
 import { gameDataAtom } from '../../state/atoms'
-import { Button } from '../../ui/components/button'
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '../../ui/components/card'
-import { Input } from '../../ui/components/input'
 
 interface PlayerFormState {
   name: string
@@ -149,10 +155,11 @@ export function PlayerListPanel(): ReactElement {
               value={newPlayer.name}
               onChange={(event) => setNewPlayer({ name: event.target.value })}
               placeholder={t('players.newPlayerPlaceholder')}
+              className="h-10"
             />
           </div>
           <div>
-            <Button type="submit" className="mt-2 md:mt-0">
+            <Button type="submit" className="mt-2 md:mt-0 h-10">
               {t('players.addButton')}
             </Button>
           </div>

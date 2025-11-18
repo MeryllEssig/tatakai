@@ -1,8 +1,14 @@
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from '@/components/retroui/Card'
 import { useAtomValue } from 'jotai/react'
 import type { ReactElement } from 'react'
 import { useTranslation } from 'react-i18next'
 import { gameDataAtom } from '../../state/atoms'
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '../../ui/components/card'
 import { useRatingSnapshots } from './use-rating-snapshots'
 
 export function PlayerStatsPanel(): ReactElement {

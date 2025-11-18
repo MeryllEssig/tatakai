@@ -1,3 +1,7 @@
+import { Button } from '@/components/retroui/Button'
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/retroui/Card'
+import { Input } from '@/components/retroui/Input'
+import { Select } from '@/components/retroui/Select'
 import { ArrowLeftOutlined } from '@ant-design/icons'
 import type { FormEvent, ReactElement } from 'react'
 import { useState } from 'react'
@@ -5,11 +9,7 @@ import { useNavigate } from 'react-router-dom'
 import type { RatingPreset, TournamentMode } from '../../lib/domain/types'
 import { buildTournamentRoute } from '../../lib/route-builders'
 import { createTournament } from '../../lib/tournaments/tournament-service'
-import { Button } from '../../ui/components/button'
-import { Card, CardContent, CardHeader, CardTitle } from '../../ui/components/card'
-import { Input } from '../../ui/components/input'
 import { PageContentHeader } from '../../ui/components/page-content-header'
-import { Select } from '../../ui/components/select'
 import { saveTournament } from '../persistence/local-storage-adapter'
 
 interface SettingsState {
@@ -164,17 +164,23 @@ export function CreateTournamentWizard(): ReactElement {
                   Mode
                 </label>
                 <Select
-                  id="tournament-mode"
                   value={settings.mode}
-                  onChange={(event) =>
+                  onValueChange={(value) =>
                     setSettings((current) => ({
                       ...current,
-                      mode: event.target.value as TournamentMode,
+                      mode: value as TournamentMode,
                     }))
                   }
                 >
-                  <option value="solo">Solo (1v1)</option>
-                  <option value="teams">Équipes</option>
+                  <Select.Trigger id="tournament-mode" className="w-full">
+                    <Select.Value />
+                  </Select.Trigger>
+                  <Select.Content>
+                    <Select.Group>
+                      <Select.Item value="solo">Solo (1v1)</Select.Item>
+                      <Select.Item value="teams">Équipes</Select.Item>
+                    </Select.Group>
+                  </Select.Content>
                 </Select>
               </div>
 
@@ -226,18 +232,24 @@ export function CreateTournamentWizard(): ReactElement {
                   Préréglage OpenSkill
                 </label>
                 <Select
-                  id="rating-preset"
                   value={settings.ratingPreset}
-                  onChange={(event) =>
+                  onValueChange={(value) =>
                     setSettings((current) => ({
                       ...current,
-                      ratingPreset: event.target.value as RatingPreset,
+                      ratingPreset: value as RatingPreset,
                     }))
                   }
                 >
-                  <option value="default">Par défaut</option>
-                  <option value="conservative">Conservateur</option>
-                  <option value="aggressive">Agressif</option>
+                  <Select.Trigger id="rating-preset" className="w-full">
+                    <Select.Value />
+                  </Select.Trigger>
+                  <Select.Content>
+                    <Select.Group>
+                      <Select.Item value="default">Par défaut</Select.Item>
+                      <Select.Item value="conservative">Conservateur</Select.Item>
+                      <Select.Item value="aggressive">Agressif</Select.Item>
+                    </Select.Group>
+                  </Select.Content>
                 </Select>
               </div>
 

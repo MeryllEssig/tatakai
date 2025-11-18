@@ -1,3 +1,11 @@
+import { Button } from '@/components/retroui/Button'
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from '@/components/retroui/Card'
 import {
   ArrowLeftOutlined,
   HistoryOutlined,
@@ -11,8 +19,6 @@ import { useTranslation } from 'react-i18next'
 import { useNavigate, useParams } from 'react-router-dom'
 import type { TournamentSummary } from '../../lib/domain/types'
 import { buildTournamentRoute } from '../../lib/route-builders'
-import { Button } from '../../ui/components/button'
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '../../ui/components/card'
 import { PageContentHeader } from '../../ui/components/page-content-header'
 import { listStoredTournamentSummaries } from '../persistence/local-storage-adapter'
 import { PlayerListPanel } from '../players/player-list-panel'
@@ -86,6 +92,7 @@ export function TournamentListScreen(): ReactElement {
           <>
             <Button
               type="button"
+              size="sm"
               variant="outline"
               onClick={() => navigate(buildTournamentRoute(id, 'history'))}
             >
@@ -94,6 +101,7 @@ export function TournamentListScreen(): ReactElement {
             </Button>
             <Button
               type="button"
+              size="sm"
               variant="outline"
               onClick={() => navigate(buildTournamentRoute(id, 'leaderboard'))}
             >
@@ -102,6 +110,7 @@ export function TournamentListScreen(): ReactElement {
             </Button>
             <Button
               type="button"
+              size="sm"
               className="bg-[#ffdb33] text-slate-900 hover:bg-[#facc15]"
               onClick={() => navigate(buildTournamentRoute(id, 'matchmaking'))}
             >
@@ -110,6 +119,7 @@ export function TournamentListScreen(): ReactElement {
             </Button>
             <Button
               type="button"
+              size="sm"
               variant="outline"
               className="bg-sky-100 hover:bg-sky-200"
               onClick={() => navigate(buildTournamentRoute(id, 'new-game'))}
@@ -117,7 +127,7 @@ export function TournamentListScreen(): ReactElement {
               <PlusCircleOutlined className="text-base" aria-hidden="true" />
               {t('home.newGame')}
             </Button>
-            <Button type="button" onClick={() => navigate('/')}>
+            <Button type="button" size="sm" variant="secondary" onClick={() => navigate('/')}>
               <ArrowLeftOutlined />
             </Button>
           </>
@@ -125,6 +135,7 @@ export function TournamentListScreen(): ReactElement {
           <>
             <Button
               type="button"
+              size="sm"
               variant="outline"
               onClick={() => {
                 setIsImportOpen((prev) => !prev)
@@ -136,6 +147,7 @@ export function TournamentListScreen(): ReactElement {
             </Button>
             <Button
               type="button"
+              size="sm"
               className="bg-[#ffdb33] text-slate-900 hover:bg-[#facc15]"
               onClick={() => navigate('/new-tournament')}
             >
