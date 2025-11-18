@@ -1,3 +1,10 @@
+import {
+  ArrowLeftOutlined,
+  HistoryOutlined,
+  PlusCircleOutlined,
+  TeamOutlined,
+  TrophyOutlined,
+} from '@ant-design/icons'
 import type { ReactElement } from 'react'
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
@@ -6,6 +13,7 @@ import type { TournamentSummary } from '../../lib/domain/types'
 import { buildTournamentRoute } from '../../lib/route-builders'
 import { Button } from '../../ui/components/button'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '../../ui/components/card'
+import { PageContentHeader } from '../../ui/components/page-content-header'
 import { listStoredTournamentSummaries } from '../persistence/local-storage-adapter'
 import { PlayerListPanel } from '../players/player-list-panel'
 import { PlayerStatsPanel } from '../ratings/player-stats-panel'
@@ -70,68 +78,72 @@ export function TournamentListScreen(): ReactElement {
 
   return (
     <div className="flex flex-col gap-4">
-      <div className="flex items-center justify-between gap-2">
-        <div>
-          <h2 className="text-xl font-semibold">{id ? t('home.titleWithId') : t('home.title')}</h2>
-          <p className="text-sm text-slate-600">
-            {id ? t('home.subtitleWithId') : t('home.subtitle')}
-          </p>
-        </div>
-        <div className="flex flex-wrap justify-end gap-2">
-          {id ? (
-            <>
-              <Button
-                type="button"
-                variant="outline"
-                onClick={() => navigate(buildTournamentRoute(id, 'history'))}
-              >
-                {t('home.history')}
-              </Button>
-              <Button
-                type="button"
-                variant="outline"
-                onClick={() => navigate(buildTournamentRoute(id, 'matchmaking'))}
-              >
-                {t('home.matchmaking')}
-              </Button>
-              <Button
-                type="button"
-                variant="outline"
-                onClick={() => navigate(buildTournamentRoute(id, 'leaderboard'))}
-              >
-                {t('home.leaderboard')}
-              </Button>
-              <Button
-                type="button"
-                variant="outline"
-                onClick={() => navigate(buildTournamentRoute(id, 'new-game'))}
-              >
-                {t('home.newGame')}
-              </Button>
-              <Button type="button" variant="ghost" onClick={() => navigate('/')}>
-                {t('home.quit')}
-              </Button>
-            </>
-          ) : (
-            <>
-              <Button
-                type="button"
-                variant="outline"
-                onClick={() => {
-                  setIsImportOpen((prev) => !prev)
-                  setImportStatus(null)
-                  setImportError(null)
-                }}
-              >
-                {t('home.importButton')}
-              </Button>
-              <Button type="button" onClick={() => navigate('/new-tournament')}>
-                {t('home.newTournamentButton')}
-              </Button>
-            </>
-          )}
-        </div>
-      </div>
+      <PageContentHeader
+        title={id ? t('home.titleWithId') : t('home.title')}
+        subtitle={id ? t('home.subtitleWithId') : t('home.subtitle')}
+      >
+        {id ? (
+          <>
+            <Button
+              type="button"
+              variant="outline"
+              onClick={() => navigate(buildTournamentRoute(id, 'history'))}
+            >
+              <HistoryOutlined className="text-base" aria-hidden="true" />
+              {/* {t('home.history')} */}
+            </Button>
+            <Button
+              type="button"
+              variant="outline"
+              onClick={() => navigate(buildTournamentRoute(id, 'leaderboard'))}
+            >
+              <TrophyOutlined className="text-base" aria-hidden="true" />
+              {/* {t('home.leaderboard')} */}
+            </Button>
+            <Button
+              type="button"
+              className="bg-[#ffdb33] text-slate-900 hover:bg-[#facc15]"
+              onClick={() => navigate(buildTournamentRoute(id, 'matchmaking'))}
+            >
+              <TeamOutlined className="text-base" aria-hidden="true" />
+              {t('home.matchmaking')}
+            </Button>
+            <Button
+              type="button"
+              variant="outline"
+              className="bg-sky-100 hover:bg-sky-200"
+              onClick={() => navigate(buildTournamentRoute(id, 'new-game'))}
+            >
+              <PlusCircleOutlined className="text-base" aria-hidden="true" />
+              {t('home.newGame')}
+            </Button>
+            <Button type="button" onClick={() => navigate('/')}>
+              <ArrowLeftOutlined />
+            </Button>
+          </>
+        ) : (
+          <>
+            <Button
+              type="button"
+              variant="outline"
+              onClick={() => {
+                setIsImportOpen((prev) => !prev)
+                setImportStatus(null)
+                setImportError(null)
+              }}
+            >
+              {t('home.importButton')}
+            </Button>
+            <Button
+              type="button"
+              className="bg-[#ffdb33] text-slate-900 hover:bg-[#facc15]"
+              onClick={() => navigate('/new-tournament')}
+            >
+              {t('home.newTournamentButton')}
+            </Button>
+          </>
+        )}
+      </PageContentHeader>
 
       {!id && isImportOpen ? (
         <Card className="border border-dashed border-slate-700">
@@ -171,63 +183,56 @@ export function TournamentListScreen(): ReactElement {
         </Card>
       ) : null}
 
-      <div className="grid gap-4 lg:grid-cols-[minmax(0,1.4fr)_minmax(0,1fr)]">
-        <div>
-          {!id ? (
-            !hasTournaments ? (
-              <Card>
-                <CardHeader>
-                  <CardTitle>{t('home.noTournamentTitle')}</CardTitle>
-                  <CardDescription>{t('home.noTournamentDescription')}</CardDescription>
-                </CardHeader>
-              </Card>
-            ) : (
-              <div className="grid gap-3 md:grid-cols-2">
-                {tournaments.map((tournament) => (
-                  <Card
-                    key={tournament.id}
-                    className="cursor-pointer"
-                    onClick={() => navigate(buildTournamentRoute(tournament.id, 'overview'))}
-                  >
-                    <CardHeader>
-                      <CardTitle>{tournament.name}</CardTitle>
-                      <CardDescription>
-                        {t('home.cardPlayersCount', { count: tournament.playerCount })} ·{' '}
-                        {t('home.cardGamesCount', { count: tournament.gameCount })}
-                      </CardDescription>
-                    </CardHeader>
-                    <CardContent className="flex items-center justify-between text-xs text-slate-600">
-                      <span>
-                        {t('home.lastGameLabel', {
-                          date: formatLastGameDate(tournament.lastGameDate, {
-                            none: t('home.lastGameNone'),
-                            unknown: t('home.lastGameUnknown'),
-                          }),
-                        })}
-                      </span>
-                    </CardContent>
-                  </Card>
-                ))}
-              </div>
-            )
-          ) : (
-            <Card>
-              <CardHeader>
-                <CardTitle>{t('home.detailsTitle')}</CardTitle>
-                <CardDescription>{t('home.detailsDescription')}</CardDescription>
-              </CardHeader>
-            </Card>
-          )}
-        </div>
-
-        {id ? (
+      {id ? (
+        <div className="grid gap-4 lg:grid-cols-[minmax(0,1.4fr)_minmax(0,1fr)]">
           <div className="flex flex-col gap-4">
             <PlayerListPanel />
             <PlayerStatsPanel />
+          </div>
+          <div>
             <TournamentSettingsPanel />
           </div>
-        ) : null}
-      </div>
+        </div>
+      ) : (
+        <div>
+          {!hasTournaments ? (
+            <Card>
+              <CardHeader>
+                <CardTitle>{t('home.noTournamentTitle')}</CardTitle>
+                <CardDescription>{t('home.noTournamentDescription')}</CardDescription>
+              </CardHeader>
+            </Card>
+          ) : (
+            <div className="grid gap-3 md:grid-cols-2">
+              {tournaments.map((tournament) => (
+                <Card
+                  key={tournament.id}
+                  className="cursor-pointer"
+                  onClick={() => navigate(buildTournamentRoute(tournament.id, 'overview'))}
+                >
+                  <CardHeader>
+                    <CardTitle>{tournament.name}</CardTitle>
+                    <CardDescription>
+                      {t('home.cardPlayersCount', { count: tournament.playerCount })} ·{' '}
+                      {t('home.cardGamesCount', { count: tournament.gameCount })}
+                    </CardDescription>
+                  </CardHeader>
+                  <CardContent className="flex items-center justify-between text-xs text-slate-600">
+                    <span>
+                      {t('home.lastGameLabel', {
+                        date: formatLastGameDate(tournament.lastGameDate, {
+                          none: t('home.lastGameNone'),
+                          unknown: t('home.lastGameUnknown'),
+                        }),
+                      })}
+                    </span>
+                  </CardContent>
+                </Card>
+              ))}
+            </div>
+          )}
+        </div>
+      )}
     </div>
   )
 }

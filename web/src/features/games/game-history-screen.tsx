@@ -1,3 +1,4 @@
+import { ArrowLeftOutlined } from '@ant-design/icons'
 import { useAtom } from 'jotai/react'
 import type { ReactElement } from 'react'
 import { useState } from 'react'
@@ -9,6 +10,7 @@ import { buildTournamentRoute } from '../../lib/route-builders'
 import { gameDataAtom } from '../../state/atoms'
 import { Button } from '../../ui/components/button'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '../../ui/components/card'
+import { PageContentHeader } from '../../ui/components/page-content-header'
 
 function formatDate(value: string): string {
   const date = new Date(value)
@@ -32,8 +34,12 @@ export function GameHistoryScreen(): ReactElement {
             <CardDescription>{t('history.noTournamentDescription')}</CardDescription>
           </CardHeader>
           <CardContent>
-            <Button type="button" variant="outline" onClick={() => navigate('/')}>
-              {t('history.backToList')}
+            <Button
+              type="button"
+              aria-label={t('history.backToList')}
+              onClick={() => navigate('/')}
+            >
+              <ArrowLeftOutlined aria-hidden="true" />
             </Button>
           </CardContent>
         </Card>
@@ -76,7 +82,7 @@ export function GameHistoryScreen(): ReactElement {
           <CardContent>
             <Button
               type="button"
-              variant="outline"
+              aria-label={t('history.backToTournament')}
               onClick={() => {
                 if (!id) {
                   navigate('/')
@@ -85,7 +91,7 @@ export function GameHistoryScreen(): ReactElement {
                 navigate(buildTournamentRoute(id, 'overview'))
               }}
             >
-              {t('history.backToTournament')}
+              <ArrowLeftOutlined aria-hidden="true" />
             </Button>
           </CardContent>
         </Card>
@@ -95,14 +101,10 @@ export function GameHistoryScreen(): ReactElement {
 
   return (
     <div className="flex flex-col gap-4">
-      <div className="flex items-center justify-between gap-2">
-        <div>
-          <h2 className="text-xl font-semibold">{t('history.title')}</h2>
-          <p className="text-sm text-slate-600">{t('history.subtitle')}</p>
-        </div>
+      <PageContentHeader title={t('history.title')} subtitle={t('history.subtitle')}>
         <Button
           type="button"
-          variant="ghost"
+          aria-label={t('history.backToTournament')}
           onClick={() => {
             if (!id) {
               navigate('/')
@@ -111,9 +113,9 @@ export function GameHistoryScreen(): ReactElement {
             navigate(buildTournamentRoute(id, 'overview'))
           }}
         >
-          {t('history.backToTournament')}
+          <ArrowLeftOutlined aria-hidden="true" />
         </Button>
-      </div>
+      </PageContentHeader>
 
       <Card>
         <CardHeader>
@@ -144,7 +146,7 @@ export function GameHistoryScreen(): ReactElement {
                   return (
                     <tr
                       key={game.id}
-                      className="border-b border-slate-900/60 last:border-b-0 hover:bg-slate-900/40"
+                      className="border-b border-slate-900/60 last:border-b-0 hover:bg-slate-100"
                     >
                       <td className="py-2 pr-2 align-top text-left text-xs tabular-nums">
                         {formatDate(game.createdAt)}

@@ -1,3 +1,4 @@
+import { ArrowLeftOutlined } from '@ant-design/icons'
 import type { FormEvent, ReactElement } from 'react'
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
@@ -7,6 +8,7 @@ import { createTournament } from '../../lib/tournaments/tournament-service'
 import { Button } from '../../ui/components/button'
 import { Card, CardContent, CardHeader, CardTitle } from '../../ui/components/card'
 import { Input } from '../../ui/components/input'
+import { PageContentHeader } from '../../ui/components/page-content-header'
 import { Select } from '../../ui/components/select'
 import { saveTournament } from '../persistence/local-storage-adapter'
 
@@ -283,8 +285,8 @@ export function CreateTournamentWizard(): ReactElement {
         {error ? <p className="text-sm text-red-400">{error}</p> : null}
 
         <div className="flex justify-between gap-2">
-          <Button type="button" variant="ghost" onClick={() => navigate('/')}>
-            {''}Annuler
+          <Button type="button" aria-label="Annuler" onClick={() => navigate('/')}>
+            <ArrowLeftOutlined aria-hidden="true" />
           </Button>
           <Button type="submit">Continuer</Button>
         </div>
@@ -348,12 +350,10 @@ export function CreateTournamentWizard(): ReactElement {
 
   return (
     <div className="flex flex-col gap-4">
-      <div>
-        <h2 className="text-xl font-semibold">Nouveau tournoi</h2>
-        <p className="text-sm text-slate-600">
-          Configurez d'abord le tournoi, puis ajoutez les joueurs qui y participeront.
-        </p>
-      </div>
+      <PageContentHeader
+        title="Nouveau tournoi"
+        subtitle="Configurez d'abord le tournoi, puis ajoutez les joueurs qui y participeront."
+      />
 
       {step === 1 ? renderStep1() : renderStep2()}
     </div>

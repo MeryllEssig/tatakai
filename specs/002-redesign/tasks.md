@@ -112,7 +112,7 @@
 - [x] T033 [US4] Integrate header component into app shell layout in `web/src/app/layout/app-shell.tsx`
 - [x] T034 [P] [US4] Configure font stacks (Syne for headings, Darker Grotesque for body, Noto Sans JP fallback) in `web/src/index.css` or `web/src/App.css`
 - [x] T035 [US4] Apply Retro UI base styles and components to main layout blocks in `web/src/app/layout/app-shell.tsx` and `web/src/ui/components/*`
-- [ ] T036 [P] [US4] Adjust key pages (home, tournament overview, history, leaderboard, matchmaking, help, settings) to follow light neobrutalist blocks/borders/shadows/colors using Retro UI in the corresponding `web/src/features/*` components
+- [x] T036 [P] [US4] Adjust key pages (home, tournament overview, history, leaderboard, matchmaking, help, settings) to follow light neobrutalist blocks/borders/shadows/colors using Retro UI in the corresponding `web/src/features/*` components (see `specs/002-redesign/t036-neobrutalist-layout.md`)
 
 **Checkpoint**: Visual identity is consistent and recognizable across core flows.
 
@@ -161,6 +161,7 @@
 - [ ] T047 Address accessibility items (focus states, contrast, aria-labels on icons) in `web/src/ui/components/*` and key `web/src/features/*` screens
 - [ ] T048 Clean up any dead code or unused routes/components related to old home/routing and remove any `lastOpenedTournamentId`/"last opened tournament" state usage in storage or state in `web/src/app/router/routes.tsx`, `web/src/features/persistence/*` and `web/src/features/*`
 - [ ] T049 [P] Ensure vitest suite remains green and add any missing unit tests for route/i18n helpers in `web/tests/unit/*`
+- [ ] T050 Use the new Retro UI components in the whole app instead of the old ones (`web/src/components/retroui/*`)
 
 ---
 

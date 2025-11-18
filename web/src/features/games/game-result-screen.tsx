@@ -1,3 +1,4 @@
+import { ArrowLeftOutlined } from '@ant-design/icons'
 import { useAtom } from 'jotai/react'
 import type { FormEvent, ReactElement } from 'react'
 import { useEffect, useState } from 'react'
@@ -8,6 +9,7 @@ import { buildTournamentRoute } from '../../lib/route-builders'
 import { gameDataAtom, nextGameSuggestedPlayerIdsAtom } from '../../state/atoms'
 import { Button } from '../../ui/components/button'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '../../ui/components/card'
+import { PageContentHeader } from '../../ui/components/page-content-header'
 
 interface PlayerGameState {
   isActive: boolean
@@ -59,8 +61,12 @@ export function GameResultScreen(): ReactElement {
             <CardDescription>{t('gameResult.noTournamentDescription')}</CardDescription>
           </CardHeader>
           <CardContent>
-            <Button type="button" variant="outline" onClick={() => navigate('/')}>
-              {t('gameResult.backToList')}
+            <Button
+              type="button"
+              aria-label={t('gameResult.backToList')}
+              onClick={() => navigate('/')}
+            >
+              <ArrowLeftOutlined aria-hidden="true" />
             </Button>
           </CardContent>
         </Card>
@@ -207,10 +213,7 @@ export function GameResultScreen(): ReactElement {
 
   return (
     <div className="flex flex-col gap-4">
-      <div>
-        <h2 className="text-xl font-semibold">{t('gameResult.title')}</h2>
-        <p className="text-sm text-slate-600">{t('gameResult.subtitle')}</p>
-      </div>
+      <PageContentHeader title={t('gameResult.title')} subtitle={t('gameResult.subtitle')} />
 
       {activePlayers.length === 0 ? (
         <Card>
@@ -221,10 +224,10 @@ export function GameResultScreen(): ReactElement {
           <CardContent>
             <Button
               type="button"
-              variant="outline"
+              aria-label={t('gameResult.backToTournament')}
               onClick={() => navigate(buildTournamentRoute(gameData.id, 'overview'))}
             >
-              {t('gameResult.backToTournament')}
+              <ArrowLeftOutlined aria-hidden="true" />
             </Button>
           </CardContent>
         </Card>

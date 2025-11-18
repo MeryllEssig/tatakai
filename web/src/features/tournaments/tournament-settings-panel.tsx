@@ -1,19 +1,13 @@
+import { useAtomValue, useSetAtom } from 'jotai/react'
 import type { ReactElement } from 'react'
 import { useState } from 'react'
-import { useAtomValue, useSetAtom } from 'jotai/react'
 import { useTranslation } from 'react-i18next'
 import type { GameData } from '../../lib/domain/types'
-import { gameDataAtom } from '../../state/atoms'
-import { exportTournamentToClipboard } from './export-tournament'
 import { createInitialRating } from '../../lib/openskill/ratings'
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from '../../ui/components/card'
+import { gameDataAtom } from '../../state/atoms'
 import { Button } from '../../ui/components/button'
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '../../ui/components/card'
+import { exportTournamentToClipboard } from './export-tournament'
 
 function resetTournamentGameData(gameData: GameData): GameData {
   const updatedAt = new Date().toISOString()

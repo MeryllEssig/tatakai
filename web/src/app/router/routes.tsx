@@ -1,31 +1,19 @@
+import { ArrowLeftOutlined } from '@ant-design/icons'
+import { useSetAtom } from 'jotai/react'
 import type { ReactElement } from 'react'
 import { useEffect } from 'react'
-import {
-  BrowserRouter,
-  Route,
-  Routes,
-  Outlet,
-  useNavigate,
-  useParams,
-} from 'react-router-dom'
-import { useSetAtom } from 'jotai/react'
-import { TournamentListScreen } from '../../features/tournaments/tournament-list-screen'
-import { CreateTournamentWizard } from '../../features/tournaments/create-tournament-wizard'
-import { GameResultScreen } from '../../features/games/game-result-screen'
-import { LeaderboardScreen } from '../../features/ratings/leaderboard-screen'
-import { MatchmakingScreen } from '../../features/matchmaking/matchmaking-screen'
+import { BrowserRouter, Outlet, Route, Routes, useNavigate, useParams } from 'react-router-dom'
 import { GameHistoryScreen } from '../../features/games/game-history-screen'
+import { GameResultScreen } from '../../features/games/game-result-screen'
+import { MatchmakingScreen } from '../../features/matchmaking/matchmaking-screen'
+import { loadTournament } from '../../features/persistence/local-storage-adapter'
+import { LeaderboardScreen } from '../../features/ratings/leaderboard-screen'
+import { CreateTournamentWizard } from '../../features/tournaments/create-tournament-wizard'
+import { TournamentListScreen } from '../../features/tournaments/tournament-list-screen'
 import { TournamentSettingsPanel } from '../../features/tournaments/tournament-settings-panel'
 import { currentTournamentIdAtom, gameDataAtom } from '../../state/atoms'
-import { loadTournament } from '../../features/persistence/local-storage-adapter'
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from '../../ui/components/card'
 import { Button } from '../../ui/components/button'
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '../../ui/components/card'
 
 function TournamentRouteGuard(): ReactElement {
   const { id } = useParams<{ id: string }>()
@@ -66,8 +54,12 @@ function TournamentNotFoundScreen(): ReactElement {
             </CardDescription>
           </CardHeader>
           <CardContent className="flex justify-end">
-            <Button type="button" variant="outline" onClick={() => navigate('/') }>
-              Retour à la liste des tournois
+            <Button
+              type="button"
+              aria-label="Retour à la liste des tournois"
+              onClick={() => navigate('/')}
+            >
+              <ArrowLeftOutlined aria-hidden="true" />
             </Button>
           </CardContent>
         </Card>

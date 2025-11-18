@@ -8,7 +8,7 @@ interface AppShellProps {
 
 export function AppShell({ children }: AppShellProps) {
   return (
-    <div className="min-h-screen bg-slate-100 text-slate-900">
+    <div className="min-h-screen bg-[#ffdb3355] text-slate-900">
       <div className="mx-auto flex min-h-screen max-w-7xl flex-col px-4 py-6">
         <AppHeader rightSlot={<LanguageSelector />} />
         <main className="flex-1">{children}</main>

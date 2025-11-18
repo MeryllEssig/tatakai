@@ -1,3 +1,4 @@
+import { ArrowLeftOutlined } from '@ant-design/icons'
 import { useAtomValue } from 'jotai/react'
 import type { ReactElement } from 'react'
 import { useTranslation } from 'react-i18next'
@@ -6,6 +7,7 @@ import { buildTournamentRoute } from '../../lib/route-builders'
 import { gameDataAtom } from '../../state/atoms'
 import { Button } from '../../ui/components/button'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '../../ui/components/card'
+import { PageContentHeader } from '../../ui/components/page-content-header'
 import { useRatingSnapshots } from './use-rating-snapshots'
 
 export function LeaderboardScreen(): ReactElement {
@@ -24,8 +26,12 @@ export function LeaderboardScreen(): ReactElement {
             <CardDescription>{t('leaderboard.noTournamentDescription')}</CardDescription>
           </CardHeader>
           <CardContent>
-            <Button type="button" variant="outline" onClick={() => navigate('/')}>
-              {t('leaderboard.backToList')}
+            <Button
+              type="button"
+              aria-label={t('leaderboard.backToList')}
+              onClick={() => navigate('/')}
+            >
+              <ArrowLeftOutlined aria-hidden="true" />
             </Button>
           </CardContent>
         </Card>
@@ -44,7 +50,7 @@ export function LeaderboardScreen(): ReactElement {
           <CardContent>
             <Button
               type="button"
-              variant="outline"
+              aria-label={t('leaderboard.backToTournament')}
               onClick={() => {
                 if (!id) {
                   navigate('/')
@@ -53,7 +59,7 @@ export function LeaderboardScreen(): ReactElement {
                 navigate(buildTournamentRoute(id, 'overview'))
               }}
             >
-              {t('leaderboard.backToTournament')}
+              <ArrowLeftOutlined aria-hidden="true" />
             </Button>
           </CardContent>
         </Card>
@@ -63,10 +69,21 @@ export function LeaderboardScreen(): ReactElement {
 
   return (
     <div className="flex flex-col gap-4">
-      <div>
-        <h2 className="text-xl font-semibold">{t('leaderboard.title')}</h2>
-        <p className="text-sm text-slate-600">{t('leaderboard.subtitle')}</p>
-      </div>
+      <PageContentHeader title={t('leaderboard.title')} subtitle={t('leaderboard.subtitle')}>
+        <Button
+          type="button"
+          aria-label={t('leaderboard.backToTournament')}
+          onClick={() => {
+            if (!id) {
+              navigate('/')
+              return
+            }
+            navigate(buildTournamentRoute(id, 'overview'))
+          }}
+        >
+          <ArrowLeftOutlined aria-hidden="true" />
+        </Button>
+      </PageContentHeader>
 
       <Card>
         <CardHeader>
@@ -89,51 +106,47 @@ export function LeaderboardScreen(): ReactElement {
               </tr>
             </thead>
             <tbody>
-              {snapshots.map(({ player, conservative }, index) => (
-                <tr
-                  key={player.id}
-                  className="border-b border-slate-900/60 last:border-b-0 hover:bg-slate-900/40"
-                >
-                  <td className="py-1 pr-2 text-left tabular-nums">{index + 1}</td>
-                  <td className="py-1 pr-2 text-left">
-                    <span className="font-medium text-slate-900">{player.name}</span>
-                    {!player.isActive ? (
-                      <span className="ml-1 text-xs text-slate-600">
-                        {t('leaderboard.inactiveBadge')}
-                      </span>
-                    ) : null}
-                  </td>
-                  <td className="py-1 px-2 text-right tabular-nums">
-                    {player.rating.mu.toFixed(2)}
-                  </td>
-                  <td className="py-1 px-2 text-right tabular-nums">
-                    {player.rating.sigma.toFixed(2)}
-                  </td>
-                  <td className="py-1 px-2 text-right tabular-nums">{conservative.toFixed(2)}</td>
-                  <td className="py-1 px-2 text-right tabular-nums">{player.gamesPlayed}</td>
-                  <td className="py-1 pl-2 text-right tabular-nums">{player.benchStreak}</td>
-                </tr>
-              ))}
+              {snapshots.map(({ player, conservative }, index) => {
+                const rank = index + 1
+                const highlightClass =
+                  rank === 1
+                    ? 'bg-[#fffbeb] border-l-4 border-l-[#ffdb33]'
+                    : rank === 2
+                    ? 'bg-sky-50 border-l-4 border-l-sky-300'
+                    : rank === 3
+                    ? 'bg-emerald-50 border-l-4 border-l-emerald-300'
+                    : ''
+
+                return (
+                  <tr
+                    key={player.id}
+                    className={`border-b border-slate-900/60 last:border-b-0 hover:bg-slate-100 ${highlightClass}`}
+                  >
+                    <td className="py-1 pr-2 text-left tabular-nums">{rank}</td>
+                    <td className="py-1 pr-2 text-left">
+                      <span className="font-medium text-slate-900">{player.name}</span>
+                      {!player.isActive ? (
+                        <span className="ml-1 text-xs text-slate-600">
+                          {t('leaderboard.inactiveBadge')}
+                        </span>
+                      ) : null}
+                    </td>
+                    <td className="py-1 px-2 text-right tabular-nums">
+                      {player.rating.mu.toFixed(2)}
+                    </td>
+                    <td className="py-1 px-2 text-right tabular-nums">
+                      {player.rating.sigma.toFixed(2)}
+                    </td>
+                    <td className="py-1 px-2 text-right tabular-nums">{conservative.toFixed(2)}</td>
+                    <td className="py-1 px-2 text-right tabular-nums">{player.gamesPlayed}</td>
+                    <td className="py-1 pl-2 text-right tabular-nums">{player.benchStreak}</td>
+                  </tr>
+                )
+              })}
             </tbody>
           </table>
         </CardContent>
       </Card>
-
-      <div className="flex justify-end">
-        <Button
-          type="button"
-          variant="ghost"
-          onClick={() => {
-            if (!id) {
-              navigate('/')
-              return
-            }
-            navigate(buildTournamentRoute(id, 'overview'))
-          }}
-        >
-          {t('leaderboard.backToTournament')}
-        </Button>
-      </div>
     </div>
   )
 }

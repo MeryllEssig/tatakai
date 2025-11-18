@@ -170,7 +170,7 @@ export function PlayerListPanel(): ReactElement {
               return (
                 <div
                   key={player.id}
-                  className="flex flex-col gap-2 rounded-md border border-slate-800 bg-slate-950/40 p-3 md:flex-row md:items-center md:justify-between"
+                  className="flex flex-col gap-2 rounded-lg border-2 border-slate-900 p-3 shadow-[4px_4px_0_0_#020617] md:flex-row md:items-center md:justify-between"
                 >
                   <div className="flex flex-1 flex-col gap-1 md:flex-row md:items-center md:gap-3">
                     {isEditing ? (
@@ -192,8 +192,10 @@ export function PlayerListPanel(): ReactElement {
                       </form>
                     ) : (
                       <div className="flex flex-col gap-0.5">
-                        <span className="text-sm font-medium text-slate-50">{player.name}</span>
-                        <span className="text-xs text-slate-300">
+                        <span className="text-sm font-[750] font-heading text-slate-950">
+                          {player.name}
+                        </span>
+                        <span className="text-xs text-slate-500">
                           {t('players.statusSummary', {
                             status: t(
                               player.isActive ? 'players.statusActive' : 'players.statusInactive',
@@ -211,7 +213,7 @@ export function PlayerListPanel(): ReactElement {
                       <Button
                         type="button"
                         size="sm"
-                        variant="outline"
+                        variant="ghost"
                         onClick={() => startEditing(player)}
                       >
                         {t('players.renameButton')}
@@ -219,7 +221,7 @@ export function PlayerListPanel(): ReactElement {
                       <Button
                         type="button"
                         size="sm"
-                        variant="ghost"
+                        variant="outline"
                         onClick={() => toggleActive(player)}
                       >
                         {player.isActive ? t('players.deactivate') : t('players.reactivate')}

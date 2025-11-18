@@ -1,3 +1,4 @@
+import { ArrowLeftOutlined } from '@ant-design/icons'
 import { useAtomValue } from 'jotai/react'
 import type { FormEvent, ReactElement } from 'react'
 import { useState } from 'react'
@@ -11,6 +12,7 @@ import { gameDataAtom } from '../../state/atoms'
 import { Button } from '../../ui/components/button'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '../../ui/components/card'
 import { Input } from '../../ui/components/input'
+import { PageContentHeader } from '../../ui/components/page-content-header'
 import { useAcceptSuggestion } from './use-accept-suggestion'
 
 interface MatchmakingFormState {
@@ -62,8 +64,12 @@ export function MatchmakingScreen(): ReactElement {
             <CardDescription>{t('matchmaking.noTournamentDescription')}</CardDescription>
           </CardHeader>
           <CardContent>
-            <Button type="button" variant="outline" onClick={() => navigate('/')}>
-              {t('matchmaking.backToList')}
+            <Button
+              type="button"
+              aria-label={t('matchmaking.backToList')}
+              onClick={() => navigate('/')}
+            >
+              <ArrowLeftOutlined aria-hidden="true" />
             </Button>
           </CardContent>
         </Card>
@@ -127,11 +133,21 @@ export function MatchmakingScreen(): ReactElement {
 
   return (
     <div className="flex flex-col gap-4">
-      <div>
-        <h2 className="text-xl font-semibold">{t('matchmaking.title')}</h2>
-        <p className="text-sm text-slate-600">{t('matchmaking.subtitle')}</p>
-      </div>
-
+      <PageContentHeader title={t('matchmaking.title')} subtitle={t('matchmaking.subtitle')}>
+        <Button
+          type="button"
+          aria-label={t('matchmaking.backToTournament')}
+          onClick={() => {
+            if (!id) {
+              navigate('/')
+              return
+            }
+            navigate(buildTournamentRoute(id, 'overview'))
+          }}
+        >
+          <ArrowLeftOutlined aria-hidden="true" />
+        </Button>
+      </PageContentHeader>
       <div className="grid gap-4 lg:grid-cols-[minmax(0,1.1fr)_minmax(0,1.2fr)]">
         <Card>
           <CardHeader>
@@ -209,18 +225,10 @@ export function MatchmakingScreen(): ReactElement {
               <div className="flex justify-between gap-2">
                 <Button
                   type="button"
-                  variant="ghost"
-                  onClick={() => {
-                    if (!id) {
-                      navigate('/')
-                      return
-                    }
-                    navigate(buildTournamentRoute(id, 'overview'))
-                  }}
+                  className="bg-[#ffdb33] text-slate-900 hover:bg-[#facc15]"
+                  onClick={handleGenerate}
+                  disabled={activePlayers.length < 2}
                 >
-                  {t('matchmaking.backToTournament')}
-                </Button>
-                <Button type="button" onClick={handleGenerate} disabled={activePlayers.length < 2}>
                   {t('matchmaking.generateButton')}
                 </Button>
               </div>
@@ -256,18 +264,20 @@ export function MatchmakingScreen(): ReactElement {
                     return (
                       <label
                         key={player.id}
-                        className="flex items-center justify-between gap-2 rounded-md border border-slate-800 bg-slate-950/40 p-2 text-sm"
+                        className={`flex items-center justify-between gap-2 rounded-xl border border-slate-200 bg-slate-50 px-3 py-2 text-sm shadow-[3px_3px_0_0_#020617] ${
+                          isSelected ? 'border-l-4 border-l-[#ffdb33]' : ''
+                        }`}
                       >
                         <div className="flex items-center gap-2">
                           <input
                             type="checkbox"
-                            className="h-4 w-4 accent-slate-400"
+                            className="h-4 w-4 accent-[#ffdb33]"
                             checked={isSelected}
                             onChange={() => handleToggleCandidate(player.id)}
                           />
                           <div>
-                            <p className="font-medium text-slate-50">{player.name}</p>
-                            <p className="text-xs text-slate-400">
+                            <p className="font-medium text-slate-900">{player.name}</p>
+                            <p className="text-xs text-slate-600">
                               {t('matchmaking.playerSummary', {
                                 games: player.gamesPlayed,
                                 streak: player.benchStreak,
@@ -304,13 +314,13 @@ export function MatchmakingScreen(): ReactElement {
                 return (
                   <div
                     key={team.id}
-                    className="flex flex-col gap-1 rounded-md border border-slate-800 bg-slate-950/40 p-3"
+                    className="flex flex-col gap-1 rounded-2xl border-2 border-slate-900 bg-slate-50 p-3 shadow-[4px_4px_0_0_#020617]"
                   >
                     <div className="flex items-center justify-between gap-2">
                       <p className="text-sm font-semibold">
                         {t('matchmaking.teamLabel', { index: index + 1 })}
                       </p>
-                      <p className="text-xs text-slate-400">
+                      <p className="text-xs text-slate-600">
                         {t('matchmaking.teamSummary', {
                           mean: mean.toFixed(2),
                           conservative: conservativeMean.toFixed(2),
@@ -320,8 +330,8 @@ export function MatchmakingScreen(): ReactElement {
                     <ul className="mt-1 flex flex-col gap-1 text-sm">
                       {players.map((player) => (
                         <li key={player.id} className="flex justify-between gap-2">
-                          <span className="text-slate-50">{player.name}</span>
-                          <span className="text-xs text-slate-400">
+                          <span className="text-slate-900">{player.name}</span>
+                          <span className="text-xs text-slate-600">
                             {t('matchmaking.playerRatingSummary', {
                               mu: player.rating.mu.toFixed(2),
                               sigma: player.rating.sigma.toFixed(2),
@@ -335,7 +345,11 @@ export function MatchmakingScreen(): ReactElement {
               })}
 
               <div className="flex justify-end gap-2">
-                <Button type="button" variant="outline" onClick={handleAccept}>
+                <Button
+                  type="button"
+                  className="bg-[#ffdb33] text-slate-900 hover:bg-[#facc15]"
+                  onClick={handleAccept}
+                >
                   {t('matchmaking.acceptSuggestion')}
                 </Button>
               </div>
@@ -349,7 +363,7 @@ export function MatchmakingScreen(): ReactElement {
             </CardHeader>
             <CardContent className="flex flex-col gap-2 text-sm">
               {result.benchCandidates.length === 0 ? (
-                <p className="text-xs text-slate-400">{t('matchmaking.noBenchCandidates')}</p>
+                <p className="text-xs text-slate-600">{t('matchmaking.noBenchCandidates')}</p>
               ) : (
                 <ul className="flex flex-col gap-1">
                   {result.benchCandidates.map((playerId) => {
@@ -358,8 +372,8 @@ export function MatchmakingScreen(): ReactElement {
 
                     return (
                       <li key={player.id} className="flex justify-between gap-2">
-                        <span className="text-slate-50">{player.name}</span>
-                        <span className="text-xs text-slate-400">
+                        <span className="text-slate-900">{player.name}</span>
+                        <span className="text-xs text-slate-600">
                           {t('matchmaking.benchBadge', {
                             streak: player.benchStreak,
                             sigma: player.rating.sigma.toFixed(2),

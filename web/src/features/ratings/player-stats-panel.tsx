@@ -56,7 +56,7 @@ export function PlayerStatsPanel(): ReactElement {
             {snapshots.map(({ player, conservative }) => (
               <tr
                 key={player.id}
-                className="border-b border-slate-900/60 last:border-b-0 hover:bg-slate-900/40"
+                className="border-b border-slate-900/60 last:border-b-0 hover:bg-slate-100"
               >
                 <td className="py-1 pr-2 text-left">
                   <span className="font-medium text-slate-900">{player.name}</span>
