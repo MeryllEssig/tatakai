@@ -9,13 +9,13 @@ const buttonVariants = cva(
     variants: {
       variant: {
         default:
-          'shadow-md hover:shadow active:shadow-none bg-primary text-primary-foreground border-2 border-black transition hover:translate-y-1 active:translate-y-2 active:translate-x-1 hover:bg-primary-hover',
+          'shadow-md hover:shadow-xs hover:translate-y-1 active:translate-y-2 active:translate-x-1 active:shadow-none bg-primary text-primary-foreground border-2 border-black transition hover:translate-y-1 active:translate-y-2 active:translate-x-1 hover:bg-primary-hover',
         secondary:
-          'shadow-md hover:shadow active:shadow-none bg-secondary shadow-primary text-secondary-foreground border-2 border-black transition hover:translate-y-1 active:translate-y-2 active:translate-x-1 hover:bg-secondary-hover',
+          'shadow-md hover:shadow-xs hover:translate-y-1 active:translate-y-2 active:translate-x-1 active:shadow-none bg-secondary shadow-primary text-secondary-foreground border-2 border-black transition hover:translate-y-1 active:translate-y-2 active:translate-x-1 hover:bg-secondary-hover',
         outline:
-          'shadow-md hover:shadow active:shadow-none bg-transparent border-2 transition hover:translate-y-1 active:translate-y-2 active:translate-x-1',
+          'shadow-md hover:shadow-xs hover:translate-y-1 active:translate-y-2 active:translate-x-1 active:shadow-none bg-transparent border-2 transition hover:translate-y-1 active:translate-y-2 active:translate-x-1',
         ghost:
-          'bg-transparent border-1 !shadow-sm shadow-stone-500 border-stone-500 hover:bg-muted hover:text-muted-foreground',
+          'shadow-md hover:shadow-xs hover:translate-y-1 active:translate-y-2 active:translate-x-1 active:shadow-none bg-transparent border-2 transition hover:translate-y-1 active:translate-y-2 active:translate-x-1 shadow-stone-600 border-stone-600 hover:bg-stone-200 hover:text-stone-600 text-stone-600',
         link: '!shadow-none bg-transparent underline decoration-wavy decoration-2 decoration-yellow-500',
       },
       size: {
