@@ -41,7 +41,7 @@ const radioIndicatorVariants = cva('flex ', {
   },
 })
 
-interface RadioGroupProps extends React.ComponentProps<typeof RadioPrimitive.Root> {}
+type RadioGroupProps = React.ComponentProps<typeof RadioPrimitive.Root>
 
 export const RadioGroupRoot = ({ className, ...props }: RadioGroupProps) => (
   <RadioPrimitive.Root className={cn('grid gap-2', className)} {...props} />

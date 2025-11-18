@@ -17,6 +17,7 @@
 ## 3. Visual & Routing Checklist
 
 - Verify REST-style routing:
+
   - `/` → home tournament list (no auto-open of last tournament).
   - `/tournament/:id` → overview page.
   - `/tournament/:id/history` → history view.
