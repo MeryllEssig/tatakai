@@ -1,5 +1,4 @@
 ---
-
 description: "Task list for feature 001-tournament-manager"
 ---
 
@@ -24,11 +23,11 @@ description: "Task list for feature 001-tournament-manager"
 
 **Purpose**: Project initialization and basic structure for the `web/` React SPA.
 
-- [X] T001 Create Vite React + TypeScript app in `web/` aligned with plan.md structure
-- [X] T002 Configure TypeScript and base linting/formatting in `web/tsconfig.json`, `web/eslint.config.js`, `web/.prettierrc*`
-- [X] T003 [P] Install core dependencies (React 19, React DOM, React Router, Jotai, openskill, Tailwind CSS, Tailwind tooling) by updating `web/package.json`
-- [X] T004 [P] Configure Tailwind CSS using the `@tailwindcss/vite` plugin and global styles in `web/src/index.css`
-- [X] T005 [P] Initialize shadcn/ui-style UI primitives (Button, Card, Dialog, Input, Select) in `web/src/ui/components/`
+- [x] T001 Create Vite React + TypeScript app in `web/` aligned with plan.md structure
+- [x] T002 Configure TypeScript and base linting/formatting in `web/tsconfig.json`, `web/eslint.config.js`, `web/.prettierrc*`
+- [x] T003 [P] Install core dependencies (React 19, React DOM, React Router, Jotai, openskill, Tailwind CSS, Tailwind tooling) by updating `web/package.json`
+- [x] T004 [P] Configure Tailwind CSS using the `@tailwindcss/vite` plugin and global styles in `web/src/index.css`
+- [x] T005 [P] Initialize shadcn/ui-style UI primitives (Button, Card, Dialog, Input, Select) in `web/src/ui/components/`
 
 ---
 
@@ -38,18 +37,18 @@ description: "Task list for feature 001-tournament-manager"
 
 **⚠️ CRITICAL**: No user story work can begin until this phase is complete.
 
-- [X] T006 Implement React entrypoint and app shell in `web/src/main.tsx` and `web/src/app/layout/app-shell.tsx`
-- [X] T007 [P] Implement Jotai provider component in `web/src/app/providers/jotai-provider.tsx`
-- [X] T008 [P] Implement theme provider and base theming in `web/src/app/providers/theme-provider.tsx`
-- [X] T009 Set up routing configuration for main screens in `web/src/app/router/routes.tsx`
-- [X] T010 Define shared domain TypeScript types from `data-model.md` in `web/src/lib/domain/types.ts`
-- [X] T011 [P] Implement localStorage tournament storage adapter (key-per-tournament equal to the tournament name normalized to alphanumeric characters without spaces, e.g. `"Mon Tournoi 1!"` → `"montournoi1"`) in `web/src/features/persistence/local-storage-adapter.ts`
-- [X] T012 Implement root Jotai atoms for `GameData` and current tournament selection in `web/src/state/atoms.ts`
-- [X] T013 [P] Implement persistence helpers to load/save Jotai atoms from localStorage (including lastOpenedTournamentId) in `web/src/state/persistence.ts`
-- [X] T014 Implement OpenSkill.js wrapper utilities for rating updates in `web/src/lib/openskill/ratings.ts`
-- [X] T015 Implement sequential recomputation utilities skeleton in `web/src/lib/recompute/recompute-ratings.ts`
-- [X] T016 Implement matchmaking engine skeleton in `web/src/lib/matchmaking/engine.ts`
-- [X] T017 [P] Configure Vitest and basic test setup for unit and integration tests in `web/vitest.config.*`, `web/tests/unit/`, `web/tests/integration/`
+- [x] T006 Implement React entrypoint and app shell in `web/src/main.tsx` and `web/src/app/layout/app-shell.tsx`
+- [x] T007 [P] Implement Jotai provider component in `web/src/app/providers/jotai-provider.tsx`
+- [x] T008 [P] Implement theme provider and base theming in `web/src/app/providers/theme-provider.tsx`
+- [x] T009 Set up routing configuration for main screens in `web/src/app/router/routes.tsx`
+- [x] T010 Define shared domain TypeScript types from `data-model.md` in `web/src/lib/domain/types.ts`
+- [x] T011 [P] Implement localStorage tournament storage adapter (key-per-tournament equal to the tournament name normalized to alphanumeric characters without spaces, e.g. `"Mon Tournoi 1!"` → `"montournoi1"`) in `web/src/features/persistence/local-storage-adapter.ts`
+- [x] T012 Implement root Jotai atoms for `GameData` and current tournament selection in `web/src/state/atoms.ts`
+- [x] T013 [P] Implement persistence helpers to load/save Jotai atoms from localStorage (including lastOpenedTournamentId) in `web/src/state/persistence.ts`
+- [x] T014 Implement OpenSkill.js wrapper utilities for rating updates in `web/src/lib/openskill/ratings.ts`
+- [x] T015 Implement sequential recomputation utilities skeleton in `web/src/lib/recompute/recompute-ratings.ts`
+- [x] T016 Implement matchmaking engine skeleton in `web/src/lib/matchmaking/engine.ts`
+- [x] T017 [P] Configure Vitest and basic test setup for unit and integration tests in `web/vitest.config.*`, `web/tests/unit/`, `web/tests/integration/`
 
 **Checkpoint**: Foundation ready – user story implementation can now begin in parallel.
 
@@ -63,13 +62,13 @@ description: "Task list for feature 001-tournament-manager"
 
 ### Implementation for User Story 1
 
-- [X] T018 Implement `CreateTournament` and `AddOrUpdatePlayer` domain functions in `web/src/lib/tournaments/tournament-service.ts`
-- [X] T019 [P] [US1] Add unit tests for tournament-service functions in `web/tests/unit/tournaments/tournament-service.test.ts`
-- [X] T020 [US1] Implement tournament list screen (showing name, player count, game count, last game date) in `web/src/features/tournaments/tournament-list-screen.tsx`
-- [X] T021 [P] [US1] Implement 2-step tournament creation wizard (settings → players) in `web/src/features/tournaments/create-tournament-wizard.tsx`
-- [X] T022 [US1] Implement hook for tournament selection and lastOpenedTournamentId handling in `web/src/features/tournaments/use-tournament-selection.ts`
-- [X] T023 [US1] Implement player management UI (add/edit/deactivate players with unique name validation) in `web/src/features/players/player-list-panel.tsx`
-- [X] T024 [US1] Wire persistence of created/updated tournaments via `state/persistence` helpers in `web/src/features/tournaments/tournament-list-screen.tsx`
+- [x] T018 Implement `CreateTournament` and `AddOrUpdatePlayer` domain functions in `web/src/lib/tournaments/tournament-service.ts`
+- [x] T019 [P] [US1] Add unit tests for tournament-service functions in `web/tests/unit/tournaments/tournament-service.test.ts`
+- [x] T020 [US1] Implement tournament list screen (showing name, player count, game count, last game date) in `web/src/features/tournaments/tournament-list-screen.tsx`
+- [x] T021 [P] [US1] Implement 2-step tournament creation wizard (settings → players) in `web/src/features/tournaments/create-tournament-wizard.tsx`
+- [x] T022 [US1] Implement hook for tournament selection and lastOpenedTournamentId handling in `web/src/features/tournaments/use-tournament-selection.ts`
+- [x] T023 [US1] Implement player management UI (add/edit/deactivate players with unique name validation) in `web/src/features/players/player-list-panel.tsx`
+- [x] T024 [US1] Wire persistence of created/updated tournaments via `state/persistence` helpers in `web/src/features/tournaments/tournament-list-screen.tsx`
 
 **Checkpoint**: User Story 1 should be fully functional and testable independently as the MVP.
 
@@ -83,12 +82,12 @@ description: "Task list for feature 001-tournament-manager"
 
 ### Implementation for User Story 2
 
-- [X] T025 [US2] Implement `RecordGameResult` command using OpenSkill wrapper in `web/src/lib/games/game-service.ts`
-- [X] T026 [P] [US2] Add unit tests for rating updates and bench streak tracking in `web/tests/unit/games/game-service.test.ts`
-- [X] T027 [US2] Implement per-player rank-based game result entry screen with bench toggle and rank selector (1..rankMax) in `web/src/features/games/game-result-screen.tsx`, including per-tournament `rankMax` configuration in tournament settings and creation wizard
-- [X] T028 [US2] Implement player statistics view (µ, σ, µ-3σ, bench streak, games played, rating history) in `web/src/features/ratings/player-stats-panel.tsx`
-- [X] T029 [US2] Implement tournament leaderboard view sorted by rating with uncertainty and game count in `web/src/features/ratings/leaderboard-screen.tsx`
-- [X] T030 [US2] Wire game save flow to persist updated `GameData` via `state/persistence` in `web/src/features/games/game-result-screen.tsx`
+- [x] T025 [US2] Implement `RecordGameResult` command using OpenSkill wrapper in `web/src/lib/games/game-service.ts`
+- [x] T026 [P] [US2] Add unit tests for rating updates and bench streak tracking in `web/tests/unit/games/game-service.test.ts`
+- [x] T027 [US2] Implement per-player rank-based game result entry screen with bench toggle and rank selector (1..rankMax) in `web/src/features/games/game-result-screen.tsx`, including per-tournament `rankMax` configuration in tournament settings and creation wizard
+- [x] T028 [US2] Implement player statistics view (µ, σ, µ-3σ, bench streak, games played, rating history) in `web/src/features/ratings/player-stats-panel.tsx`
+- [x] T029 [US2] Implement tournament leaderboard view sorted by rating with uncertainty and game count in `web/src/features/ratings/leaderboard-screen.tsx`
+- [x] T030 [US2] Wire game save flow to persist updated `GameData` via `state/persistence` in `web/src/features/games/game-result-screen.tsx`
 
 **Checkpoint**: At this point, User Stories 1 AND 2 should both work independently and provide core tournament + rating functionality.
 
@@ -102,11 +101,11 @@ description: "Task list for feature 001-tournament-manager"
 
 ### Implementation for User Story 3
 
-- [X] T031 [US3] Implement `GenerateMatchmakingSuggestion` algorithm (bench fairness → sigma → rating balance) in `web/src/lib/matchmaking/engine.ts`
-- [X] T032 [P] [US3] Add unit tests for matchmaking engine scenarios in `web/tests/unit/matchmaking/engine.test.ts`
-- [X] T033 [US3] Implement matchmaking configuration and candidate selection UI in `web/src/features/matchmaking/matchmaking-screen.tsx`
-- [X] T034 [US3] Implement display of suggested teams and bench recommendations in `web/src/features/matchmaking/matchmaking-screen.tsx`
-- [X] T035 [US3] Implement "accept suggestion" flow to prefill game result screen in `web/src/features/matchmaking/use-accept-suggestion.ts`
+- [x] T031 [US3] Implement `GenerateMatchmakingSuggestion` algorithm (bench fairness → sigma → rating balance) in `web/src/lib/matchmaking/engine.ts`
+- [x] T032 [P] [US3] Add unit tests for matchmaking engine scenarios in `web/tests/unit/matchmaking/engine.test.ts`
+- [x] T033 [US3] Implement matchmaking configuration and candidate selection UI in `web/src/features/matchmaking/matchmaking-screen.tsx`
+- [x] T034 [US3] Implement display of suggested teams and bench recommendations in `web/src/features/matchmaking/matchmaking-screen.tsx`
+- [x] T035 [US3] Implement "accept suggestion" flow to prefill game result screen in `web/src/features/matchmaking/use-accept-suggestion.ts`
 
 **Checkpoint**: Matchmaking suggestions should be independently testable and usable on top of completed US1+US2 flows.
 
@@ -120,11 +119,11 @@ description: "Task list for feature 001-tournament-manager"
 
 ### Implementation for User Story 4
 
-- [X] T036 [US4] Implement `DeleteGameAndRecompute` logic in `web/src/lib/recompute/recompute-ratings.ts` (reset ratings and replay history)
-- [X] T037 [P] [US4] Add unit tests validating sequential recomputation in `web/tests/unit/recompute/recompute-ratings.test.ts`
-- [X] T038 [US4] Implement game history screen showing chronological games with teams and rankings in `web/src/features/games/game-history-screen.tsx`
-- [X] T039 [US4] Implement delete game UI with confirmation and recomputation trigger in `web/src/features/games/game-history-screen.tsx`
-- [X] T040 [US4] Ensure player stats and leaderboard views react to updated ratings after recomputation in `web/src/features/ratings/use-rating-snapshots.ts`
+- [x] T036 [US4] Implement `DeleteGameAndRecompute` logic in `web/src/lib/recompute/recompute-ratings.ts` (reset ratings and replay history)
+- [x] T037 [P] [US4] Add unit tests validating sequential recomputation in `web/tests/unit/recompute/recompute-ratings.test.ts`
+- [x] T038 [US4] Implement game history screen showing chronological games with teams and rankings in `web/src/features/games/game-history-screen.tsx`
+- [x] T039 [US4] Implement delete game UI with confirmation and recomputation trigger in `web/src/features/games/game-history-screen.tsx`
+- [x] T040 [US4] Ensure player stats and leaderboard views react to updated ratings after recomputation in `web/src/features/ratings/use-rating-snapshots.ts`
 
 **Checkpoint**: All four user stories (US1–US4) should now be independently functional and testable.
 
@@ -134,16 +133,16 @@ description: "Task list for feature 001-tournament-manager"
 
 **Purpose**: Improvements that affect multiple user stories and overall quality.
 
-- [X] T041 Documentation updates to reference `quickstart.md` in `web/README.md` or `web/docs/quickstart.md`
-- [X] T042 [P] Code cleanup and type tightening across `web/src/**/*`
-- [X] T043 [P] Performance checks and optimizations for rating updates and recomputation in `web/src/lib/` and `web/src/features/`
-- [X] T044 [P] Add any missing unit tests for core business utilities (OpenSkill integration, matchmaking, recomputation) in `web/tests/unit/`
-- [X] T045 Run full manual validation flows described in `specs/001-tournament-manager/quickstart.md`
-- [X] T046 Implement tournament export to JSON clipboard in `web/src/features/tournaments/export-tournament.ts` and wire it into the tournament settings UI
-- [X] T047 Implement tournament reset flow with confirmation in `web/src/features/tournaments/tournament-settings-panel.tsx` and ensure it clears `GameData` and updates local storage
-- [X] T048 [P] Implement backup and automatic recovery logic in `web/src/features/persistence/local-storage-adapter.ts` following R-004 (primary + `"-backup"` key per tournament)
-- [X] T049 [P] Add unit tests for critical edge cases (deleted players with history, insufficient players for matchmaking, settings changes after games) in `web/tests/unit/edgecases/`
-- [X] T050 Implement tournament import from JSON in `web/src/features/tournaments/import-tournament.ts` and add an "Importer un tournoi" button in `web/src/features/tournaments/tournament-list-screen.tsx` that overwrites any existing tournament when the imported JSON has the same id.
+- [x] T041 Documentation updates to reference `quickstart.md` in `web/README.md` or `web/docs/quickstart.md`
+- [x] T042 [P] Code cleanup and type tightening across `web/src/**/*`
+- [x] T043 [P] Performance checks and optimizations for rating updates and recomputation in `web/src/lib/` and `web/src/features/`
+- [x] T044 [P] Add any missing unit tests for core business utilities (OpenSkill integration, matchmaking, recomputation) in `web/tests/unit/`
+- [x] T045 Run full manual validation flows described in `specs/001-tournament-manager/quickstart.md`
+- [x] T046 Implement tournament export to JSON clipboard in `web/src/features/tournaments/export-tournament.ts` and wire it into the tournament settings UI
+- [x] T047 Implement tournament reset flow with confirmation in `web/src/features/tournaments/tournament-settings-panel.tsx` and ensure it clears `GameData` and updates local storage
+- [x] T048 [P] Implement backup and automatic recovery logic in `web/src/features/persistence/local-storage-adapter.ts` following R-004 (primary + `"-backup"` key per tournament)
+- [x] T049 [P] Add unit tests for critical edge cases (deleted players with history, insufficient players for matchmaking, settings changes after games) in `web/tests/unit/edgecases/`
+- [x] T050 Implement tournament import from JSON in `web/src/features/tournaments/import-tournament.ts` and add an "Importer un tournoi" button in `web/src/features/tournaments/tournament-list-screen.tsx` that overwrites any existing tournament when the imported JSON has the same id.
 
 ---
 

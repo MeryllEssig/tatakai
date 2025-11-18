@@ -75,11 +75,6 @@ export interface TournamentSummary {
   lastGameDate: string | null
 }
 
-export interface StoredData {
-  tournaments: TournamentSummary[]
-  lastOpenedTournamentId: string | null
-}
-
 export interface LeaderboardEntry {
   playerId: string
   name: string

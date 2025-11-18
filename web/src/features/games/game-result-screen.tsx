@@ -1,17 +1,23 @@
-import type { FormEvent, ReactElement } from 'react'
-import { useEffect, useState } from 'react'
-import { useAtom } from 'jotai/react'
-import { useNavigate } from 'react-router-dom'
-import { gameDataAtom, nextGameSuggestedPlayerIdsAtom } from '../../state/atoms'
-import { recordGameResult } from '../../lib/games/game-service'
+import { Button } from '@/components/retroui/Button'
 import {
   Card,
   CardContent,
   CardDescription,
   CardHeader,
   CardTitle,
-} from '../../ui/components/card'
-import { Button } from '../../ui/components/button'
+} from '@/components/retroui/Card'
+import { Switch } from '@/components/retroui/Switch'
+import { useAtom } from 'jotai/react'
+import type { FormEvent, ReactElement } from 'react'
+import { useEffect, useState } from 'react'
+import { useTranslation } from 'react-i18next'
+import { useNavigate } from 'react-router-dom'
+import { recordGameResult } from '../../lib/games/game-service'
+import { buildTournamentRoute } from '../../lib/route-builders'
+import { gameDataAtom, nextGameSuggestedPlayerIdsAtom } from '../../state/atoms'
+import { PageContentHeader } from '../../ui/components/page-content-header'
+import { PlayerAvatar } from '../../ui/components/player-avatar'
+import { TatakaiIcon } from '../../ui/components/tatakai-icon'
 
 interface PlayerGameState {
   isActive: boolean
@@ -27,6 +33,7 @@ export function GameResultScreen(): ReactElement {
   const [playerStates, setPlayerStates] = useState<PlayerStateById>({})
   const [error, setError] = useState<string | null>(null)
   const [isSubmitting, setIsSubmitting] = useState(false)
+  const { t } = useTranslation()
 
   useEffect(() => {
     if (!gameData) {
@@ -58,14 +65,17 @@ export function GameResultScreen(): ReactElement {
       <div className="flex flex-col gap-4">
         <Card>
           <CardHeader>
-            <CardTitle>Aucun tournoi sélectionné</CardTitle>
-            <CardDescription>
-              Sélectionnez un tournoi dans la liste avant d'enregistrer une nouvelle partie.
-            </CardDescription>
+            <CardTitle>{t('gameResult.noTournamentTitle')}</CardTitle>
+            <CardDescription>{t('gameResult.noTournamentDescription')}</CardDescription>
           </CardHeader>
           <CardContent>
-            <Button type="button" variant="outline" onClick={() => navigate('/')}>
-              Retour à la liste des tournois
+            <Button
+              type="button"
+              variant="secondary"
+              aria-label={t('gameResult.backToList')}
+              onClick={() => navigate('/')}
+            >
+              <TatakaiIcon name="back" className="text-base" />
             </Button>
           </CardContent>
         </Card>
@@ -77,12 +87,14 @@ export function GameResultScreen(): ReactElement {
   const rankMax = gameData.settings.rankMax || 12
   const maxPlayersPerGame = gameData.maxPlayersPerGame
 
-  const handleToggleActive = (playerId: string) => {
+  const handleToggleActive = (playerId: string, nextIsActive?: boolean) => {
     setPlayerStates((current) => {
       const previous = current[playerId] ?? { isActive: false, rank: null }
+      const isActive = nextIsActive ?? !previous.isActive
+
       return {
         ...current,
-        [playerId]: { ...previous, isActive: !previous.isActive },
+        [playerId]: { ...previous, isActive },
       }
     })
   }
@@ -106,7 +118,7 @@ export function GameResultScreen(): ReactElement {
     setError(null)
 
     if (!gameData) {
-      setError('Aucun tournoi sélectionné.')
+      setError(t('gameResult.errorNoTournament'))
       return
     }
 
@@ -130,14 +142,12 @@ export function GameResultScreen(): ReactElement {
       .filter((entry): entry is ParticipantCandidate => entry !== null)
 
     if (candidates.length < 2) {
-      setError('Sélectionnez au moins deux joueurs actifs pour enregistrer une partie.')
+      setError(t('gameResult.errorNotEnoughPlayers'))
       return
     }
 
     if (candidates.length > maxPlayersPerGame) {
-      setError(
-        `Au maximum ${maxPlayersPerGame} joueurs peuvent participer à une partie pour ce tournoi.`,
-      )
+      setError(t('gameResult.errorTooManyPlayers', { max: maxPlayersPerGame }))
       return
     }
 
@@ -150,7 +160,7 @@ export function GameResultScreen(): ReactElement {
     )
 
     if (invalidRank) {
-      setError(`Les rangs doivent être des entiers positifs compris entre 1 et ${rankMax}.`)
+      setError(t('gameResult.errorInvalidRank', { maxRank: rankMax }))
       return
     }
 
@@ -176,7 +186,7 @@ export function GameResultScreen(): ReactElement {
       const group = groupsByRank.get(rankValue) ?? []
       return {
         id: `rank-group-${index + 1}`,
-        name: `Rang ${rankValue}`,
+        name: t('gameResult.rankGroup', { rank: rankValue }),
         playerIds: group.map((participant) => participant.playerId),
       }
     })
@@ -197,41 +207,35 @@ export function GameResultScreen(): ReactElement {
 
       setGameData(updated)
       setSuggestedPlayerIds(null)
-      navigate('/')
+      navigate(buildTournamentRoute(updated.id, 'overview'))
     } catch (unknownError) {
       console.error(unknownError)
-      setError("Impossible d'enregistrer la partie. Vérifiez les rangs des joueurs.")
+      setError(t('gameResult.errorSaveFailed'))
     } finally {
       setIsSubmitting(false)
     }
   }
 
   const rankNumbers = Array.from({ length: rankMax }, (_, index) => index + 1)
-  const rankRows: number[][] = []
-  for (let index = 0; index < rankNumbers.length; index += 4) {
-    rankRows.push(rankNumbers.slice(index, index + 4))
-  }
 
   return (
     <div className="flex flex-col gap-4">
-      <div>
-        <h2 className="text-xl font-semibold">Nouvelle partie</h2>
-        <p className="text-sm text-slate-300">
-          Sélectionnez les joueurs actifs pour cette partie et assignez-leur un rang.
-        </p>
-      </div>
+      <PageContentHeader title={t('gameResult.title')} subtitle={t('gameResult.subtitle')} />
 
       {activePlayers.length === 0 ? (
         <Card>
           <CardHeader>
-            <CardTitle>Aucun joueur actif</CardTitle>
-            <CardDescription>
-              Ajoutez ou réactivez des joueurs dans le tournoi avant d'enregistrer une partie.
-            </CardDescription>
+            <CardTitle>{t('gameResult.noActivePlayersTitle')}</CardTitle>
+            <CardDescription>{t('gameResult.noActivePlayersDescription')}</CardDescription>
           </CardHeader>
           <CardContent>
-            <Button type="button" variant="outline" onClick={() => navigate('/')}>
-              Retour au tournoi
+            <Button
+              type="button"
+              variant="secondary"
+              aria-label={t('gameResult.backToTournament')}
+              onClick={() => navigate(buildTournamentRoute(gameData.id, 'overview'))}
+            >
+              <TatakaiIcon name="back" className="text-base" />
             </Button>
           </CardContent>
         </Card>
@@ -239,16 +243,15 @@ export function GameResultScreen(): ReactElement {
         <form onSubmit={handleSubmit} className="grid gap-4 lg:grid-cols-[minmax(0,1fr)]">
           <Card>
             <CardHeader>
-              <CardTitle>Joueurs et rangs</CardTitle>
+              <CardTitle>{t('gameResult.sectionTitle')}</CardTitle>
               <CardDescription>
-                Basculez les joueurs sur le banc ou actifs, puis choisissez un rang entre 1 et{' '}
-                {rankMax}. Au moins deux joueurs actifs avec un rang sont requis.
+                {t('gameResult.sectionDescription', { maxRank: rankMax })}
               </CardDescription>
             </CardHeader>
             <CardContent className="flex flex-col gap-3">
               {error ? <p className="text-sm text-red-400">{error}</p> : null}
 
-              <div className="flex flex-col gap-2">
+              <div className="flex flex-wrap gap-3">
                 {activePlayers.map((player) => {
                   const state = playerStates[player.id] ?? { isActive: false, rank: null }
                   const isActive = state.isActive
@@ -257,67 +260,72 @@ export function GameResultScreen(): ReactElement {
                   return (
                     <div
                       key={player.id}
-                      className="flex flex-col gap-2 rounded-md border border-slate-800 bg-slate-950/40 p-3 md:flex-row md:items-center md:justify-between"
+                      className="flex min-w-[260px] flex-1 flex-col gap-3 rounded-xl border border-slate-200 bg-slate-50 p-3"
                     >
-                      <div>
-                        <p className="text-sm font-medium text-slate-50">{player.name}</p>
-                        <p className="text-xs text-slate-400">
-                          Parties jouées : {player.gamesPlayed} · banc : {player.benchStreak}
-                        </p>
-                      </div>
-
-                      <div className="mt-2 flex flex-1 flex-col gap-2 md:mt-0 md:items-end">
-                        <div className="flex items-center gap-2">
-                          <span className="text-xs uppercase tracking-wide text-slate-400">
-                            {isActive ? 'Actif pour cette partie' : 'Sur le banc'}
-                          </span>
-                          <Button
-                            type="button"
-                            size="sm"
-                            variant={isActive ? 'default' : 'outline'}
-                            onClick={() => handleToggleActive(player.id)}
-                          >
-                            {isActive ? 'Mettre sur le banc' : 'Activer'}
-                          </Button>
+                      <div className="flex items-center gap-3">
+                        <PlayerAvatar playerId={player.id} displayName={player.name} size="sm" />
+                        <div>
+                          <p className="text-sm font-medium text-slate-900">{player.name}</p>
+                          <p className="text-xs text-slate-600">
+                            {t('gameResult.playerSummary', {
+                              games: player.gamesPlayed,
+                              bench: player.benchStreak,
+                            })}
+                          </p>
                         </div>
-
-                        {isActive ? (
-                          <div className="flex flex-col gap-1">
-                            <p className="text-xs text-slate-400">Rang</p>
-                            <div className="flex flex-col gap-1">
-                              {rankRows.map((row, rowIndex) => (
-                                <div key={rowIndex} className="flex flex-wrap gap-1">
-                                  {row.map((rank) => {
-                                    const isSelected = selectedRank === rank
-                                    return (
-                                      <Button
-                                        key={rank}
-                                        type="button"
-                                        size="sm"
-                                        variant={isSelected ? 'default' : 'outline'}
-                                        onClick={() => handleSelectRank(player.id, rank)}
-                                      >
-                                        {rank}
-                                      </Button>
-                                    )
-                                  })}
-                                </div>
-                              ))}
-                            </div>
-                          </div>
-                        ) : null}
                       </div>
+
+                      <div className="flex items-center gap-2">
+                        <Switch
+                          checked={isActive}
+                          onCheckedChange={(checked) => handleToggleActive(player.id, checked)}
+                          aria-label={t('gameResult.playerActiveLabelActive')}
+                        />
+                        <span className="text-xs text-slate-700">
+                          {t('gameResult.playerActiveLabelActive')}
+                        </span>
+                      </div>
+
+                      {isActive ? (
+                        <div
+                          className="mt-2 grid gap-1"
+                          style={{
+                            gridTemplateColumns: 'repeat(auto-fit, minmax(2.5rem, 1fr))',
+                          }}
+                        >
+                          {rankNumbers.map((rank) => {
+                            const isSelected = selectedRank === rank
+                            return (
+                              <Button
+                                key={rank}
+                                type="button"
+                                size="sm"
+                                className="h-10 w-10 grid place-content-center"
+                                variant={isSelected ? 'default' : 'outline'}
+                                onClick={() => handleSelectRank(player.id, rank)}
+                              >
+                                {rank}
+                              </Button>
+                            )
+                          })}
+                        </div>
+                      ) : null}
                     </div>
                   )
                 })}
               </div>
 
               <div className="flex justify-between gap-2">
-                <Button type="button" variant="ghost" onClick={() => navigate('/')}>
-                  Annuler
+                <Button
+                  type="button"
+                  variant="ghost"
+                  onClick={() => navigate(buildTournamentRoute(gameData.id, 'overview'))}
+                >
+                  {t('gameResult.cancel')}
                 </Button>
                 <Button type="submit" disabled={isSubmitting}>
-                  Enregistrer la partie
+                  <TatakaiIcon name="save" className="mr-2 text-base" />
+                  {t('gameResult.submit')}
                 </Button>
               </div>
             </CardContent>

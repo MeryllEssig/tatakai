@@ -1,18 +1,20 @@
-import type { ReactElement } from 'react'
-import { useState } from 'react'
-import { useAtomValue, useSetAtom } from 'jotai/react'
-import type { GameData } from '../../lib/domain/types'
-import { gameDataAtom } from '../../state/atoms'
-import { exportTournamentToClipboard } from './export-tournament'
-import { createInitialRating } from '../../lib/openskill/ratings'
+import { Button } from '@/components/retroui/Button'
 import {
   Card,
   CardContent,
   CardDescription,
   CardHeader,
   CardTitle,
-} from '../../ui/components/card'
-import { Button } from '../../ui/components/button'
+} from '@/components/retroui/Card'
+import { useAtomValue, useSetAtom } from 'jotai/react'
+import type { ReactElement } from 'react'
+import { useState } from 'react'
+import { useTranslation } from 'react-i18next'
+import type { GameData } from '../../lib/domain/types'
+import { createInitialRating } from '../../lib/openskill/ratings'
+import { gameDataAtom } from '../../state/atoms'
+import { TatakaiIcon } from '../../ui/components/tatakai-icon'
+import { exportTournamentToClipboard } from './export-tournament'
 
 function resetTournamentGameData(gameData: GameData): GameData {
   const updatedAt = new Date().toISOString()
@@ -37,15 +39,14 @@ export function TournamentSettingsPanel(): ReactElement {
   const setGameData = useSetAtom(gameDataAtom)
   const [statusMessage, setStatusMessage] = useState<string | null>(null)
   const [errorMessage, setErrorMessage] = useState<string | null>(null)
+  const { t } = useTranslation()
 
   if (!gameData) {
     return (
       <Card>
         <CardHeader>
-          <CardTitle>Parametres du tournoi</CardTitle>
-          <CardDescription>
-            Selectionnez un tournoi pour exporter ou reinitialiser ses donnees.
-          </CardDescription>
+          <CardTitle>{t('settings.title')}</CardTitle>
+          <CardDescription>{t('settings.noTournamentDescription')}</CardDescription>
         </CardHeader>
       </Card>
     )
@@ -57,19 +58,15 @@ export function TournamentSettingsPanel(): ReactElement {
 
     try {
       await exportTournamentToClipboard(gameData)
-      setStatusMessage('Tournoi exporte vers le presse-papiers.')
+      setStatusMessage(t('settings.statusExported'))
     } catch (unknownError) {
       console.error(unknownError)
-      setErrorMessage(
-        "Impossible d'exporter le tournoi. Verifiez les autorisations du presse-papiers.",
-      )
+      setErrorMessage(t('settings.errorExport'))
     }
   }
 
   const handleReset = () => {
-    const confirmed = window.confirm(
-      'Reinitialiser ce tournoi ? Toutes les parties seront supprimees et les ratings remis a zero.',
-    )
+    const confirmed = window.confirm(t('settings.resetConfirm'))
 
     if (!confirmed) return
 
@@ -78,16 +75,14 @@ export function TournamentSettingsPanel(): ReactElement {
 
     const updated = resetTournamentGameData(gameData)
     setGameData(updated)
-    setStatusMessage('Tournoi reinitialise. Toutes les parties ont ete supprimees.')
+    setStatusMessage(t('settings.statusReset'))
   }
 
   return (
     <Card>
       <CardHeader>
-        <CardTitle>Parametres du tournoi</CardTitle>
-        <CardDescription>
-          Exportez les donnees ou reinitialisez ce tournoi.
-        </CardDescription>
+        <CardTitle>{t('settings.title')}</CardTitle>
+        <CardDescription>{t('settings.description')}</CardDescription>
       </CardHeader>
       <CardContent className="flex flex-col gap-3 text-sm">
         {statusMessage ? <p className="text-emerald-400">{statusMessage}</p> : null}
@@ -95,10 +90,11 @@ export function TournamentSettingsPanel(): ReactElement {
 
         <div className="flex flex-col gap-2">
           <Button type="button" variant="outline" onClick={handleExport}>
-            Exporter le tournoi (JSON)
+            {t('settings.exportButton')}
           </Button>
           <Button type="button" variant="outline" onClick={handleReset}>
-            Reinitialiser le tournoi
+            <TatakaiIcon name="reset" className="mr-2 text-base" />
+            {t('settings.resetButton')}
           </Button>
         </div>
       </CardContent>

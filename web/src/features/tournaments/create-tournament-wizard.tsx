@@ -1,13 +1,16 @@
+import { Button } from '@/components/retroui/Button'
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/retroui/Card'
+import { Input } from '@/components/retroui/Input'
+import { Select } from '@/components/retroui/Select'
 import type { FormEvent, ReactElement } from 'react'
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import type { RatingPreset, TournamentMode } from '../../lib/domain/types'
+import { buildTournamentRoute } from '../../lib/route-builders'
 import { createTournament } from '../../lib/tournaments/tournament-service'
+import { PageContentHeader } from '../../ui/components/page-content-header'
+import { TatakaiIcon } from '../../ui/components/tatakai-icon'
 import { saveTournament } from '../persistence/local-storage-adapter'
-import { Card, CardContent, CardHeader, CardTitle } from '../../ui/components/card'
-import { Input } from '../../ui/components/input'
-import { Select } from '../../ui/components/select'
-import { Button } from '../../ui/components/button'
 
 interface SettingsState {
   name: string
@@ -78,9 +81,7 @@ export function CreateTournamentWizard(): ReactElement {
     event.preventDefault()
     setError(null)
 
-    const trimmedNames = players
-      .map((row) => row.name.trim())
-      .filter((name) => name.length > 0)
+    const trimmedNames = players.map((row) => row.name.trim()).filter((name) => name.length > 0)
 
     if (trimmedNames.length === 0) {
       setError('Ajoutez au moins un joueur pour démarrer le tournoi.')
@@ -110,7 +111,7 @@ export function CreateTournamentWizard(): ReactElement {
 
       saveTournament(gameData)
 
-      navigate('/')
+      navigate(buildTournamentRoute(gameData.id, 'overview'))
     } catch (creationError) {
       setError('Impossible de créer le tournoi. Réessayez plus tard.')
       console.error(creationError)
@@ -121,16 +122,11 @@ export function CreateTournamentWizard(): ReactElement {
   }
 
   const handleAddPlayerRow = () => {
-    setPlayers((current) => [
-      ...current,
-      { id: `p-${current.length + 1}`, name: '' },
-    ])
+    setPlayers((current) => [...current, { id: `p-${current.length + 1}`, name: '' }])
   }
 
   const handlePlayerNameChange = (id: string, value: string) => {
-    setPlayers((current) =>
-      current.map((row) => (row.id === id ? { ...row, name: value } : row)),
-    )
+    setPlayers((current) => current.map((row) => (row.id === id ? { ...row, name: value } : row)))
   }
 
   const handleRemovePlayerRow = (id: string) => {
@@ -168,17 +164,23 @@ export function CreateTournamentWizard(): ReactElement {
                   Mode
                 </label>
                 <Select
-                  id="tournament-mode"
                   value={settings.mode}
-                  onChange={(event) =>
+                  onValueChange={(value) =>
                     setSettings((current) => ({
                       ...current,
-                      mode: event.target.value as TournamentMode,
+                      mode: value as TournamentMode,
                     }))
                   }
                 >
-                  <option value="solo">Solo (1v1)</option>
-                  <option value="teams">Équipes</option>
+                  <Select.Trigger id="tournament-mode" className="w-full">
+                    <Select.Value />
+                  </Select.Trigger>
+                  <Select.Content>
+                    <Select.Group>
+                      <Select.Item value="solo">Solo (1v1)</Select.Item>
+                      <Select.Item value="teams">Équipes</Select.Item>
+                    </Select.Group>
+                  </Select.Content>
                 </Select>
               </div>
 
@@ -218,7 +220,7 @@ export function CreateTournamentWizard(): ReactElement {
                     }))
                   }
                 />
-                <p className="text-xs text-slate-400">
+                <p className="text-xs text-slate-600">
                   Détermine le rang maximal sélectionnable lors de l'enregistrement d'une partie.
                 </p>
               </div>
@@ -230,18 +232,24 @@ export function CreateTournamentWizard(): ReactElement {
                   Préréglage OpenSkill
                 </label>
                 <Select
-                  id="rating-preset"
                   value={settings.ratingPreset}
-                  onChange={(event) =>
+                  onValueChange={(value) =>
                     setSettings((current) => ({
                       ...current,
-                      ratingPreset: event.target.value as RatingPreset,
+                      ratingPreset: value as RatingPreset,
                     }))
                   }
                 >
-                  <option value="default">Par défaut</option>
-                  <option value="conservative">Conservateur</option>
-                  <option value="aggressive">Agressif</option>
+                  <Select.Trigger id="rating-preset" className="w-full">
+                    <Select.Value />
+                  </Select.Trigger>
+                  <Select.Content>
+                    <Select.Group>
+                      <Select.Item value="default">Par défaut</Select.Item>
+                      <Select.Item value="conservative">Conservateur</Select.Item>
+                      <Select.Item value="aggressive">Agressif</Select.Item>
+                    </Select.Group>
+                  </Select.Content>
                 </Select>
               </div>
 
@@ -250,7 +258,11 @@ export function CreateTournamentWizard(): ReactElement {
                 <div className="flex items-center gap-2 text-sm">
                   <button
                     type="button"
-                    className={`rounded-md border px-3 py-1 text-xs ${settings.openSkillEnabled ? 'border-slate-300 bg-slate-200 text-slate-900' : 'border-slate-700 text-slate-200'}`}
+                    className={`rounded-md border px-3 py-1 text-xs ${
+                      settings.openSkillEnabled
+                        ? 'border-slate-300 bg-slate-200 text-slate-900'
+                        : 'border-slate-700 text-slate-200'
+                    }`}
                     onClick={() =>
                       setSettings((current) => ({
                         ...current,
@@ -262,7 +274,11 @@ export function CreateTournamentWizard(): ReactElement {
                   </button>
                   <button
                     type="button"
-                    className={`rounded-md border px-3 py-1 text-xs ${!settings.openSkillEnabled ? 'border-slate-300 bg-slate-200 text-slate-900' : 'border-slate-700 text-slate-200'}`}
+                    className={`rounded-md border px-3 py-1 text-xs ${
+                      !settings.openSkillEnabled
+                        ? 'border-slate-300 bg-slate-200 text-slate-900'
+                        : 'border-slate-700 text-slate-200'
+                    }`}
                     onClick={() =>
                       setSettings((current) => ({
                         ...current,
@@ -281,7 +297,9 @@ export function CreateTournamentWizard(): ReactElement {
         {error ? <p className="text-sm text-red-400">{error}</p> : null}
 
         <div className="flex justify-between gap-2">
-          <Button type="button" variant="ghost" onClick={() => navigate('/')}>{""}Annuler</Button>
+          <Button type="button" aria-label="Annuler" onClick={() => navigate('/')}>
+            <TatakaiIcon name="back" className="text-base" />
+          </Button>
           <Button type="submit">Continuer</Button>
         </div>
       </form>
@@ -296,7 +314,7 @@ export function CreateTournamentWizard(): ReactElement {
             <CardTitle>Étape 2 · Joueurs</CardTitle>
           </CardHeader>
           <CardContent className="flex flex-col gap-3">
-            <p className="text-sm text-slate-300">
+            <p className="text-sm text-slate-600">
               Ajoutez les joueurs qui participeront à ce tournoi. Les noms doivent être uniques.
             </p>
 
@@ -344,12 +362,10 @@ export function CreateTournamentWizard(): ReactElement {
 
   return (
     <div className="flex flex-col gap-4">
-      <div>
-        <h2 className="text-xl font-semibold">Nouveau tournoi</h2>
-        <p className="text-sm text-slate-300">
-          Configurez d'abord le tournoi, puis ajoutez les joueurs qui y participeront.
-        </p>
-      </div>
+      <PageContentHeader
+        title="Nouveau tournoi"
+        subtitle="Configurez d'abord le tournoi, puis ajoutez les joueurs qui y participeront."
+      />
 
       {step === 1 ? renderStep1() : renderStep2()}
     </div>

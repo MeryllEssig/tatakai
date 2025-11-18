@@ -1,20 +1,25 @@
-import type { FormEvent, ReactElement } from 'react'
-import { useState } from 'react'
-import { useAtomValue } from 'jotai/react'
-import { useNavigate } from 'react-router-dom'
-import { gameDataAtom } from '../../state/atoms'
-import { generateMatchmakingSuggestion } from '../../lib/matchmaking/engine'
-import type { MatchmakingResult } from '../../lib/matchmaking/engine'
-import type { Player } from '../../lib/domain/types'
+import { Button } from '@/components/retroui/Button'
 import {
   Card,
   CardContent,
   CardDescription,
   CardHeader,
   CardTitle,
-} from '../../ui/components/card'
-import { Button } from '../../ui/components/button'
-import { Input } from '../../ui/components/input'
+} from '@/components/retroui/Card'
+import { Input } from '@/components/retroui/Input'
+import { useAtomValue } from 'jotai/react'
+import type { FormEvent, ReactElement } from 'react'
+import { useState } from 'react'
+import { useTranslation } from 'react-i18next'
+import { useNavigate, useParams } from 'react-router-dom'
+import type { Player } from '../../lib/domain/types'
+import type { MatchmakingResult } from '../../lib/matchmaking/engine'
+import { generateMatchmakingSuggestion } from '../../lib/matchmaking/engine'
+import { buildTournamentRoute } from '../../lib/route-builders'
+import { gameDataAtom } from '../../state/atoms'
+import { PageContentHeader } from '../../ui/components/page-content-header'
+import { PlayerAvatar } from '../../ui/components/player-avatar'
+import { TatakaiIcon } from '../../ui/components/tatakai-icon'
 import { useAcceptSuggestion } from './use-accept-suggestion'
 
 interface MatchmakingFormState {
@@ -30,13 +35,14 @@ function getActivePlayers(gameData: { players: Player[] }): Player[] {
 export function MatchmakingScreen(): ReactElement {
   const gameData = useAtomValue(gameDataAtom)
   const navigate = useNavigate()
+  const { id } = useParams<{ id: string }>()
   const activePlayers = gameData ? getActivePlayers(gameData) : []
+  const { t } = useTranslation()
 
   const initialFormState: MatchmakingFormState = gameData
     ? {
         maxPlayersPerGame:
-          gameData.settings.matchmakingMaxPlayers &&
-          gameData.settings.matchmakingMaxPlayers > 0
+          gameData.settings.matchmakingMaxPlayers && gameData.settings.matchmakingMaxPlayers > 0
             ? gameData.settings.matchmakingMaxPlayers
             : Math.max(2, Math.min(4, activePlayers.length || 2)),
         maxTeams: Math.max(2, Math.min(4, activePlayers.length || 2)),
@@ -55,22 +61,23 @@ export function MatchmakingScreen(): ReactElement {
   const [result, setResult] = useState<MatchmakingResult | null>(null)
   const [error, setError] = useState<string | null>(null)
   const acceptSuggestion = useAcceptSuggestion()
-  
 
   if (!gameData) {
     return (
       <div className="flex flex-col gap-4">
         <Card>
           <CardHeader>
-            <CardTitle>Matchmaking</CardTitle>
-            <CardDescription>
-              Sélectionnez un tournoi dans la liste avant de générer une suggestion de
-              matchmaking.
-            </CardDescription>
+            <CardTitle>{t('matchmaking.title')}</CardTitle>
+            <CardDescription>{t('matchmaking.noTournamentDescription')}</CardDescription>
           </CardHeader>
           <CardContent>
-            <Button type="button" variant="outline" onClick={() => navigate('/') }>
-              Retour à la liste des tournois
+            <Button
+              type="button"
+              variant="secondary"
+              aria-label={t('matchmaking.backToList')}
+              onClick={() => navigate('/')}
+            >
+              <TatakaiIcon name="back" className="text-base" />
             </Button>
           </CardContent>
         </Card>
@@ -87,7 +94,7 @@ export function MatchmakingScreen(): ReactElement {
     setResult(null)
 
     if (selectedCandidateIds.length < 2) {
-      setError('Sélectionnez au moins deux joueurs candidats pour générer une suggestion.')
+      setError(t('matchmaking.errorNotEnoughCandidates'))
       return
     }
 
@@ -101,7 +108,7 @@ export function MatchmakingScreen(): ReactElement {
     })
 
     if (!suggestionResult) {
-      setError("Impossible de générer une suggestion avec les paramètres et candidats actuels.")
+      setError(t('matchmaking.errorNoSuggestion'))
       return
     }
 
@@ -134,28 +141,35 @@ export function MatchmakingScreen(): ReactElement {
 
   return (
     <div className="flex flex-col gap-4">
-      <div>
-        <h2 className="text-xl font-semibold">Matchmaking</h2>
-        <p className="text-sm text-slate-300">
-          Configurez les paramètres de matchmaking, sélectionnez les candidats puis générez une
-          suggestion de composition pour la prochaine partie.
-        </p>
-      </div>
-
+      <PageContentHeader title={t('matchmaking.title')} subtitle={t('matchmaking.subtitle')}>
+        <Button
+          type="button"
+          size="sm"
+          variant="secondary"
+          aria-label={t('matchmaking.backToTournament')}
+          onClick={() => {
+            if (!id) {
+              navigate('/')
+              return
+            }
+            navigate(buildTournamentRoute(id, 'overview'))
+          }}
+        >
+          <TatakaiIcon name="back" className="text-base" />
+        </Button>
+      </PageContentHeader>
       <div className="grid gap-4 lg:grid-cols-[minmax(0,1.1fr)_minmax(0,1.2fr)]">
         <Card>
           <CardHeader>
-            <CardTitle>Paramètres</CardTitle>
-            <CardDescription>
-              Limitez le nombre de joueurs, le nombre d'équipes et activez le fairness du banc.
-            </CardDescription>
+            <CardTitle>{t('matchmaking.settingsTitle')}</CardTitle>
+            <CardDescription>{t('matchmaking.settingsDescription')}</CardDescription>
           </CardHeader>
           <CardContent className="flex flex-col gap-4">
             <form onSubmit={handleFormChange} className="flex flex-col gap-4">
               <div className="grid gap-4 md:grid-cols-2">
                 <div className="flex flex-col gap-1">
                   <label className="text-sm font-medium" htmlFor="max-players">
-                    Nombre maximum de joueurs
+                    {t('matchmaking.maxPlayersLabel')}
                   </label>
                   <Input
                     id="max-players"
@@ -175,7 +189,7 @@ export function MatchmakingScreen(): ReactElement {
 
                 <div className="flex flex-col gap-1">
                   <label className="text-sm font-medium" htmlFor="max-teams">
-                    Nombre d'équipes
+                    {t('matchmaking.maxTeamsLabel')}
                   </label>
                   <Input
                     id="max-teams"
@@ -196,10 +210,9 @@ export function MatchmakingScreen(): ReactElement {
 
               <div className="flex items-center justify-between gap-2">
                 <div className="flex flex-col">
-                  <span className="text-sm font-medium">Fairness du banc</span>
-                  <span className="text-xs text-slate-400">
-                    Prioriser les joueurs avec une grande série de banc avant l'équilibrage par
-                    rating.
+                  <span className="text-sm font-medium">{t('matchmaking.benchFairnessLabel')}</span>
+                  <span className="text-xs text-slate-600">
+                    {t('matchmaking.benchFairnessHelp')}
                   </span>
                 </div>
                 <Button
@@ -213,16 +226,21 @@ export function MatchmakingScreen(): ReactElement {
                     }))
                   }
                 >
-                  {formState.benchFairnessEnabled ? 'Activé' : 'Désactivé'}
+                  {formState.benchFairnessEnabled
+                    ? t('matchmaking.benchFairnessOn')
+                    : t('matchmaking.benchFairnessOff')}
                 </Button>
               </div>
 
               <div className="flex justify-between gap-2">
-                <Button type="button" variant="ghost" onClick={() => navigate('/') }>
-                  Retour au tournoi
-                </Button>
-                <Button type="button" onClick={handleGenerate} disabled={activePlayers.length < 2}>
-                  Générer une suggestion
+                <Button
+                  type="button"
+                  className="bg-[#ffdb33] text-slate-900 hover:bg-[#facc15]"
+                  onClick={handleGenerate}
+                  disabled={activePlayers.length < 2}
+                >
+                  <TatakaiIcon name="matchmaking" className="mr-2 text-base" />
+                  {t('matchmaking.generateButton')}
                 </Button>
               </div>
             </form>
@@ -231,27 +249,22 @@ export function MatchmakingScreen(): ReactElement {
 
         <Card>
           <CardHeader>
-            <CardTitle>Joueurs candidats</CardTitle>
-            <CardDescription>
-              Cochez les joueurs éligibles pour la prochaine partie. Au moins deux candidats sont
-              requis.
-            </CardDescription>
+            <CardTitle>{t('matchmaking.candidatesTitle')}</CardTitle>
+            <CardDescription>{t('matchmaking.candidatesDescription')}</CardDescription>
           </CardHeader>
           <CardContent className="flex flex-col gap-3">
             {error ? <p className="text-sm text-red-400">{error}</p> : null}
 
             {activePlayers.length === 0 ? (
-              <p className="text-sm text-slate-400">
-                Aucun joueur actif. Ajoutez ou réactivez des joueurs dans le tournoi.
-              </p>
+              <p className="text-sm text-slate-600">{t('matchmaking.noActivePlayers')}</p>
             ) : (
               <>
                 <div className="flex justify-between gap-2 text-xs">
-                  <Button type="button" size="sm" variant="ghost" onClick={handleSelectAll}>
-                    Tout sélectionner
+                  <Button type="button" size="sm" variant="link" onClick={handleSelectAll}>
+                    {t('matchmaking.selectAll')}
                   </Button>
-                  <Button type="button" size="sm" variant="ghost" onClick={handleClearAll}>
-                    Tout désélectionner
+                  <Button type="button" size="sm" variant="link" onClick={handleClearAll}>
+                    {t('matchmaking.clearAll')}
                   </Button>
                 </div>
 
@@ -262,19 +275,31 @@ export function MatchmakingScreen(): ReactElement {
                     return (
                       <label
                         key={player.id}
-                        className="flex items-center justify-between gap-2 rounded-md border border-slate-800 bg-slate-950/40 p-2 text-sm"
+                        className={`flex items-center justify-between gap-2 rounded-xl border border-slate-200 bg-slate-50 px-3 py-2 text-sm shadow-[3px_3px_0_0_#020617] ${
+                          isSelected ? 'border-l-4 border-l-[#ffdb33]' : ''
+                        }`}
                       >
                         <div className="flex items-center gap-2">
                           <input
                             type="checkbox"
-                            className="h-4 w-4 accent-slate-400"
+                            className="h-4 w-4 accent-[#ffdb33]"
                             checked={isSelected}
                             onChange={() => handleToggleCandidate(player.id)}
                           />
                           <div>
-                            <p className="font-medium text-slate-50">{player.name}</p>
-                            <p className="text-xs text-slate-400">
-                              Parties : {player.gamesPlayed} · banc : {player.benchStreak}
+                            <div className="flex items-center gap-2">
+                              <PlayerAvatar
+                                playerId={player.id}
+                                displayName={player.name}
+                                size="sm"
+                              />
+                              <p className="font-medium text-slate-900">{player.name}</p>
+                            </div>
+                            <p className="text-xs text-slate-600">
+                              {t('matchmaking.playerSummary', {
+                                games: player.gamesPlayed,
+                                streak: player.benchStreak,
+                              })}
                             </p>
                           </div>
                         </div>
@@ -292,11 +317,8 @@ export function MatchmakingScreen(): ReactElement {
         <div className="grid gap-4 lg:grid-cols-[minmax(0,1.4fr)_minmax(0,1fr)]">
           <Card>
             <CardHeader>
-              <CardTitle>Suggestion d'équipes</CardTitle>
-              <CardDescription>
-                Équipes proposées pour la prochaine partie. Vous pouvez accepter la suggestion pour
-                pré-remplir la saisie de partie.
-              </CardDescription>
+              <CardTitle>{t('matchmaking.suggestionTitle')}</CardTitle>
+              <CardDescription>{t('matchmaking.suggestionDescription')}</CardDescription>
             </CardHeader>
             <CardContent className="flex flex-col gap-3">
               {result.suggestion.teams.map((team, index) => {
@@ -310,20 +332,35 @@ export function MatchmakingScreen(): ReactElement {
                 return (
                   <div
                     key={team.id}
-                    className="flex flex-col gap-1 rounded-md border border-slate-800 bg-slate-950/40 p-3"
+                    className="flex flex-col gap-1 rounded-2xl border-2 border-slate-900 bg-slate-50 p-3 shadow-[4px_4px_0_0_#020617]"
                   >
                     <div className="flex items-center justify-between gap-2">
-                      <p className="text-sm font-semibold">Équipe {index + 1}</p>
-                      <p className="text-xs text-slate-400">
-                        µ moyen ≈ {mean.toFixed(2)} · µ-3σ moyen ≈ {conservativeMean.toFixed(2)}
+                      <p className="text-sm font-semibold">
+                        {t('matchmaking.teamLabel', { index: index + 1 })}
+                      </p>
+                      <p className="text-xs text-slate-600">
+                        {t('matchmaking.teamSummary', {
+                          mean: mean.toFixed(2),
+                          conservative: conservativeMean.toFixed(2),
+                        })}
                       </p>
                     </div>
                     <ul className="mt-1 flex flex-col gap-1 text-sm">
                       {players.map((player) => (
-                        <li key={player.id} className="flex justify-between gap-2">
-                          <span className="text-slate-50">{player.name}</span>
-                          <span className="text-xs text-slate-400">
-                            µ {player.rating.mu.toFixed(2)} · σ {player.rating.sigma.toFixed(2)}
+                        <li key={player.id} className="flex items-center justify-between gap-2">
+                          <div className="flex items-center gap-2">
+                            <PlayerAvatar
+                              playerId={player.id}
+                              displayName={player.name}
+                              size="sm"
+                            />
+                            <span className="text-slate-900">{player.name}</span>
+                          </div>
+                          <span className="text-xs text-slate-600">
+                            {t('matchmaking.playerRatingSummary', {
+                              mu: player.rating.mu.toFixed(2),
+                              sigma: player.rating.sigma.toFixed(2),
+                            })}
                           </span>
                         </li>
                       ))}
@@ -333,8 +370,12 @@ export function MatchmakingScreen(): ReactElement {
               })}
 
               <div className="flex justify-end gap-2">
-                <Button type="button" variant="outline" onClick={handleAccept}>
-                  Accepter la suggestion
+                <Button
+                  type="button"
+                  className="bg-[#ffdb33] text-slate-900 hover:bg-[#facc15]"
+                  onClick={handleAccept}
+                >
+                  {t('matchmaking.acceptSuggestion')}
                 </Button>
               </div>
             </CardContent>
@@ -342,17 +383,12 @@ export function MatchmakingScreen(): ReactElement {
 
           <Card>
             <CardHeader>
-              <CardTitle>Joueurs proposés sur le banc</CardTitle>
-              <CardDescription>
-                Joueurs non inclus dans la suggestion actuelle. Ils peuvent être privilégiés lors de
-                la prochaine partie.
-              </CardDescription>
+              <CardTitle>{t('matchmaking.benchCandidatesTitle')}</CardTitle>
+              <CardDescription>{t('matchmaking.benchCandidatesDescription')}</CardDescription>
             </CardHeader>
             <CardContent className="flex flex-col gap-2 text-sm">
               {result.benchCandidates.length === 0 ? (
-                <p className="text-xs text-slate-400">
-                  Aucun joueur sur le banc dans cette suggestion.
-                </p>
+                <p className="text-xs text-slate-600">{t('matchmaking.noBenchCandidates')}</p>
               ) : (
                 <ul className="flex flex-col gap-1">
                   {result.benchCandidates.map((playerId) => {
@@ -360,10 +396,16 @@ export function MatchmakingScreen(): ReactElement {
                     if (!player) return null
 
                     return (
-                      <li key={player.id} className="flex justify-between gap-2">
-                        <span className="text-slate-50">{player.name}</span>
-                        <span className="text-xs text-slate-400">
-                          banc : {player.benchStreak} · σ {player.rating.sigma.toFixed(2)}
+                      <li key={player.id} className="flex items-center justify-between gap-2">
+                        <div className="flex items-center gap-2">
+                          <PlayerAvatar playerId={player.id} displayName={player.name} size="sm" />
+                          <span className="text-slate-900">{player.name}</span>
+                        </div>
+                        <span className="text-xs text-slate-600">
+                          {t('matchmaking.benchBadge', {
+                            streak: player.benchStreak,
+                            sigma: player.rating.sigma.toFixed(2),
+                          })}
                         </span>
                       </li>
                     )

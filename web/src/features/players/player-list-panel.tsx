@@ -1,12 +1,21 @@
+import { Button } from '@/components/retroui/Button'
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from '@/components/retroui/Card'
+import { Input } from '@/components/retroui/Input'
+import { useAtom } from 'jotai/react'
 import type { FormEvent, ReactElement } from 'react'
 import { useState } from 'react'
-import { useAtom } from 'jotai/react'
+import { useTranslation } from 'react-i18next'
 import type { Player } from '../../lib/domain/types'
-import { gameDataAtom } from '../../state/atoms'
 import { addOrUpdatePlayer } from '../../lib/tournaments/tournament-service'
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '../../ui/components/card'
-import { Input } from '../../ui/components/input'
-import { Button } from '../../ui/components/button'
+import { gameDataAtom } from '../../state/atoms'
+import { PlayerAvatar } from '../../ui/components/player-avatar'
+import { TatakaiIcon } from '../../ui/components/tatakai-icon'
 
 interface PlayerFormState {
   name: string
@@ -28,13 +37,14 @@ export function PlayerListPanel(): ReactElement {
   const [editingPlayerId, setEditingPlayerId] = useState<string | null>(null)
   const [editingName, setEditingName] = useState('')
   const [error, setError] = useState<string | null>(null)
+  const { t } = useTranslation()
 
   if (!gameData) {
     return (
       <Card>
         <CardHeader>
-          <CardTitle>Joueurs</CardTitle>
-          <CardDescription>Sélectionnez un tournoi pour gérer ses joueurs.</CardDescription>
+          <CardTitle>{t('players.title')}</CardTitle>
+          <CardDescription>{t('players.noTournamentDescription')}</CardDescription>
         </CardHeader>
       </Card>
     )
@@ -49,7 +59,7 @@ export function PlayerListPanel(): ReactElement {
     const trimmedName = newPlayer.name.trim()
 
     if (!trimmedName) {
-      setError('Le nom du joueur est obligatoire.')
+      setError(t('players.errorNameRequired'))
       return
     }
 
@@ -63,9 +73,9 @@ export function PlayerListPanel(): ReactElement {
       setNewPlayer({ name: '' })
     } catch (unknownError) {
       if (unknownError instanceof Error && /unique/i.test(unknownError.message)) {
-        setError('Un joueur avec ce nom existe déjà dans ce tournoi.')
+        setError(t('players.errorNameDuplicate'))
       } else {
-        setError("Impossible d'ajouter le joueur. Réessayez plus tard.")
+        setError(t('players.errorAddFailed'))
       }
     }
   }
@@ -90,7 +100,7 @@ export function PlayerListPanel(): ReactElement {
     const trimmedName = editingName.trim()
 
     if (!trimmedName) {
-      setError('Le nom du joueur est obligatoire.')
+      setError(t('players.errorNameRequired'))
       return
     }
 
@@ -104,9 +114,9 @@ export function PlayerListPanel(): ReactElement {
       cancelEditing()
     } catch (unknownError) {
       if (unknownError instanceof Error && /unique/i.test(unknownError.message)) {
-        setError('Un joueur avec ce nom existe déjà dans ce tournoi.')
+        setError(t('players.errorNameDuplicate'))
       } else {
-        setError("Impossible de mettre à jour le joueur. Réessayez plus tard.")
+        setError(t('players.errorUpdateFailed'))
       }
     }
   }
@@ -123,9 +133,9 @@ export function PlayerListPanel(): ReactElement {
       setGameData(updated)
     } catch (unknownError) {
       if (unknownError instanceof Error && /unique/i.test(unknownError.message)) {
-        setError('Un joueur avec ce nom existe déjà dans ce tournoi.')
+        setError(t('players.errorNameDuplicate'))
       } else {
-        setError("Impossible de mettre à jour le joueur. Réessayez plus tard.")
+        setError(t('players.errorUpdateFailed'))
       }
     }
   }
@@ -133,27 +143,27 @@ export function PlayerListPanel(): ReactElement {
   return (
     <Card>
       <CardHeader>
-        <CardTitle>Joueurs</CardTitle>
-        <CardDescription>
-          Ajoutez, renommez ou désactivez des joueurs. Les noms doivent être uniques par tournoi.
-        </CardDescription>
+        <CardTitle>{t('players.title')}</CardTitle>
+        <CardDescription>{t('players.description')}</CardDescription>
       </CardHeader>
       <CardContent className="flex flex-col gap-4">
         <form onSubmit={handleAddPlayer} className="flex flex-col gap-2 md:flex-row md:items-end">
           <div className="flex-1">
             <label className="mb-1 block text-sm font-medium" htmlFor="new-player-name">
-              Nouveau joueur
+              {t('players.newPlayerLabel')}
             </label>
             <Input
               id="new-player-name"
               value={newPlayer.name}
               onChange={(event) => setNewPlayer({ name: event.target.value })}
-              placeholder="Nom du joueur"
+              placeholder={t('players.newPlayerPlaceholder')}
+              className="h-10"
             />
           </div>
           <div>
-            <Button type="submit" className="mt-2 md:mt-0">
-              Ajouter
+            <Button type="submit" className="mt-2 md:mt-0 h-10">
+              <TatakaiIcon name="addPlayer" className="mr-2 text-base" />
+              {t('players.addButton')}
             </Button>
           </div>
         </form>
@@ -161,7 +171,7 @@ export function PlayerListPanel(): ReactElement {
         {error ? <p className="text-sm text-red-400">{error}</p> : null}
 
         {players.length === 0 ? (
-          <p className="text-sm text-slate-300">Aucun joueur pour le moment.</p>
+          <p className="text-sm text-slate-600">{t('players.empty')}</p>
         ) : (
           <div className="flex flex-col gap-2">
             {players.map((player) => {
@@ -170,46 +180,64 @@ export function PlayerListPanel(): ReactElement {
               return (
                 <div
                   key={player.id}
-                  className="flex flex-col gap-2 rounded-md border border-slate-800 bg-slate-950/40 p-3 md:flex-row md:items-center md:justify-between"
+                  className="flex flex-col gap-2 rounded-lg border-2 border-slate-900 p-3 shadow-[4px_4px_0_0_#020617] md:flex-row md:items-center md:justify-between"
                 >
                   <div className="flex flex-1 flex-col gap-1 md:flex-row md:items-center md:gap-3">
                     {isEditing ? (
-                      <form onSubmit={handleUpdatePlayer} className="flex flex-1 items-center gap-2">
+                      <form
+                        onSubmit={handleUpdatePlayer}
+                        className="flex flex-1 items-center gap-2"
+                      >
                         <Input
                           value={editingName}
                           onChange={(event) => setEditingName(event.target.value)}
-                          placeholder="Nom du joueur"
+                          placeholder={t('players.newPlayerPlaceholder')}
                         />
                         <Button type="submit" size="sm">
-                          Enregistrer
+                          {t('players.save')}
                         </Button>
                         <Button type="button" size="sm" variant="ghost" onClick={cancelEditing}>
-                          Annuler
+                          {t('players.cancel')}
                         </Button>
                       </form>
                     ) : (
-                      <div className="flex flex-col gap-0.5">
-                        <span className="text-sm font-medium text-slate-50">{player.name}</span>
-                        <span className="text-xs text-slate-400">
-                          {player.isActive ? 'Actif' : 'Inactif'} · {player.gamesPlayed} partie
-                          {player.gamesPlayed > 1 ? 's' : ''} · banc: {player.benchStreak}
-                        </span>
+                      <div className="flex items-center gap-3">
+                        <PlayerAvatar playerId={player.id} displayName={player.name} size="sm" />
+                        <div className="flex flex-col gap-0.5">
+                          <span className="text-sm font-[750] font-heading text-slate-950">
+                            {player.name}
+                          </span>
+                          <span className="text-xs text-slate-500">
+                            {t('players.statusSummary', {
+                              status: t(
+                                player.isActive ? 'players.statusActive' : 'players.statusInactive',
+                              ),
+                              games: t('players.gamesCount', { count: player.gamesPlayed }),
+                              bench: player.benchStreak,
+                            })}
+                          </span>
+                        </div>
                       </div>
                     )}
                   </div>
 
                   {!isEditing && (
                     <div className="flex gap-2">
-                      <Button type="button" size="sm" variant="outline" onClick={() => startEditing(player)}>
-                        Renommer
-                      </Button>
                       <Button
                         type="button"
                         size="sm"
                         variant="ghost"
+                        onClick={() => startEditing(player)}
+                      >
+                        {t('players.renameButton')}
+                      </Button>
+                      <Button
+                        type="button"
+                        size="sm"
+                        variant="outline"
                         onClick={() => toggleActive(player)}
                       >
-                        {player.isActive ? 'Désactiver' : 'Réactiver'}
+                        {player.isActive ? t('players.deactivate') : t('players.reactivate')}
                       </Button>
                     </div>
                   )}
