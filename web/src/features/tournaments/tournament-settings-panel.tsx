@@ -13,6 +13,7 @@ import { useTranslation } from 'react-i18next'
 import type { GameData } from '../../lib/domain/types'
 import { createInitialRating } from '../../lib/openskill/ratings'
 import { gameDataAtom } from '../../state/atoms'
+import { TatakaiIcon } from '../../ui/components/tatakai-icon'
 import { exportTournamentToClipboard } from './export-tournament'
 
 function resetTournamentGameData(gameData: GameData): GameData {
@@ -92,6 +93,7 @@ export function TournamentSettingsPanel(): ReactElement {
             {t('settings.exportButton')}
           </Button>
           <Button type="button" variant="outline" onClick={handleReset}>
+            <TatakaiIcon name="reset" className="mr-2 text-base" />
             {t('settings.resetButton')}
           </Button>
         </div>

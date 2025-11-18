@@ -6,7 +6,6 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/retroui/Card'
-import { ArrowLeftOutlined } from '@ant-design/icons'
 import { useAtom } from 'jotai/react'
 import type { FormEvent, ReactElement } from 'react'
 import { useEffect, useState } from 'react'
@@ -16,6 +15,8 @@ import { recordGameResult } from '../../lib/games/game-service'
 import { buildTournamentRoute } from '../../lib/route-builders'
 import { gameDataAtom, nextGameSuggestedPlayerIdsAtom } from '../../state/atoms'
 import { PageContentHeader } from '../../ui/components/page-content-header'
+import { PlayerAvatar } from '../../ui/components/player-avatar'
+import { TatakaiIcon } from '../../ui/components/tatakai-icon'
 
 interface PlayerGameState {
   isActive: boolean
@@ -73,7 +74,7 @@ export function GameResultScreen(): ReactElement {
               aria-label={t('gameResult.backToList')}
               onClick={() => navigate('/')}
             >
-              <ArrowLeftOutlined aria-hidden="true" />
+              <TatakaiIcon name="back" className="text-base" />
             </Button>
           </CardContent>
         </Card>
@@ -235,7 +236,7 @@ export function GameResultScreen(): ReactElement {
               aria-label={t('gameResult.backToTournament')}
               onClick={() => navigate(buildTournamentRoute(gameData.id, 'overview'))}
             >
-              <ArrowLeftOutlined aria-hidden="true" />
+              <TatakaiIcon name="back" className="text-base" />
             </Button>
           </CardContent>
         </Card>
@@ -262,14 +263,17 @@ export function GameResultScreen(): ReactElement {
                       key={player.id}
                       className="flex flex-col gap-2 rounded-md border border-slate-800 bg-slate-950/40 p-3 md:flex-row md:items-center md:justify-between"
                     >
-                      <div>
-                        <p className="text-sm font-medium text-slate-50">{player.name}</p>
-                        <p className="text-xs text-slate-400">
-                          {t('gameResult.playerSummary', {
-                            games: player.gamesPlayed,
-                            bench: player.benchStreak,
-                          })}
-                        </p>
+                      <div className="flex items-center gap-3">
+                        <PlayerAvatar playerId={player.id} displayName={player.name} size="sm" />
+                        <div>
+                          <p className="text-sm font-medium text-slate-50">{player.name}</p>
+                          <p className="text-xs text-slate-400">
+                            {t('gameResult.playerSummary', {
+                              games: player.gamesPlayed,
+                              bench: player.benchStreak,
+                            })}
+                          </p>
+                        </div>
                       </div>
 
                       <div className="mt-2 flex flex-1 flex-col gap-2 md:mt-0 md:items-end">
@@ -331,6 +335,7 @@ export function GameResultScreen(): ReactElement {
                   {t('gameResult.cancel')}
                 </Button>
                 <Button type="submit" disabled={isSubmitting}>
+                  <TatakaiIcon name="save" className="mr-2 text-base" />
                   {t('gameResult.submit')}
                 </Button>
               </div>

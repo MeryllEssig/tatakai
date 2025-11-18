@@ -6,7 +6,6 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/retroui/Card'
-import { ArrowLeftOutlined } from '@ant-design/icons'
 import { useSetAtom } from 'jotai/react'
 import type { ReactElement } from 'react'
 import { useEffect } from 'react'
@@ -21,6 +20,7 @@ import { CreateTournamentWizard } from '../../features/tournaments/create-tourna
 import { TournamentListScreen } from '../../features/tournaments/tournament-list-screen'
 import { TournamentSettingsPanel } from '../../features/tournaments/tournament-settings-panel'
 import { currentTournamentIdAtom, gameDataAtom } from '../../state/atoms'
+import { TatakaiIcon } from '../../ui/components/tatakai-icon'
 
 function TournamentRouteGuard(): ReactElement {
   const { id } = useParams<{ id: string }>()
@@ -66,7 +66,7 @@ function TournamentNotFoundScreen(): ReactElement {
               aria-label="Retour à la liste des tournois"
               onClick={() => navigate('/')}
             >
-              <ArrowLeftOutlined aria-hidden="true" />
+              <TatakaiIcon name="back" className="text-base" />
             </Button>
           </CardContent>
         </Card>

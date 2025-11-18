@@ -1,10 +1,10 @@
 import { Button } from '@/components/retroui/Button'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/retroui/Card'
-import { ArrowLeftOutlined } from '@ant-design/icons'
 import type { ReactElement } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useNavigate } from 'react-router-dom'
 import { PageContentHeader } from '../../ui/components/page-content-header'
+import { TatakaiIcon } from '../../ui/components/tatakai-icon'
 import { buildHelpContent } from './help-content'
 
 export function HelpPage(): ReactElement {
@@ -22,7 +22,7 @@ export function HelpPage(): ReactElement {
           aria-label={t('help.backToHome')}
           onClick={() => navigate('/')}
         >
-          <ArrowLeftOutlined aria-hidden="true" />
+          <TatakaiIcon name="back" className="text-base" />
         </Button>
       </PageContentHeader>
 

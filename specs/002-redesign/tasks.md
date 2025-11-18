@@ -143,10 +143,10 @@
 
 ### Implementation for User Story 6
 
-- [ ] T041 [P] [US6] Implement a `TatakaiIcon` wrapper component using shadcn ant-design icons in `web/src/ui/components/tatakai-icon.tsx`
-- [ ] T042 [US6] Apply icons to primary action buttons (create/import tournament, add player, save game, launch matchmaking, reset) in `web/src/features/tournaments/tournament-list-screen.tsx`, `web/src/features/players/*`, `web/src/features/games/*`, and `web/src/features/matchmaking/*`
-- [ ] T043 [P] [US6] Implement `PlayerAvatarView` component that deterministically generates avatars from player name/ID in `web/src/ui/components/player-avatar.tsx`
-- [ ] T044 [US6] Integrate `PlayerAvatar` into player list, leaderboard, stats, and matchmaking UIs in `web/src/features/players/*`, `web/src/features/ratings/*`, and `web/src/features/matchmaking/*`
+- [x] T041 [P] [US6] Implement a `TatakaiIcon` wrapper component using shadcn ant-design icons in `web/src/ui/components/tatakai-icon.tsx`
+- [x] T042 [US6] Apply icons to primary action buttons (create/import tournament, add player, save game, launch matchmaking, reset) in `web/src/features/tournaments/tournament-list-screen.tsx`, `web/src/features/players/*`, `web/src/features/games/*`, and `web/src/features/matchmaking/*`
+- [x] T043 [P] [US6] Implement `PlayerAvatarView` component that deterministically generates avatars from player name/ID in `web/src/ui/components/player-avatar.tsx`
+- [x] T044 [US6] Integrate `PlayerAvatar` into player list, leaderboard, stats, and matchmaking UIs in `web/src/features/players/*`, `web/src/features/ratings/*`, and `web/src/features/matchmaking/*`
 
 **Checkpoint**: Icons and avatars significantly improve scanability of main screens.
 

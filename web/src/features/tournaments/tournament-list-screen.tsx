@@ -6,13 +6,6 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/retroui/Card'
-import {
-  ArrowLeftOutlined,
-  HistoryOutlined,
-  PlusCircleOutlined,
-  TeamOutlined,
-  TrophyOutlined,
-} from '@ant-design/icons'
 import type { ReactElement } from 'react'
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
@@ -20,6 +13,7 @@ import { useNavigate, useParams } from 'react-router-dom'
 import type { TournamentSummary } from '../../lib/domain/types'
 import { buildTournamentRoute } from '../../lib/route-builders'
 import { PageContentHeader } from '../../ui/components/page-content-header'
+import { TatakaiIcon } from '../../ui/components/tatakai-icon'
 import { listStoredTournamentSummaries } from '../persistence/local-storage-adapter'
 import { PlayerListPanel } from '../players/player-list-panel'
 import { PlayerStatsPanel } from '../ratings/player-stats-panel'
@@ -96,7 +90,7 @@ export function TournamentListScreen(): ReactElement {
               variant="outline"
               onClick={() => navigate(buildTournamentRoute(id, 'history'))}
             >
-              <HistoryOutlined className="text-base" aria-hidden="true" />
+              <TatakaiIcon name="history" className="text-base" />
               {/* {t('home.history')} */}
             </Button>
             <Button
@@ -105,7 +99,7 @@ export function TournamentListScreen(): ReactElement {
               variant="outline"
               onClick={() => navigate(buildTournamentRoute(id, 'leaderboard'))}
             >
-              <TrophyOutlined className="text-base" aria-hidden="true" />
+              <TatakaiIcon name="leaderboard" className="text-base" />
               {/* {t('home.leaderboard')} */}
             </Button>
             <Button
@@ -114,7 +108,7 @@ export function TournamentListScreen(): ReactElement {
               className="bg-[#ffdb33] text-slate-900 hover:bg-[#facc15]"
               onClick={() => navigate(buildTournamentRoute(id, 'matchmaking'))}
             >
-              <TeamOutlined className="text-base" aria-hidden="true" />
+              <TatakaiIcon name="matchmaking" className="text-base" />
               {t('home.matchmaking')}
             </Button>
             <Button
@@ -124,11 +118,11 @@ export function TournamentListScreen(): ReactElement {
               className="bg-sky-100 hover:bg-sky-200"
               onClick={() => navigate(buildTournamentRoute(id, 'new-game'))}
             >
-              <PlusCircleOutlined className="text-base" aria-hidden="true" />
+              <TatakaiIcon name="newGame" className="text-base" />
               {t('home.newGame')}
             </Button>
             <Button type="button" size="sm" variant="secondary" onClick={() => navigate('/')}>
-              <ArrowLeftOutlined />
+              <TatakaiIcon name="back" className="text-base" />
             </Button>
           </>
         ) : (
@@ -143,6 +137,7 @@ export function TournamentListScreen(): ReactElement {
                 setImportError(null)
               }}
             >
+              <TatakaiIcon name="import" className="text-base" />
               {t('home.importButton')}
             </Button>
             <Button
@@ -151,6 +146,7 @@ export function TournamentListScreen(): ReactElement {
               className="bg-[#ffdb33] text-slate-900 hover:bg-[#facc15]"
               onClick={() => navigate('/new-tournament')}
             >
+              <TatakaiIcon name="newTournament" className="mr-1 text-base" />
               {t('home.newTournamentButton')}
             </Button>
           </>

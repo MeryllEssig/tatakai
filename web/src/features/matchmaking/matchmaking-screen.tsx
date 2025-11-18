@@ -7,7 +7,6 @@ import {
   CardTitle,
 } from '@/components/retroui/Card'
 import { Input } from '@/components/retroui/Input'
-import { ArrowLeftOutlined } from '@ant-design/icons'
 import { useAtomValue } from 'jotai/react'
 import type { FormEvent, ReactElement } from 'react'
 import { useState } from 'react'
@@ -19,6 +18,8 @@ import { generateMatchmakingSuggestion } from '../../lib/matchmaking/engine'
 import { buildTournamentRoute } from '../../lib/route-builders'
 import { gameDataAtom } from '../../state/atoms'
 import { PageContentHeader } from '../../ui/components/page-content-header'
+import { PlayerAvatar } from '../../ui/components/player-avatar'
+import { TatakaiIcon } from '../../ui/components/tatakai-icon'
 import { useAcceptSuggestion } from './use-accept-suggestion'
 
 interface MatchmakingFormState {
@@ -76,7 +77,7 @@ export function MatchmakingScreen(): ReactElement {
               aria-label={t('matchmaking.backToList')}
               onClick={() => navigate('/')}
             >
-              <ArrowLeftOutlined aria-hidden="true" />
+              <TatakaiIcon name="back" className="text-base" />
             </Button>
           </CardContent>
         </Card>
@@ -154,7 +155,7 @@ export function MatchmakingScreen(): ReactElement {
             navigate(buildTournamentRoute(id, 'overview'))
           }}
         >
-          <ArrowLeftOutlined aria-hidden="true" />
+          <TatakaiIcon name="back" className="text-base" />
         </Button>
       </PageContentHeader>
       <div className="grid gap-4 lg:grid-cols-[minmax(0,1.1fr)_minmax(0,1.2fr)]">
@@ -238,6 +239,7 @@ export function MatchmakingScreen(): ReactElement {
                   onClick={handleGenerate}
                   disabled={activePlayers.length < 2}
                 >
+                  <TatakaiIcon name="matchmaking" className="mr-2 text-base" />
                   {t('matchmaking.generateButton')}
                 </Button>
               </div>
@@ -285,7 +287,14 @@ export function MatchmakingScreen(): ReactElement {
                             onChange={() => handleToggleCandidate(player.id)}
                           />
                           <div>
-                            <p className="font-medium text-slate-900">{player.name}</p>
+                            <div className="flex items-center gap-2">
+                              <PlayerAvatar
+                                playerId={player.id}
+                                displayName={player.name}
+                                size="sm"
+                              />
+                              <p className="font-medium text-slate-900">{player.name}</p>
+                            </div>
                             <p className="text-xs text-slate-600">
                               {t('matchmaking.playerSummary', {
                                 games: player.gamesPlayed,
@@ -338,8 +347,15 @@ export function MatchmakingScreen(): ReactElement {
                     </div>
                     <ul className="mt-1 flex flex-col gap-1 text-sm">
                       {players.map((player) => (
-                        <li key={player.id} className="flex justify-between gap-2">
-                          <span className="text-slate-900">{player.name}</span>
+                        <li key={player.id} className="flex items-center justify-between gap-2">
+                          <div className="flex items-center gap-2">
+                            <PlayerAvatar
+                              playerId={player.id}
+                              displayName={player.name}
+                              size="sm"
+                            />
+                            <span className="text-slate-900">{player.name}</span>
+                          </div>
                           <span className="text-xs text-slate-600">
                             {t('matchmaking.playerRatingSummary', {
                               mu: player.rating.mu.toFixed(2),
@@ -380,8 +396,11 @@ export function MatchmakingScreen(): ReactElement {
                     if (!player) return null
 
                     return (
-                      <li key={player.id} className="flex justify-between gap-2">
-                        <span className="text-slate-900">{player.name}</span>
+                      <li key={player.id} className="flex items-center justify-between gap-2">
+                        <div className="flex items-center gap-2">
+                          <PlayerAvatar playerId={player.id} displayName={player.name} size="sm" />
+                          <span className="text-slate-900">{player.name}</span>
+                        </div>
                         <span className="text-xs text-slate-600">
                           {t('matchmaking.benchBadge', {
                             streak: player.benchStreak,

@@ -7,7 +7,6 @@ import {
   CardTitle,
 } from '@/components/retroui/Card'
 import { Table } from '@/components/retroui/Table'
-import { ArrowLeftOutlined } from '@ant-design/icons'
 import { useAtom } from 'jotai/react'
 import type { ReactElement } from 'react'
 import { useState } from 'react'
@@ -18,6 +17,7 @@ import { deleteGameAndRecompute } from '../../lib/recompute/recompute-ratings'
 import { buildTournamentRoute } from '../../lib/route-builders'
 import { gameDataAtom } from '../../state/atoms'
 import { PageContentHeader } from '../../ui/components/page-content-header'
+import { TatakaiIcon } from '../../ui/components/tatakai-icon'
 
 function formatDate(value: string): string {
   const date = new Date(value)
@@ -47,7 +47,7 @@ export function GameHistoryScreen(): ReactElement {
               aria-label={t('history.backToList')}
               onClick={() => navigate('/')}
             >
-              <ArrowLeftOutlined aria-hidden="true" />
+              <TatakaiIcon name="back" className="text-base" />
             </Button>
           </CardContent>
         </Card>
@@ -100,7 +100,7 @@ export function GameHistoryScreen(): ReactElement {
                 navigate(buildTournamentRoute(id, 'overview'))
               }}
             >
-              <ArrowLeftOutlined aria-hidden="true" />
+              <TatakaiIcon name="back" className="text-base" />
             </Button>
           </CardContent>
         </Card>
@@ -124,7 +124,7 @@ export function GameHistoryScreen(): ReactElement {
             navigate(buildTournamentRoute(id, 'overview'))
           }}
         >
-          <ArrowLeftOutlined aria-hidden="true" />
+          <TatakaiIcon name="back" className="text-base" />
         </Button>
       </PageContentHeader>
 

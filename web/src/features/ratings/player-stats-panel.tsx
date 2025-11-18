@@ -10,6 +10,7 @@ import { useAtomValue } from 'jotai/react'
 import type { ReactElement } from 'react'
 import { useTranslation } from 'react-i18next'
 import { gameDataAtom } from '../../state/atoms'
+import { PlayerAvatar } from '../../ui/components/player-avatar'
 import { useRatingSnapshots } from './use-rating-snapshots'
 
 export function PlayerStatsPanel(): ReactElement {
@@ -76,12 +77,15 @@ export function PlayerStatsPanel(): ReactElement {
                 className="border-b border-slate-900/60 last:border-b-0 hover:bg-slate-100"
               >
                 <Table.Cell className="py-1 pr-2 text-left">
-                  <span className="font-medium text-slate-900">{player.name}</span>
-                  {!player.isActive ? (
-                    <span className="ml-1 text-xs text-slate-600">
-                      {t('leaderboard.inactiveBadge')}
-                    </span>
-                  ) : null}
+                  <div className="flex items-center gap-2">
+                    <PlayerAvatar playerId={player.id} displayName={player.name} size="sm" />
+                    <span className="font-medium text-slate-900">{player.name}</span>
+                    {!player.isActive ? (
+                      <span className="ml-1 text-xs text-slate-600">
+                        {t('leaderboard.inactiveBadge')}
+                      </span>
+                    ) : null}
+                  </div>
                 </Table.Cell>
                 <Table.Cell className="py-1 px-2 text-right tabular-nums">
                   {player.rating.mu.toFixed(2)}

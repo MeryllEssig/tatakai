@@ -1,10 +1,10 @@
 import { Button } from '@/components/retroui/Button'
-import { QuestionCircleOutlined } from '@ant-design/icons'
 import type { ReactNode } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useNavigate } from 'react-router-dom'
 import { AppHeader } from '../../ui/components/app-header'
 import { LanguageSelector } from '../../ui/components/language-selector'
+import { TatakaiIcon } from '../../ui/components/tatakai-icon'
 
 interface AppShellProps {
   children: ReactNode
@@ -28,7 +28,7 @@ function AppShellRightSlot() {
         aria-label={t('help.navLabel')}
         onClick={handleHelpClick}
       >
-        <QuestionCircleOutlined aria-hidden="true" />
+        <TatakaiIcon name="help" className="text-base" />
       </Button>
       <LanguageSelector />
     </>

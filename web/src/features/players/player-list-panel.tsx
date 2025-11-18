@@ -14,6 +14,8 @@ import { useTranslation } from 'react-i18next'
 import type { Player } from '../../lib/domain/types'
 import { addOrUpdatePlayer } from '../../lib/tournaments/tournament-service'
 import { gameDataAtom } from '../../state/atoms'
+import { PlayerAvatar } from '../../ui/components/player-avatar'
+import { TatakaiIcon } from '../../ui/components/tatakai-icon'
 
 interface PlayerFormState {
   name: string
@@ -160,6 +162,7 @@ export function PlayerListPanel(): ReactElement {
           </div>
           <div>
             <Button type="submit" className="mt-2 md:mt-0 h-10">
+              <TatakaiIcon name="addPlayer" className="mr-2 text-base" />
               {t('players.addButton')}
             </Button>
           </div>
@@ -198,19 +201,22 @@ export function PlayerListPanel(): ReactElement {
                         </Button>
                       </form>
                     ) : (
-                      <div className="flex flex-col gap-0.5">
-                        <span className="text-sm font-[750] font-heading text-slate-950">
-                          {player.name}
-                        </span>
-                        <span className="text-xs text-slate-500">
-                          {t('players.statusSummary', {
-                            status: t(
-                              player.isActive ? 'players.statusActive' : 'players.statusInactive',
-                            ),
-                            games: t('players.gamesCount', { count: player.gamesPlayed }),
-                            bench: player.benchStreak,
-                          })}
-                        </span>
+                      <div className="flex items-center gap-3">
+                        <PlayerAvatar playerId={player.id} displayName={player.name} size="sm" />
+                        <div className="flex flex-col gap-0.5">
+                          <span className="text-sm font-[750] font-heading text-slate-950">
+                            {player.name}
+                          </span>
+                          <span className="text-xs text-slate-500">
+                            {t('players.statusSummary', {
+                              status: t(
+                                player.isActive ? 'players.statusActive' : 'players.statusInactive',
+                              ),
+                              games: t('players.gamesCount', { count: player.gamesPlayed }),
+                              bench: player.benchStreak,
+                            })}
+                          </span>
+                        </div>
                       </div>
                     )}
                   </div>

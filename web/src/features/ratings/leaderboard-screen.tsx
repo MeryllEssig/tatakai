@@ -7,7 +7,6 @@ import {
   CardTitle,
 } from '@/components/retroui/Card'
 import { Table } from '@/components/retroui/Table'
-import { ArrowLeftOutlined } from '@ant-design/icons'
 import { useAtomValue } from 'jotai/react'
 import type { ReactElement } from 'react'
 import { useTranslation } from 'react-i18next'
@@ -15,6 +14,8 @@ import { useNavigate, useParams } from 'react-router-dom'
 import { buildTournamentRoute } from '../../lib/route-builders'
 import { gameDataAtom } from '../../state/atoms'
 import { PageContentHeader } from '../../ui/components/page-content-header'
+import { PlayerAvatar } from '../../ui/components/player-avatar'
+import { TatakaiIcon } from '../../ui/components/tatakai-icon'
 import { useRatingSnapshots } from './use-rating-snapshots'
 
 export function LeaderboardScreen(): ReactElement {
@@ -39,7 +40,7 @@ export function LeaderboardScreen(): ReactElement {
               aria-label={t('leaderboard.backToList')}
               onClick={() => navigate('/')}
             >
-              <ArrowLeftOutlined aria-hidden="true" />
+              <TatakaiIcon name="back" className="text-base" />
             </Button>
           </CardContent>
         </Card>
@@ -68,7 +69,7 @@ export function LeaderboardScreen(): ReactElement {
                 navigate(buildTournamentRoute(id, 'overview'))
               }}
             >
-              <ArrowLeftOutlined aria-hidden="true" />
+              <TatakaiIcon name="back" className="text-base" />
             </Button>
           </CardContent>
         </Card>
@@ -92,7 +93,7 @@ export function LeaderboardScreen(): ReactElement {
             navigate(buildTournamentRoute(id, 'overview'))
           }}
         >
-          <ArrowLeftOutlined aria-hidden="true" />
+          <TatakaiIcon name="back" className="text-base" />
         </Button>
       </PageContentHeader>
 
@@ -147,12 +148,15 @@ export function LeaderboardScreen(): ReactElement {
                   >
                     <Table.Cell className="py-1 pr-2 text-left tabular-nums">{rank}</Table.Cell>
                     <Table.Cell className="py-1 pr-2 text-left">
-                      <span className="font-medium text-slate-900">{player.name}</span>
-                      {!player.isActive ? (
-                        <span className="ml-1 text-xs text-slate-600">
-                          {t('leaderboard.inactiveBadge')}
-                        </span>
-                      ) : null}
+                      <div className="flex items-center gap-2">
+                        <PlayerAvatar playerId={player.id} displayName={player.name} size="sm" />
+                        <span className="font-medium text-slate-900">{player.name}</span>
+                        {!player.isActive ? (
+                          <span className="ml-1 text-xs text-slate-600">
+                            {t('leaderboard.inactiveBadge')}
+                          </span>
+                        ) : null}
+                      </div>
                     </Table.Cell>
                     <Table.Cell className="py-1 px-2 text-right tabular-nums">
                       {player.rating.mu.toFixed(2)}

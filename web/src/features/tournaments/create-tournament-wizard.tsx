@@ -2,7 +2,6 @@ import { Button } from '@/components/retroui/Button'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/retroui/Card'
 import { Input } from '@/components/retroui/Input'
 import { Select } from '@/components/retroui/Select'
-import { ArrowLeftOutlined } from '@ant-design/icons'
 import type { FormEvent, ReactElement } from 'react'
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
@@ -10,6 +9,7 @@ import type { RatingPreset, TournamentMode } from '../../lib/domain/types'
 import { buildTournamentRoute } from '../../lib/route-builders'
 import { createTournament } from '../../lib/tournaments/tournament-service'
 import { PageContentHeader } from '../../ui/components/page-content-header'
+import { TatakaiIcon } from '../../ui/components/tatakai-icon'
 import { saveTournament } from '../persistence/local-storage-adapter'
 
 interface SettingsState {
@@ -298,7 +298,7 @@ export function CreateTournamentWizard(): ReactElement {
 
         <div className="flex justify-between gap-2">
           <Button type="button" aria-label="Annuler" onClick={() => navigate('/')}>
-            <ArrowLeftOutlined aria-hidden="true" />
+            <TatakaiIcon name="back" className="text-base" />
           </Button>
           <Button type="submit">Continuer</Button>
         </div>
