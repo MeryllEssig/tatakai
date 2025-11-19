@@ -25,6 +25,7 @@ npm test && npm run lint
 TypeScript 5.x with React 19: Follow standard conventions
 
 ## Recent Changes
+- 003-github-pages: Added [if applicable, e.g., PostgreSQL, CoreData, files or N/A]
 - 002-redesign: Added TypeScript + React 19 on Vite 7 (web SPA) + React, React DOM, React Router DOM 7, Jotai for state, Tailwind CSS 4 + tailwind-merge/tailwindcss-animate, class-variance-authority, vitest + jsdom for tests, shadcn ant-design icon set, Retro UI (retroui) for light neobrutalist styling
 
 - 001-tournament-manager: Added TypeScript 5.x with React 19 + Vite (React + TS), React Router, Jotai, openskill, Tailwind CSS, shadcn/ui
