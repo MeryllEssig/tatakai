@@ -1,11 +1,13 @@
 import { describe, expect, it } from 'vitest'
-import { createTournament, addOrUpdatePlayer } from '../../../src/lib/tournaments/tournament-service'
 import type { CreateTournamentInput } from '../../../src/lib/tournaments/tournament-service'
+import {
+  addOrUpdatePlayer,
+  createTournament,
+} from '../../../src/lib/tournaments/tournament-service'
 
 function makeCreateInput(overrides: Partial<CreateTournamentInput> = {}): CreateTournamentInput {
   return {
     name: 'Mon Tournoi 1!',
-    mode: 'solo',
     maxPlayersPerGame: 4,
     ratingPreset: 'default',
     openSkillEnabled: true,
@@ -16,16 +18,13 @@ function makeCreateInput(overrides: Partial<CreateTournamentInput> = {}): Create
 
 describe('tournament-service createTournament', () => {
   it('creates a GameData with normalized id and storageKey', () => {
-    const { gameData, storageKey } = createTournament(
-      makeCreateInput({ name: 'Mon Tournoi 1!' }),
-    )
+    const { gameData, storageKey } = createTournament(makeCreateInput({ name: 'Mon Tournoi 1!' }))
 
     expect(gameData.id).toBe('montournoi1')
     expect(storageKey).toBe('montournoi1')
     expect(gameData.name).toBe('Mon Tournoi 1!')
     expect(gameData.createdAt).toBeTruthy()
     expect(gameData.updatedAt).toBe(gameData.createdAt)
-    expect(gameData.mode).toBe('solo')
     expect(gameData.maxPlayersPerGame).toBe(4)
   })
 
