@@ -1,7 +1,5 @@
 // Domain types for the tournament manager feature, derived from specs/001-tournament-manager/data-model.md
 
-export type TournamentMode = 'solo' | 'teams'
-
 export type RatingPreset = 'default' | 'conservative' | 'aggressive'
 
 export interface Rating {
@@ -59,7 +57,6 @@ export interface GameData {
   name: string
   createdAt: string
   updatedAt: string
-  mode: TournamentMode
   maxPlayersPerGame: number
   ratingConfig: RatingConfig
   settings: TournamentSettings

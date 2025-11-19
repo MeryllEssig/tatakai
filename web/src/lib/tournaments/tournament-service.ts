@@ -3,14 +3,12 @@ import type {
   Player,
   RatingConfig,
   RatingPreset,
-  TournamentMode,
   TournamentSettings,
 } from '../domain/types'
 import { createInitialRating } from '../openskill/ratings'
 
 export interface CreateTournamentInput {
   name: string
-  mode: TournamentMode
   maxPlayersPerGame: number
   ratingPreset: RatingPreset
   openSkillEnabled: boolean
@@ -142,7 +140,6 @@ export function createTournament(input: CreateTournamentInput): CreateTournament
     name: input.name,
     createdAt,
     updatedAt: createdAt,
-    mode: input.mode,
     maxPlayersPerGame: input.maxPlayersPerGame,
     ratingConfig,
     settings: createDefaultTournamentSettings(

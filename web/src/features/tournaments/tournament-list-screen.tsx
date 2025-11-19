@@ -192,12 +192,10 @@ export function TournamentListScreen(): ReactElement {
       ) : null}
 
       {id ? (
-        <div className="grid gap-4 lg:grid-cols-[minmax(0,1.4fr)_minmax(0,1fr)]">
-          <div className="flex flex-col gap-4">
-            <PlayerListPanel />
+        <div className="flex flex-col gap-4">
+          <PlayerListPanel />
+          <div className="grid gap-4 lg:grid-cols-2">
             <PlayerStatsPanel />
-          </div>
-          <div>
             <TournamentSettingsPanel />
           </div>
         </div>

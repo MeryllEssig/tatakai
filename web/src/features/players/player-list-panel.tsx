@@ -147,105 +147,110 @@ export function PlayerListPanel(): ReactElement {
         <CardDescription>{t('players.description')}</CardDescription>
       </CardHeader>
       <CardContent className="flex flex-col gap-4">
-        <form onSubmit={handleAddPlayer} className="flex flex-col gap-2 md:flex-row md:items-end">
-          <div className="flex-1">
-            <label className="mb-1 block text-sm font-medium" htmlFor="new-player-name">
-              {t('players.newPlayerLabel')}
-            </label>
-            <Input
-              id="new-player-name"
-              value={newPlayer.name}
-              onChange={(event) => setNewPlayer({ name: event.target.value })}
-              placeholder={t('players.newPlayerPlaceholder')}
-              className="h-10"
-            />
-          </div>
-          <div>
-            <Button type="submit" className="mt-2 md:mt-0 h-10">
-              <TatakaiIcon name="addPlayer" className="mr-2 text-base" />
-              {t('players.addButton')}
-            </Button>
-          </div>
-        </form>
+        <div
+          className="grid gap-2"
+          style={{ gridTemplateColumns: 'repeat(auto-fit, minmax(min(500px, 100%), 1fr))' }}
+        >
+          <form onSubmit={handleAddPlayer} className="flex flex-col gap-2 md:flex-row md:items-end">
+            <div className="flex-1">
+              <label className="mb-1 block text-sm font-medium" htmlFor="new-player-name">
+                {t('players.newPlayerLabel')}
+              </label>
+              <Input
+                id="new-player-name"
+                value={newPlayer.name}
+                onChange={(event) => setNewPlayer({ name: event.target.value })}
+                placeholder={t('players.newPlayerPlaceholder')}
+                className="h-10"
+              />
+            </div>
+            <div>
+              <Button type="submit" className="mt-2 md:mt-0 h-10">
+                <TatakaiIcon name="addPlayer" className="mr-2 text-base" />
+                {t('players.addButton')}
+              </Button>
+            </div>
+          </form>
+        </div>
+
+        <div
+          className="grid gap-2"
+          style={{ gridTemplateColumns: 'repeat(auto-fit, minmax(min(500px, 100%), 1fr))' }}
+        >
+          {players.map((player) => {
+            const isEditing = player.id === editingPlayerId
+
+            return (
+              <div
+                key={player.id}
+                className="flex flex-col gap-2 rounded-lg border-2 border-slate-900 p-3 shadow-[4px_4px_0_0_#020617] md:flex-row md:items-center md:justify-between"
+              >
+                <div className="flex flex-1 flex-col gap-1 md:flex-row md:items-center md:gap-3">
+                  {isEditing ? (
+                    <form onSubmit={handleUpdatePlayer} className="flex flex-1 items-center gap-2">
+                      <Input
+                        value={editingName}
+                        onChange={(event) => setEditingName(event.target.value)}
+                        placeholder={t('players.newPlayerPlaceholder')}
+                      />
+                      <Button type="submit" size="sm">
+                        {t('players.save')}
+                      </Button>
+                      <Button type="button" size="sm" variant="ghost" onClick={cancelEditing}>
+                        {t('players.cancel')}
+                      </Button>
+                    </form>
+                  ) : (
+                    <div className="flex items-center gap-3">
+                      <PlayerAvatar playerId={player.id} displayName={player.name} size="sm" />
+                      <div className="flex flex-col gap-0.5">
+                        <span className="text-sm font-[750] font-heading text-slate-950">
+                          {player.name}
+                        </span>
+                        <span className="text-xs text-slate-500">
+                          {t('players.statusSummary', {
+                            status: t(
+                              player.isActive ? 'players.statusActive' : 'players.statusInactive',
+                            ),
+                            games: t('players.gamesCount', { count: player.gamesPlayed }),
+                            bench: player.benchStreak,
+                          })}
+                        </span>
+                      </div>
+                    </div>
+                  )}
+                </div>
+
+                {!isEditing && (
+                  <div className="flex gap-2">
+                    <Button
+                      type="button"
+                      size="sm"
+                      variant="ghost"
+                      onClick={() => startEditing(player)}
+                    >
+                      {t('players.renameButton')}
+                    </Button>
+                    <Button
+                      type="button"
+                      size="sm"
+                      variant="outline"
+                      onClick={() => toggleActive(player)}
+                    >
+                      {player.isActive ? t('players.deactivate') : t('players.reactivate')}
+                    </Button>
+                  </div>
+                )}
+              </div>
+            )
+          })}
+        </div>
 
         {error ? <p className="text-sm text-red-400">{error}</p> : null}
 
         {players.length === 0 ? (
           <p className="text-sm text-slate-600">{t('players.empty')}</p>
-        ) : (
-          <div className="flex flex-col gap-2">
-            {players.map((player) => {
-              const isEditing = player.id === editingPlayerId
-
-              return (
-                <div
-                  key={player.id}
-                  className="flex flex-col gap-2 rounded-lg border-2 border-slate-900 p-3 shadow-[4px_4px_0_0_#020617] md:flex-row md:items-center md:justify-between"
-                >
-                  <div className="flex flex-1 flex-col gap-1 md:flex-row md:items-center md:gap-3">
-                    {isEditing ? (
-                      <form
-                        onSubmit={handleUpdatePlayer}
-                        className="flex flex-1 items-center gap-2"
-                      >
-                        <Input
-                          value={editingName}
-                          onChange={(event) => setEditingName(event.target.value)}
-                          placeholder={t('players.newPlayerPlaceholder')}
-                        />
-                        <Button type="submit" size="sm">
-                          {t('players.save')}
-                        </Button>
-                        <Button type="button" size="sm" variant="ghost" onClick={cancelEditing}>
-                          {t('players.cancel')}
-                        </Button>
-                      </form>
-                    ) : (
-                      <div className="flex items-center gap-3">
-                        <PlayerAvatar playerId={player.id} displayName={player.name} size="sm" />
-                        <div className="flex flex-col gap-0.5">
-                          <span className="text-sm font-[750] font-heading text-slate-950">
-                            {player.name}
-                          </span>
-                          <span className="text-xs text-slate-500">
-                            {t('players.statusSummary', {
-                              status: t(
-                                player.isActive ? 'players.statusActive' : 'players.statusInactive',
-                              ),
-                              games: t('players.gamesCount', { count: player.gamesPlayed }),
-                              bench: player.benchStreak,
-                            })}
-                          </span>
-                        </div>
-                      </div>
-                    )}
-                  </div>
-
-                  {!isEditing && (
-                    <div className="flex gap-2">
-                      <Button
-                        type="button"
-                        size="sm"
-                        variant="ghost"
-                        onClick={() => startEditing(player)}
-                      >
-                        {t('players.renameButton')}
-                      </Button>
-                      <Button
-                        type="button"
-                        size="sm"
-                        variant="outline"
-                        onClick={() => toggleActive(player)}
-                      >
-                        {player.isActive ? t('players.deactivate') : t('players.reactivate')}
-                      </Button>
-                    </div>
-                  )}
-                </div>
-              )
-            })}
-          </div>
-        )}
+        ) : null}
       </CardContent>
     </Card>
   )

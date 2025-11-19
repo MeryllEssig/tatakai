@@ -5,7 +5,7 @@ import { Select } from '@/components/retroui/Select'
 import type { FormEvent, ReactElement } from 'react'
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import type { RatingPreset, TournamentMode } from '../../lib/domain/types'
+import type { RatingPreset } from '../../lib/domain/types'
 import { buildTournamentRoute } from '../../lib/route-builders'
 import { createTournament } from '../../lib/tournaments/tournament-service'
 import { PageContentHeader } from '../../ui/components/page-content-header'
@@ -14,7 +14,6 @@ import { saveTournament } from '../persistence/local-storage-adapter'
 
 interface SettingsState {
   name: string
-  mode: TournamentMode
   maxPlayersPerGame: number
   ratingPreset: RatingPreset
   openSkillEnabled: boolean
@@ -29,7 +28,6 @@ interface PlayerRow {
 function createEmptySettings(): SettingsState {
   return {
     name: '',
-    mode: 'solo',
     maxPlayersPerGame: 4,
     ratingPreset: 'default',
     openSkillEnabled: true,
@@ -101,7 +99,6 @@ export function CreateTournamentWizard(): ReactElement {
 
       const { gameData } = createTournament({
         name: settings.name.trim(),
-        mode: settings.mode,
         maxPlayersPerGame: settings.maxPlayersPerGame,
         ratingPreset: settings.ratingPreset,
         openSkillEnabled: settings.openSkillEnabled,
@@ -160,31 +157,6 @@ export function CreateTournamentWizard(): ReactElement {
 
             <div className="grid gap-4 md:grid-cols-2">
               <div className="flex flex-col gap-1">
-                <label className="text-sm font-medium" htmlFor="tournament-mode">
-                  Mode
-                </label>
-                <Select
-                  value={settings.mode}
-                  onValueChange={(value) =>
-                    setSettings((current) => ({
-                      ...current,
-                      mode: value as TournamentMode,
-                    }))
-                  }
-                >
-                  <Select.Trigger id="tournament-mode" className="w-full">
-                    <Select.Value />
-                  </Select.Trigger>
-                  <Select.Content>
-                    <Select.Group>
-                      <Select.Item value="solo">Solo (1v1)</Select.Item>
-                      <Select.Item value="teams">Équipes</Select.Item>
-                    </Select.Group>
-                  </Select.Content>
-                </Select>
-              </div>
-
-              <div className="flex flex-col gap-1">
                 <label className="text-sm font-medium" htmlFor="max-players">
                   Joueurs max par partie
                 </label>
@@ -233,7 +205,7 @@ export function CreateTournamentWizard(): ReactElement {
                 </label>
                 <Select
                   value={settings.ratingPreset}
-                  onValueChange={(value) =>
+                  onValueChange={(value: RatingPreset) =>
                     setSettings((current) => ({
                       ...current,
                       ratingPreset: value as RatingPreset,
