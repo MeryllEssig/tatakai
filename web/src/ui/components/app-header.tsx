@@ -32,9 +32,9 @@ export function AppHeader({ rightSlot }: AppHeaderProps) {
             戦
           </span>
         </div>
-        <div className="leading-tight">
+        <div className="leading-none">
           <div className="font-heading text-base font-semibold">Tatakai</div>
-          <div className="text-xs text-slate-700">{t('app.subtitle')}</div>
+          <div className="text-xs text-slate-700 -mt-2">{t('app.subtitle')}</div>
         </div>
       </div>
       {rightSlot ? <div className="flex items-center gap-2">{rightSlot}</div> : null}
