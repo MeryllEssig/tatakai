@@ -24,11 +24,11 @@ function AppShellRightSlot() {
         type="button"
         size="icon"
         variant="ghost"
-        className="h-10 w-10 mr-2"
+        className="h-10 w-10"
         aria-label={t('help.navLabel')}
         onClick={handleHelpClick}
       >
-        <TatakaiIcon name="help" className="text-base" />
+        <TatakaiIcon name="help" className="text-sm" />
       </Button>
       <LanguageSelector />
     </>

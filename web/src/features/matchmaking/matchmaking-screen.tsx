@@ -15,22 +15,20 @@ import { useNavigate, useParams } from 'react-router-dom'
 import type { Player } from '../../lib/domain/types'
 import type { MatchmakingResult } from '../../lib/matchmaking/engine'
 import { generateMatchmakingSuggestion } from '../../lib/matchmaking/engine'
+import type { MatchmakingFormState } from '../../lib/matchmaking/form-state'
+import {
+  accumulateUsedPlayerIds,
+  filterAvailableCandidateIds,
+  getActivePlayers,
+  getDefaultMatchmakingFormState,
+  getSelectedCandidateIds,
+} from '../../lib/matchmaking/form-state'
 import { buildTournamentRoute } from '../../lib/route-builders'
 import { gameDataAtom } from '../../state/atoms'
 import { PageContentHeader } from '../../ui/components/page-content-header'
 import { PlayerAvatar } from '../../ui/components/player-avatar'
 import { TatakaiIcon } from '../../ui/components/tatakai-icon'
 import { useAcceptSuggestion } from './use-accept-suggestion'
-
-interface MatchmakingFormState {
-  maxPlayersPerGame: number
-  maxTeams: number
-  benchFairnessEnabled: boolean
-}
-
-function getActivePlayers(gameData: { players: Player[] }): Player[] {
-  return gameData.players.filter((player) => player.isActive)
-}
 
 export function MatchmakingScreen(): ReactElement {
   const gameData = useAtomValue(gameDataAtom)
@@ -39,26 +37,17 @@ export function MatchmakingScreen(): ReactElement {
   const activePlayers = gameData ? getActivePlayers(gameData) : []
   const { t } = useTranslation()
 
-  const initialFormState: MatchmakingFormState = gameData
-    ? {
-        maxPlayersPerGame:
-          gameData.settings.matchmakingMaxPlayers && gameData.settings.matchmakingMaxPlayers > 0
-            ? gameData.settings.matchmakingMaxPlayers
-            : Math.max(2, Math.min(4, activePlayers.length || 2)),
-        maxTeams: Math.max(2, Math.min(4, activePlayers.length || 2)),
-        benchFairnessEnabled: gameData.settings.benchFairnessEnabled,
-      }
-    : {
-        maxPlayersPerGame: 4,
-        maxTeams: 2,
-        benchFairnessEnabled: true,
-      }
-
-  const [formState, setFormState] = useState<MatchmakingFormState>(initialFormState)
-  const [selectedCandidateIds, setSelectedCandidateIds] = useState<string[]>(() =>
-    activePlayers.map((player) => player.id),
+  const defaultFormState: MatchmakingFormState = getDefaultMatchmakingFormState(
+    gameData,
+    activePlayers,
   )
-  const [result, setResult] = useState<MatchmakingResult | null>(null)
+
+  const [manualFormState, setManualFormState] = useState<MatchmakingFormState | null>(null)
+  const [manualSelectedCandidateIds, setManualSelectedCandidateIds] = useState<string[] | null>(
+    null,
+  )
+  const [usedPlayerIds, setUsedPlayerIds] = useState<string[]>([])
+  const [results, setResults] = useState<MatchmakingResult[]>([])
   const [error, setError] = useState<string | null>(null)
   const acceptSuggestion = useAcceptSuggestion()
 
@@ -85,15 +74,20 @@ export function MatchmakingScreen(): ReactElement {
     )
   }
 
+  const formState = manualFormState ?? defaultFormState
+
+  const selectedCandidateIds = getSelectedCandidateIds(manualSelectedCandidateIds, activePlayers)
+
   const handleFormChange = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault()
   }
 
   const handleGenerate = () => {
     setError(null)
-    setResult(null)
 
-    if (selectedCandidateIds.length < 2) {
+    const availableCandidateIds = filterAvailableCandidateIds(selectedCandidateIds, usedPlayerIds)
+
+    if (availableCandidateIds.length < 2) {
       setError(t('matchmaking.errorNotEnoughCandidates'))
       return
     }
@@ -101,7 +95,7 @@ export function MatchmakingScreen(): ReactElement {
     const maxPlayers = Math.max(2, Math.min(formState.maxPlayersPerGame, activePlayers.length))
     const maxTeams = Math.max(2, Math.min(formState.maxTeams, maxPlayers))
 
-    const suggestionResult = generateMatchmakingSuggestion(gameData, selectedCandidateIds, {
+    const suggestionResult = generateMatchmakingSuggestion(gameData, availableCandidateIds, {
       maxPlayersPerGame: maxPlayers,
       maxTeams,
       benchFairnessEnabled: formState.benchFairnessEnabled,
@@ -112,32 +106,41 @@ export function MatchmakingScreen(): ReactElement {
       return
     }
 
-    setResult(suggestionResult)
+    setResults((current) => [...current, suggestionResult])
+
+    setUsedPlayerIds((current) => accumulateUsedPlayerIds(current, suggestionResult))
   }
 
   const handleToggleCandidate = (playerId: string) => {
-    setSelectedCandidateIds((current) => {
-      if (current.includes(playerId)) {
-        return current.filter((id) => id !== playerId)
+    setUsedPlayerIds([])
+    setResults([])
+    setManualSelectedCandidateIds((current) => {
+      const base = current ?? activePlayers.map((player) => player.id)
+      if (base.includes(playerId)) {
+        return base.filter((id) => id !== playerId)
       }
-      return [...current, playerId]
+      return [...base, playerId]
     })
   }
 
   const handleSelectAll = () => {
-    setSelectedCandidateIds(activePlayers.map((player) => player.id))
+    setUsedPlayerIds([])
+    setResults([])
+    setManualSelectedCandidateIds(activePlayers.map((player) => player.id))
   }
 
   const handleClearAll = () => {
-    setSelectedCandidateIds([])
+    setUsedPlayerIds([])
+    setResults([])
+    setManualSelectedCandidateIds([])
   }
 
-  const handleAccept = () => {
-    if (!result) return
-
-    const playerIds = result.suggestion.teams.flatMap((team) => team.playerIds)
+  const handleAccept = (resultToAccept: MatchmakingResult) => {
+    const playerIds = resultToAccept.suggestion.teams.flatMap((team) => team.playerIds)
     acceptSuggestion(playerIds)
   }
+
+  const lastResult = results[results.length - 1]
 
   return (
     <div className="flex flex-col gap-4">
@@ -179,10 +182,13 @@ export function MatchmakingScreen(): ReactElement {
                     value={formState.maxPlayersPerGame}
                     onChange={(event) => {
                       const value = Number.parseInt(event.target.value || '0', 10)
-                      setFormState((current) => ({
-                        ...current,
-                        maxPlayersPerGame: Number.isNaN(value) ? current.maxPlayersPerGame : value,
-                      }))
+                      setManualFormState((current: MatchmakingFormState | null) => {
+                        const base = current ?? defaultFormState
+                        return {
+                          ...base,
+                          maxPlayersPerGame: Number.isNaN(value) ? base.maxPlayersPerGame : value,
+                        }
+                      })
                     }}
                   />
                 </div>
@@ -199,10 +205,13 @@ export function MatchmakingScreen(): ReactElement {
                     value={formState.maxTeams}
                     onChange={(event) => {
                       const value = Number.parseInt(event.target.value || '0', 10)
-                      setFormState((current) => ({
-                        ...current,
-                        maxTeams: Number.isNaN(value) ? current.maxTeams : value,
-                      }))
+                      setManualFormState((current: MatchmakingFormState | null) => {
+                        const base = current ?? defaultFormState
+                        return {
+                          ...base,
+                          maxTeams: Number.isNaN(value) ? base.maxTeams : value,
+                        }
+                      })
                     }}
                   />
                 </div>
@@ -220,10 +229,13 @@ export function MatchmakingScreen(): ReactElement {
                   size="sm"
                   variant={formState.benchFairnessEnabled ? 'default' : 'outline'}
                   onClick={() =>
-                    setFormState((current) => ({
-                      ...current,
-                      benchFairnessEnabled: !current.benchFairnessEnabled,
-                    }))
+                    setManualFormState((current: MatchmakingFormState | null) => {
+                      const base = current ?? defaultFormState
+                      return {
+                        ...base,
+                        benchFairnessEnabled: !base.benchFairnessEnabled,
+                      }
+                    })
                   }
                 >
                   {formState.benchFairnessEnabled
@@ -313,73 +325,80 @@ export function MatchmakingScreen(): ReactElement {
         </Card>
       </div>
 
-      {result ? (
-        <div className="grid gap-4 lg:grid-cols-[minmax(0,1.4fr)_minmax(0,1fr)]">
-          <Card>
-            <CardHeader>
-              <CardTitle>{t('matchmaking.suggestionTitle')}</CardTitle>
-              <CardDescription>{t('matchmaking.suggestionDescription')}</CardDescription>
-            </CardHeader>
-            <CardContent className="flex flex-col gap-3">
-              {result.suggestion.teams.map((team, index) => {
-                const players = team.playerIds
-                  .map((playerId) => gameData.players.find((player) => player.id === playerId))
-                  .filter((player): player is Player => Boolean(player))
+      {results.length > 0 && lastResult ? (
+        <>
+          <div className="grid gap-4 lg:grid-cols-[minmax(0,1fr)_minmax(0,1fr)]">
+            {results.map((result, suggestionIndex) => (
+              <Card key={suggestionIndex}>
+                <CardHeader>
+                  <CardTitle>
+                    {t('matchmaking.suggestionTitle')}{' '}
+                    {results.length > 1 ? `#${suggestionIndex + 1}` : ''}
+                  </CardTitle>
+                  <CardDescription>{t('matchmaking.suggestionDescription')}</CardDescription>
+                </CardHeader>
+                <CardContent className="flex flex-col gap-3">
+                  {result.suggestion.teams.map((team, index) => {
+                    const players = team.playerIds
+                      .map((playerId) => gameData.players.find((player) => player.id === playerId))
+                      .filter((player): player is Player => Boolean(player))
 
-                const mean = result.diagnostics.teamMeans[index]
-                const conservativeMean = result.diagnostics.teamConservativeMeans[index]
+                    const mean = result.diagnostics.teamMeans[index]
+                    const conservativeMean = result.diagnostics.teamConservativeMeans[index]
 
-                return (
-                  <div
-                    key={team.id}
-                    className="flex flex-col gap-1 rounded-2xl border-2 border-slate-900 bg-slate-50 p-3 shadow-[4px_4px_0_0_#020617]"
-                  >
-                    <div className="flex items-center justify-between gap-2">
-                      <p className="text-sm font-semibold">
-                        {t('matchmaking.teamLabel', { index: index + 1 })}
-                      </p>
-                      <p className="text-xs text-slate-600">
-                        {t('matchmaking.teamSummary', {
-                          mean: mean.toFixed(2),
-                          conservative: conservativeMean.toFixed(2),
-                        })}
-                      </p>
-                    </div>
-                    <ul className="mt-1 flex flex-col gap-1 text-sm">
-                      {players.map((player) => (
-                        <li key={player.id} className="flex items-center justify-between gap-2">
-                          <div className="flex items-center gap-2">
-                            <PlayerAvatar
-                              playerId={player.id}
-                              displayName={player.name}
-                              size="sm"
-                            />
-                            <span className="text-slate-900">{player.name}</span>
-                          </div>
-                          <span className="text-xs text-slate-600">
-                            {t('matchmaking.playerRatingSummary', {
-                              mu: player.rating.mu.toFixed(2),
-                              sigma: player.rating.sigma.toFixed(2),
+                    return (
+                      <div
+                        key={team.id}
+                        className="flex flex-col gap-1 rounded-2xl border-2 border-slate-900 bg-slate-50 p-3 shadow-[4px_4px_0_0_#020617]"
+                      >
+                        <div className="flex items-center justify-between gap-2">
+                          <p className="text-sm font-semibold">
+                            {t('matchmaking.teamLabel', { index: index + 1 })}
+                          </p>
+                          <p className="text-xs text-slate-600">
+                            {t('matchmaking.teamSummary', {
+                              mean: mean.toFixed(2),
+                              conservative: conservativeMean.toFixed(2),
                             })}
-                          </span>
-                        </li>
-                      ))}
-                    </ul>
-                  </div>
-                )
-              })}
+                          </p>
+                        </div>
+                        <ul className="mt-1 flex flex-col gap-1 text-sm">
+                          {players.map((player) => (
+                            <li key={player.id} className="flex items-center justify-between gap-2">
+                              <div className="flex items-center gap-2">
+                                <PlayerAvatar
+                                  playerId={player.id}
+                                  displayName={player.name}
+                                  size="sm"
+                                />
+                                <span className="text-slate-900">{player.name}</span>
+                              </div>
+                              <span className="text-xs text-slate-600">
+                                {t('matchmaking.playerRatingSummary', {
+                                  mu: player.rating.mu.toFixed(2),
+                                  sigma: player.rating.sigma.toFixed(2),
+                                })}
+                              </span>
+                            </li>
+                          ))}
+                        </ul>
+                      </div>
+                    )
+                  })}
 
-              <div className="flex justify-end gap-2">
-                <Button
-                  type="button"
-                  className="bg-[#ffdb33] text-slate-900 hover:bg-[#facc15]"
-                  onClick={handleAccept}
-                >
-                  {t('matchmaking.acceptSuggestion')}
-                </Button>
-              </div>
-            </CardContent>
-          </Card>
+                  <div className="flex justify-end gap-2">
+                    <Button
+                      type="button"
+                      className="bg-[#ffdb33] text-slate-900 hover:bg-[#facc15]"
+                      onClick={() => handleAccept(result)}
+                    >
+                      {t('matchmaking.acceptSuggestion')}
+                    </Button>
+                  </div>
+                </CardContent>
+              </Card>
+            ))}
+          </div>
 
           <Card>
             <CardHeader>
@@ -387,11 +406,11 @@ export function MatchmakingScreen(): ReactElement {
               <CardDescription>{t('matchmaking.benchCandidatesDescription')}</CardDescription>
             </CardHeader>
             <CardContent className="flex flex-col gap-2 text-sm">
-              {result.benchCandidates.length === 0 ? (
+              {lastResult.benchCandidates.length === 0 ? (
                 <p className="text-xs text-slate-600">{t('matchmaking.noBenchCandidates')}</p>
               ) : (
                 <ul className="flex flex-col gap-1">
-                  {result.benchCandidates.map((playerId) => {
+                  {lastResult.benchCandidates.map((playerId) => {
                     const player = gameData.players.find((p) => p.id === playerId)
                     if (!player) return null
 
@@ -414,7 +433,7 @@ export function MatchmakingScreen(): ReactElement {
               )}
             </CardContent>
           </Card>
-        </div>
+        </>
       ) : null}
     </div>
   )
