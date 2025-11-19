@@ -41,6 +41,10 @@ jobs:
         working-directory: web
         run: npm run build
 
+      - name: Create SPA 404 page
+        working-directory: web
+        run: cp dist/index.html dist/404.html
+
       - name: Upload Pages artifact
         uses: actions/upload-pages-artifact@v3
         with:
