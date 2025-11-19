@@ -36,9 +36,12 @@ function AppShellRightSlot() {
 }
 
 export function AppShell({ children }: AppShellProps) {
+  const { t } = useTranslation()
+
   return (
     <div className="min-h-screen bg-[#ff9b3330] text-slate-900">
       <div className="mx-auto flex min-h-screen max-w-7xl flex-col px-4 py-6">
+        <title>{t('app.title')}</title>
         <AppHeader rightSlot={<AppShellRightSlot />} />
         <main className="flex-1">{children}</main>
       </div>
