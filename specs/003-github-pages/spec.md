@@ -1,9 +1,9 @@
-# Feature Specification: React SPA Deployment on GitHub Pages
+# Feature Specification: SPA Deployment on GitHub Pages
 
 **Feature Branch**: `003-github-pages`  
 **Created**: 2025-11-19  
 **Status**: Draft  
-**Input**: User description: "Deployment of the tatakai React SPA on GitHub Pages (repo meryllessig/tatakai) with automatic deployment on every update of the main branch and full SPA behaviour support (client-side navigation, refresh on internal routes, /tatakai/ base path)."
+**Input**: User description: "Deployment of the tatakai single-page web application to GitHub Pages (repo meryllessig/tatakai) with automatic deployment on every update of the main branch and full SPA behaviour support (client-side navigation, refresh on internal routes, /tatakai/ base path)."
 
 ## Clarifications
 
@@ -92,7 +92,7 @@ A developer wants to verify that the deployment completed successfully or unders
 
 ### Key Entities _(include if feature involves data)_
 
-- **tatakai application (SPA)**: Single-page React front-end application delivered as static files (HTML, JS, CSS, assets) and accessible via `/tatakai/`.
+- **tatakai application (SPA)**: Single-page web application delivered as static files (HTML, JS, CSS, assets) and accessible via `/tatakai/`.
 - **Deployment pipeline**: Set of automated steps to fetch code, install dependencies, build, and publish to the static hosting environment.
 - **Publishing environment**: Public static hosting space serving the generated files and exposing the URL `https://meryllessig.github.io/tatakai/`.
 - **Developer**: Person who pushes code to the main branch, monitors deployments, and checks logs when issues occur.

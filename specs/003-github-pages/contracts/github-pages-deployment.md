@@ -13,6 +13,10 @@
 
 ## 3. Workflow Behaviour (Happy Path)
 
+The deployment behaviour is implemented in the GitHub Actions workflow file:
+
+- `.github/workflows/deploy-pages.yml`
+
 For each push to `main`:
 
 1. **Checkout**
@@ -52,6 +56,15 @@ For each push to `main`:
   - Per-step logs (checkout, setup-node, install, test, build, upload, deploy).
   - Links to the deployed Pages environment (on success).
 - Developers use this information to debug failed deployments and verify successful ones.
+
+### Monitoring & Logs
+
+- Open the `meryllessig/tatakai` repository on GitHub.
+- Go to the **Actions** tab and select the **Deploy SPA to GitHub Pages** workflow.
+- Open the run corresponding to the commit you want to inspect to view:
+  - Overall workflow status.
+  - Per-step logs (install, test, build, upload, deploy) to identify failures.
+  - The Pages deployment URL when the run completes successfully.
 
 ## 6. Security and Permissions
 

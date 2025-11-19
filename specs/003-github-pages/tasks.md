@@ -23,8 +23,8 @@ description: "Task list for React SPA deployment to GitHub Pages"
 
 **Purpose**: Ensure the existing `web/` app and scripts are ready to be wired into CI and deployment.
 
-- [ ] T001 Verify that `web/package.json` defines `build` and `test` scripts used by CI (`npm run build`, `npm run test`) and adjust as needed in `web/package.json`.
-- [ ] T002 [P] Run `npm install`, `npm run test`, and `npm run build` locally from `web/` and fix any issues in `web/package.json` or `web/src/*` before enabling deployment.
+- [x] T001 Verify that `web/package.json` defines `build` and `test` scripts used by CI (`npm run build`, `npm run test`) and adjust as needed in `web/package.json`.
+- [x] T002 [P] Run `npm install`, `npm run test`, and `npm run build` locally from `web/` and fix any issues in `web/package.json` or `web/src/*` before enabling deployment.
 
 ---
 
@@ -34,8 +34,8 @@ description: "Task list for React SPA deployment to GitHub Pages"
 
 **⚠️ CRITICAL**: No user story work should begin until this phase is complete.
 
-- [ ] T003 Create the GitHub Actions workflow file `.github/workflows/deploy-pages.yml` with a minimal `deploy` job scaffold (name, `runs-on`, and empty steps list).
-- [ ] T004 [P] Add a short note in `specs/003-github-pages/contracts/github-pages-deployment.md` describing the new `deploy-pages` workflow file and its role in deploying to GitHub Pages.
+- [x] T003 Create the GitHub Actions workflow file `.github/workflows/deploy-pages.yml` with a minimal `deploy` job scaffold (name, `runs-on`, and empty steps list).
+- [x] T004 [P] Add a short note in `specs/003-github-pages/contracts/github-pages-deployment.md` describing the new `deploy-pages` workflow file and its role in deploying to GitHub Pages.
 
 **Checkpoint**: Workflow scaffold exists and is documented; ready to implement user-story-specific behaviour.
 
@@ -49,11 +49,11 @@ description: "Task list for React SPA deployment to GitHub Pages"
 
 ### Implementation for User Story 1
 
-- [ ] T005 [US1] Configure the workflow trigger so `.github/workflows/deploy-pages.yml` runs on `push` events to the `main` branch only.
-- [ ] T006 [P] [US1] Add `actions/checkout` and `actions/setup-node` (Node.js LTS) steps to the `deploy-pages` job in `.github/workflows/deploy-pages.yml`.
-- [ ] T007 [P] [US1] Add steps in `.github/workflows/deploy-pages.yml` to install dependencies from `web/` using `npm ci` (with `npm install` fallback if needed) and run `npm run test` in `web/`.
-- [ ] T008 [US1] Add a `npm run build` step in `.github/workflows/deploy-pages.yml` that builds the SPA from `web/` and outputs static assets to `web/dist`.
-- [ ] T009 [US1] Configure GitHub Pages deployment in `.github/workflows/deploy-pages.yml` using `actions/upload-pages-artifact` (uploading `web/dist`) and `actions/deploy-pages` targeting the `github-pages` environment.
+- [x] T005 [US1] Configure the workflow trigger so `.github/workflows/deploy-pages.yml` runs on `push` events to the `main` branch only.
+- [x] T006 [P] [US1] Add `actions/checkout` and `actions/setup-node` (Node.js LTS) steps to the `deploy-pages` job in `.github/workflows/deploy-pages.yml`.
+- [x] T007 [P] [US1] Add steps in `.github/workflows/deploy-pages.yml` to install dependencies from `web/` using `npm ci` (with `npm install` fallback if needed) and run `npm run test` in `web/`.
+- [x] T008 [US1] Add a `npm run build` step in `.github/workflows/deploy-pages.yml` that builds the SPA from `web/` and outputs static assets to `web/dist`.
+- [x] T009 [US1] Configure GitHub Pages deployment in `.github/workflows/deploy-pages.yml` using `actions/upload-pages-artifact` (uploading `web/dist`) and `actions/deploy-pages` targeting the `github-pages` environment.
 - [ ] T010 [US1] Push a test commit to `main` and verify in the GitHub Actions UI (deploy-pages workflow for `meryllessig/tatakai`) that the run succeeds and that `https://meryllessig.github.io/tatakai/` shows the updated app.
 
 **Checkpoint**: Automatic deployment from `main` to GitHub Pages is working end-to-end.
@@ -68,11 +68,11 @@ description: "Task list for React SPA deployment to GitHub Pages"
 
 ### Implementation for User Story 2
 
-- [ ] T011 [P] [US2] Configure the Vite base path in `web/vite.config.ts` by adding `base: '/tatakai/',` so the built assets are served under `/tatakai/`.
-- [ ] T012 [P] [US2] Update the router setup in `web/src/main.tsx` to pass `basename="/tatakai"` to `BrowserRouter` so client-side navigation uses `/tatakai/` as the base.
-- [ ] T013 [P] [US2] Ensure the SPA defines an in-app "Not Found" route that catches unknown paths and renders a NotFound page in `web/src/app/router/routes.tsx` (and any associated NotFound component file).
-- [ ] T014 [US2] Create a SPA-friendly fallback file `web/public/404.html` (based on `web/index.html`) that loads the same bundle as the main entry so GitHub Pages serves the SPA for unknown paths under `/tatakai/`.
-- [ ] T015 [US2] Update `specs/003-github-pages/quickstart.md` with explicit deep-link verification steps for `/tatakai/profile`, `/tatakai/settings`, and a refresh scenario on these routes.
+- [x] T011 [P] [US2] Configure the Vite base path in `web/vite.config.ts` by adding `base: '/tatakai/',` so the built assets are served under `/tatakai/`.
+- [x] T012 [P] [US2] Update the router setup in `web/src/main.tsx` to pass `basename="/tatakai"` to `BrowserRouter` so client-side navigation uses `/tatakai/` as the base.
+- [x] T013 [P] [US2] Ensure the SPA defines an in-app "Not Found" route that catches unknown paths and renders a NotFound page in `web/src/app/router/routes.tsx` (and any associated NotFound component file).
+- [x] T014 [US2] Create a SPA-friendly fallback file `web/public/404.html` (based on `web/index.html`) that loads the same bundle as the main entry so GitHub Pages serves the SPA for unknown paths under `/tatakai/`.
+- [x] T015 [US2] Update `specs/003-github-pages/quickstart.md` with explicit deep-link verification steps for `/tatakai/profile`, `/tatakai/settings`, and a refresh scenario on these routes.
 
 **Checkpoint**: All documented internal routes under `/tatakai/` load correctly and survive page refresh without GitHub 404 errors.
 
@@ -86,9 +86,9 @@ description: "Task list for React SPA deployment to GitHub Pages"
 
 ### Implementation for User Story 3
 
-- [ ] T016 [P] [US3] Review `.github/workflows/deploy-pages.yml` and ensure all steps have clear, descriptive names and fail loudly (no unnecessary `continue-on-error`) so issues are visible in the GitHub Actions logs.
-- [ ] T017 [US3] Extend `specs/003-github-pages/contracts/github-pages-deployment.md` with a "Monitoring & Logs" subsection that documents how to open the `deploy-pages` workflow runs and inspect per-step logs.
-- [ ] T018 [US3] Add a "Deployment" section to `web/README.md` explaining how to use the GitHub Actions UI to check deployment runs, view logs, and find the link to the GitHub Pages environment.
+- [x] T016 [P] [US3] Review `.github/workflows/deploy-pages.yml` and ensure all steps have clear, descriptive names and fail loudly (no unnecessary `continue-on-error`) so issues are visible in the GitHub Actions logs.
+- [x] T017 [US3] Extend `specs/003-github-pages/contracts/github-pages-deployment.md` with a "Monitoring & Logs" subsection that documents how to open the `deploy-pages` workflow runs and inspect per-step logs.
+- [x] T018 [US3] Add a "Deployment" section to `web/README.md` explaining how to use the GitHub Actions UI to check deployment runs, view logs, and find the link to the GitHub Pages environment.
 
 **Checkpoint**: Deployment history and logs are clearly documented and discoverable; failures are easy to diagnose without impacting the live site.
 
@@ -98,8 +98,8 @@ description: "Task list for React SPA deployment to GitHub Pages"
 
 **Purpose**: Final documentation and cleanup work that affects multiple user stories.
 
-- [ ] T019 [P] Walk through all steps in `specs/003-github-pages/quickstart.md` end-to-end and refine wording or examples where needed in `specs/003-github-pages/quickstart.md`.
-- [ ] T020 [P] Perform a cleanup pass on `.github/workflows/deploy-pages.yml` (remove redundant comments, ensure consistent formatting) without changing behaviour.
+- [x] T019 [P] Walk through all steps in `specs/003-github-pages/quickstart.md` end-to-end and refine wording or examples where needed in `specs/003-github-pages/quickstart.md`.
+- [x] T020 [P] Perform a cleanup pass on `.github/workflows/deploy-pages.yml` (remove redundant comments, ensure consistent formatting) without changing behaviour.
 
 ---
 

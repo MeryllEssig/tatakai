@@ -96,6 +96,7 @@ export function AppRouter(): ReactElement {
       </Route>
       <Route path="/new-tournament" element={<CreateTournamentWizard />} />
       <Route path="/help" element={<HelpPage />} />
+      <Route path="*" element={<TournamentNotFoundScreen />} />
     </Routes>
   )
 }

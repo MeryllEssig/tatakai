@@ -17,7 +17,7 @@ This guide explains how to work with the tatakai SPA and its automatic deploymen
 1. From `web/`:
    - Run `npm run build` to produce a production build in `web/dist`.
    - Optionally run `npm run preview` to serve the built app locally and check routes.
-2. Verify that routes such as `/tatakai/`, `/tatakai/profile`, `/tatakai/settings` behave correctly when refreshed.
+2. Using the preview server, open direct URLs such as `/tatakai/`, `/tatakai/profile`, `/tatakai/settings` in the browser and press F5 (refresh) on each to verify they load without 404 errors and show the expected screens.
 
 ## 3. GitHub Pages deployment flow
 

@@ -10,6 +10,20 @@ recomputation), see the feature quickstart:
 
 - `../specs/001-tournament-manager/quickstart.md`
 
+## Deployment
+
+Automatic deployment to GitHub Pages is configured via `.github/workflows/deploy-pages.yml`.
+
+- Branch: `main` (pushes to `main` trigger deployments)
+- Target URL: `https://meryllessig.github.io/tatakai/`
+
+To inspect deployments and logs:
+
+1. Open the `meryllessig/tatakai` repository on GitHub.
+2. Go to the **Actions** tab.
+3. Select the **Deploy SPA to GitHub Pages** workflow.
+4. Open the latest run to see overall status, per-step logs, and the link to the deployed Pages environment.
+
 ## Tech notes (Vite template)
 
 This project was bootstrapped from the standard **React + TypeScript + Vite** template. The
