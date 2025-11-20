@@ -28,7 +28,7 @@ export function AppHeader({ rightSlot }: AppHeaderProps) {
         aria-label={t('home.title')}
       >
         <div className="flex h-12 w-12 items-center justify-center rounded-md bg-[#ffdb33] border-4 border-black text-2xl text-black">
-          <span aria-hidden="true" className="font-yuji-syuku leading-[0.1]">
+          <span aria-hidden="true" className="font-yuji-syuku leading-[0.1] -mt-1">
             戦
           </span>
         </div>

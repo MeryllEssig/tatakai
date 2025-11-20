@@ -280,7 +280,7 @@ export function MatchmakingScreen(): ReactElement {
                   </Button>
                 </div>
 
-                <div className="flex max-h-80 flex-col gap-2 overflow-y-auto pr-1">
+                <div className="grid max-h-80 grid-cols-[repeat(auto-fit,minmax(220px,1fr))] gap-2 overflow-y-auto pr-1">
                   {activePlayers.map((player) => {
                     const isSelected = selectedCandidateIds.includes(player.id)
 
